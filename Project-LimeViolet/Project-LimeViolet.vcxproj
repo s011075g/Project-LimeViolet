@@ -130,7 +130,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Packet.cpp" />
     <ClCompile Include="scr\Main.cpp" />
+    <ClCompile Include="scr\Switch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="scr\Packet.h" />
+    <ClInclude Include="scr\Switch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
