@@ -8,10 +8,8 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-	for (std::_Vector_iterator<IComponent *>::value_type component = _components.begin(); component != _components.end(); ++component)
-	{
+	for (auto component : _components)
 		delete component;
-	}
 }
 
 bool GameObject::AddComponent(IComponent * component)

@@ -20,18 +20,18 @@ Switch const* Switch::Instance()
 	return &instance;
 }
 
-void Switch::EventOccurred(const Packet * event)
+void Switch::EventOccurred(Packet * event)
 {
-	for (std::_List_iterator<void(*)(Packet const*)>::value_type array = _subscriptions[event->GetType()].begin(); array != _subscriptions[event->GetType()].end(); ++array)
+	for (auto array : _subscriptions[event->GetType()])
 		array(event);
 }
 
-void Switch::Subscribe(const char* event, void(* func)(Packet const *))
+void Switch::Subscribe(const char* event, void(* func)(Packet *))
 {
 	_subscriptions[event].push_back(func);
 }
 
-void Switch::Unsubscribe(const char* event, void(* func)(Packet const *))
+void Switch::Unsubscribe(const char* event, void(* func)(Packet *))
 {
 	_subscriptions[event].remove(func);
 }

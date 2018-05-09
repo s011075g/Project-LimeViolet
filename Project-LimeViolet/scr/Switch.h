@@ -8,13 +8,13 @@
  */
 struct CmpStr
 {
-	bool operator()(const char const* left, const char const* right) const;
+	bool operator()(const char * left, const char * right) const;
 };
 
 class Switch
 {
 private:
-	std::map<const char*, std::list<void(*)(Packet const *)>, CmpStr> _subscriptions;
+	std::map<const char *, std::list<void(*)(Packet *)>, CmpStr> _subscriptions;
 public:	
 	~Switch();
 	/**
@@ -26,19 +26,19 @@ public:
 	 * \brief Tells the switch an event occurred
 	 * \param event The event that has occurred with details stored in the packet
 	 */
-	void EventOccurred(const Packet const * event);
+	void EventOccurred(Packet * event);
 	/**
 	 * \brief Subscribe to an event, and calls the given function when the event occurs 
 	 * \param event The event that is subscribed to
 	 * \param func  The function called when the event occurs
 	 */
-	void Subscribe(const char * event, void(* func)(Packet const *));
+	void Subscribe(const char * event, void(* func)(Packet *));
 	/**
 	 * \brief Unsubscribe to an event thats been previously subscribed to
 	 * \param event The event that is unsubscribed from
 	 * \param func  The function was going to be called
 	 */
-	void Unsubscribe(const char* event, void (* func)(Packet const*));
+	void Unsubscribe(const char* event, void (* func)(Packet *));
 private:
 	/**
 	 * \brief Private constructor as the class is a singleton. 
