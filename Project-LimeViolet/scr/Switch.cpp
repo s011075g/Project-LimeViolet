@@ -12,7 +12,6 @@ Switch::~Switch()
 {
 	for (auto array = _subscriptions.begin(); array != _subscriptions.end(); ++array)
 		delete[] array->first;
-	_subscriptions.clear();
 }
 
 Switch const* Switch::Instance()
