@@ -1,6 +1,7 @@
 #include "GameObject.h"
 
-GameObject::GameObject()
+GameObject::GameObject() 
+	: _isStatic(false)
 {
 	_transform = new Transform();
 	AddComponent(_transform);
@@ -23,6 +24,16 @@ bool GameObject::AddComponent(IComponent * component)
 Transform * GameObject::GetTransform() const
 {
 	return _transform;
+}
+
+void GameObject::SetStatic(const bool isStatic)
+{
+	_isStatic = isStatic;
+}
+
+constexpr bool GameObject::IsStatic() const
+{
+	return _isStatic;
 }
 
 template <class T>

@@ -9,10 +9,14 @@ private:
 	std::vector<IComponent *> _components;
 
 	Transform * _transform;
+
+	//If object can move at runtime
+	bool _isStatic;
 public:
 	GameObject();
 	~GameObject();
 
+	void Start();
 	void Update();
 	void Draw();
 
@@ -21,4 +25,7 @@ public:
 	template<class T> T * GetComponent();
 
 	Transform * GetTransform() const;
+
+	void SetStatic(const bool isStatic);
+	constexpr bool IsStatic() const;
 };
