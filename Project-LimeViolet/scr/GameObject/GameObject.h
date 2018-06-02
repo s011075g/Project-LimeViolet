@@ -20,7 +20,7 @@ public:
 	void Update();
 	void Draw();
 
-	bool AddComponent(IComponent * component);
+	template<class T> bool AddComponent();
 	template<class T> bool RemoveComponent();
 	template<class T> T * GetComponent();
 

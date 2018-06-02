@@ -13,12 +13,12 @@ Quaternion::Quaternion(const float& r, const float& i, const float& j, const flo
 
 Quaternion::Quaternion(const float& yaw, const float& pitch, const float& roll)
 {
-	float cosYaw = std::cos(yaw * 0.5f);
-	float sinYaw = std::sin(yaw * 0.5f);
-	float cosPitch = std::cos(pitch * 0.5f);
-	float sinPitch = std::sin(pitch * 0.5f);
-	float cosRoll = std::cos(roll * 0.5f);
-	float sinRoll = std::sin(roll * 0.5f);
+	const float cosYaw = std::cos(yaw * 0.5f);
+	const float sinYaw = std::sin(yaw * 0.5f);
+	const float cosPitch = std::cos(pitch * 0.5f);
+	const float sinPitch = std::sin(pitch * 0.5f);
+	const float cosRoll = std::cos(roll * 0.5f);
+	const float sinRoll = std::sin(roll * 0.5f);
 
 	_r = cosYaw * cosPitch * cosRoll - sinYaw * sinPitch * sinRoll;
 	_i = sinYaw * cosPitch * cosRoll + cosYaw * sinPitch * sinRoll;
@@ -63,7 +63,7 @@ void Quaternion::RotateByVector(const Float3& v)
 
 void Quaternion::operator*=(const Quaternion& r)
 {
-	Quaternion q = *this; //Copy current values
+	const Quaternion q = *this; //Copy current values
 	_r = q._r * r._r - q._i * r._i - q._j * r._j - q._k * r._k;
 	_i = q._r * r._i + q._i * r._r + q._j * r._k - q._k * r._j;
 	_j = q._r * r._j + q._j * r._r + q._k * r._i - q._i * r._k;
@@ -75,4 +75,23 @@ Float3 Quaternion::RotateVector(const Float3& v) const
 	const Float3 u(_i, _j, _k);
 	const float dot = u.Dot(v);
 	return u * dot * 2 + v * (_r * _r - dot) + v.Cross(u) * _r * 2;
+}
+
+Float3x3 Quaternion::GetRotationMatrix() const
+{
+	Float3x3 result;
+
+	result.m11 = 1 - 2 * _j * _j - 2 * _k * _k;
+	result.m12 = 2 * _i * _j - 2 * _r * _k;
+	result.m13 = 2 * _i * _k + 2 * _r * _j;
+
+	result.m21 = 2 * _i * _j + 2 * _r * _k;
+	result.m22 = 1 - 2 * _i * _i - 2 * _k * _k;
+	result.m23 = 2 * _j * _k - 2 * _r * _i;
+
+	result.m31 = 2 * _i * _k - 2 * _r * _j;
+	result.m32 = 2 * _j * _k + 2 * _r * _i;
+	result.m33 = 1 - 2 * _i * _i - 2 * _j * _j;
+
+	return result;
 }

@@ -1,7 +1,15 @@
-#include <iostream>
+#include "Utilities.h"
 
 int main()
 {
-	std::cout << "Hello world!" << std::endl;
-	std::cin.get();
+#if defined(DEBUG) || defined(_DEBUG)
+	Utilities::ShowConsole();
+#else
+	Utilities::HideConsole();
+#endif
+
+	Utilities::Write("Running...", Utilities::NORMAL_LEVEL);
+	Utilities::PauseConsole();
+
+	return 0;
 }

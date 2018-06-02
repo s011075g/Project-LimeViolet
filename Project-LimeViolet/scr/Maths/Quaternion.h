@@ -22,5 +22,7 @@ public:
 	void operator *=(const Quaternion& right);
 
 	Float3 RotateVector(const Float3& vector) const;
+
+	Float3x3 GetRotationMatrix() const;
 };
 

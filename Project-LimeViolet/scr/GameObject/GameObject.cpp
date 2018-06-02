@@ -4,7 +4,7 @@ GameObject::GameObject()
 	: _isStatic(false)
 {
 	_transform = new Transform();
-	AddComponent(_transform);
+	_components.push_back(_transform);
 }
 
 GameObject::~GameObject()
@@ -13,12 +13,16 @@ GameObject::~GameObject()
 		delete component;
 }
 
-bool GameObject::AddComponent(IComponent * component)
+void GameObject::Start()
 {
-	_components.resize(_components.size() + 1);
-	_components.push_back(component);
-	component->Start();
-	return true; //TODO: Check if gameobject already has component
+	for (std::_Vector_iterator<IComponent *>::value_type component = _components.begin(); component != _components.end(); ++component)
+		component->Start();
+}
+
+void GameObject::Update()
+{
+	for (std::_Vector_iterator<IComponent *>::value_type component = _components.begin(); component != _components.end(); ++component)
+		component->Update();
 }
 
 Transform * GameObject::GetTransform() const
@@ -37,17 +41,34 @@ constexpr bool GameObject::IsStatic() const
 }
 
 template <class T>
-bool GameObject::RemoveComponent()
+bool GameObject::AddComponent()
 {
 	for (std::_Vector_iterator<IComponent *>::value_type component = _components.begin(); component != _components.end(); ++component)
 	{
+		if (T* c = dynamic_cast<T *>(component))
+			return false;
+	}
+	_components.push_back(new T());
+	return true;
+}
+
+template <class T>
+bool GameObject::RemoveComponent()
+{
+	bool found = false;
+	std::_Vector_iterator<IComponent *>::value_type component;
+	for (component = _components.begin(); component != _components.end(); ++component)
 		if (T * c = dynamic_cast<T *>(component))
 		{
-			delete c;
-			return true;
+			found = true;
+			break;
 		}
+	if (found)
+	{
+		_components.erase(component);
+		delete component;
 	}
-	return false;
+	return found;
 }
 
 template <class T>
