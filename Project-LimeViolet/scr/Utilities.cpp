@@ -8,6 +8,12 @@ void Utilities::Write(const char* ptr, const LEVEL level)
 	std::cout << ptr << std::endl;
 }
 
+void Utilities::Write(const char* ptr)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7u);
+	std::cout << ptr << std::endl;
+}
+
 void Utilities::PauseConsole()
 {
 	std::cin.get();

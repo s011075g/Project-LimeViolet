@@ -11,9 +11,9 @@ private:
 
 	Float4x4 _worldMatrix;
 
+	Quaternion _rotation;
 	Float3 _position;
 	Float3 _scale;
-	Quaternion* _rotation;
 public:
 	Transform();
 	~Transform();
@@ -25,6 +25,10 @@ public:
 	void UpdateMatrix(Float4x4& parentMatrix);
 
 	void SetPosition(Float3& position);
-	void SetRotation(Quaternion* quaternion);
+	void SetRotation(Quaternion& quaternion);
 	void SetScale(Float3& scale);
+
+	Float3 GetPosition() const;
+	Quaternion GetRotation() const;
+	Float3 GetScale() const;
 };

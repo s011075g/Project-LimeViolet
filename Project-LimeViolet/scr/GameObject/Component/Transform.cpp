@@ -31,10 +31,10 @@ void Transform::SetPosition(Float3& position)
 	_positionMatrix.m44 = 1.0f;
 }
 
-void Transform::SetRotation(Quaternion* quaternion)
+void Transform::SetRotation(Quaternion& quaternion)
 {
 	_rotation = quaternion;
-	_rotationMatrix = Float4x4(_rotation->GetRotationMatrix());
+	_rotationMatrix = Float4x4(_rotation.GetRotationMatrix());
 }
 
 void Transform::SetScale(Float3& scale)
@@ -44,4 +44,19 @@ void Transform::SetScale(Float3& scale)
 	_scaleMatrix.m22 = scale.y;
 	_scaleMatrix.m33 = scale.z;
 	_scaleMatrix.m44 = 1.0f;
+}
+
+Float3 Transform::GetPosition() const
+{
+	return _position;
+}
+
+Quaternion Transform::GetRotation() const
+{
+	return _rotation;
+}
+
+Float3 Transform::GetScale() const
+{
+	return _scale;
 }

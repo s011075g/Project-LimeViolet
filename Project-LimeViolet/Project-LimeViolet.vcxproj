@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\GameObject\Component\Camera.cpp" />
     <ClCompile Include="scr\Maths\Quaternion.cpp" />
     <ClCompile Include="scr\GameObject\Component\IComponent.cpp" />
     <ClCompile Include="scr\GameObject\GameObject.cpp" />
@@ -173,6 +174,8 @@
     <ClCompile Include="scr\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Color.h" />
+    <ClInclude Include="scr\GameObject\Component\Camera.h" />
     <ClInclude Include="scr\Maths\Quaternion.h" />
     <ClInclude Include="scr\GameObject\Component\IComponent.h" />
     <ClInclude Include="scr\GameObject\GameObject.h" />
