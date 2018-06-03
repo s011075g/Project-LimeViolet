@@ -1,17 +1,20 @@
 #include "MathStructs.h"
-
 #include <complex>
 
-constexpr Float2::Float2(const float& x, const float& y)
+constexpr Float2::Float2(const float x, const float y)
 	: x(x), y(y)
 { }
 
-constexpr Float3::Float3(const float& x, const float& y, const float& z)
+constexpr Float3::Float3(const float x, const float y, const float z)
 	: x(x), y(y), z(z)
 { }
 
-constexpr Float4::Float4(const float& x, const float& y, const float& z, const float& w)
+constexpr Float4::Float4(const float x, const float y, const float z, const float w)
 	: x(x), y(y), z(z), w(w)
+{ }
+
+constexpr Float4::Float4(const Float3 xyz, const float w)
+	: x(xyz.x), y(xyz.y), z(xyz.z), w(w)
 { }
 
 Float2& Float2::operator=(const Float2& r)

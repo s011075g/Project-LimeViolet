@@ -162,25 +162,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Render\IRender.cpp" />
     <ClCompile Include="scr\GameObject\Component\Camera.cpp" />
     <ClCompile Include="scr\Maths\Quaternion.cpp" />
     <ClCompile Include="scr\GameObject\Component\IComponent.cpp" />
     <ClCompile Include="scr\GameObject\GameObject.cpp" />
-    <ClCompile Include="scr\Packet.cpp" />
+    <ClCompile Include="scr\Observer\Packet.cpp" />
     <ClCompile Include="scr\Main.cpp" />
-    <ClCompile Include="scr\Switch.cpp" />
+    <ClCompile Include="scr\Observer\Switch.cpp" />
     <ClCompile Include="scr\GameObject\Component\Transform.cpp" />
     <ClCompile Include="scr\Maths\MathStructs.cpp" />
     <ClCompile Include="scr\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Render\IRender.h" />
     <ClInclude Include="scr\Color.h" />
     <ClInclude Include="scr\GameObject\Component\Camera.h" />
     <ClInclude Include="scr\Maths\Quaternion.h" />
     <ClInclude Include="scr\GameObject\Component\IComponent.h" />
     <ClInclude Include="scr\GameObject\GameObject.h" />
-    <ClInclude Include="scr\Packet.h" />
-    <ClInclude Include="scr\Switch.h" />
+    <ClInclude Include="scr\Observer\Packet.h" />
+    <ClInclude Include="scr\Observer\Switch.h" />
     <ClInclude Include="scr\GameObject\Component\Transform.h" />
     <ClInclude Include="scr\Maths\MathStructs.h" />
     <ClInclude Include="scr\Utilities.h" />

@@ -15,7 +15,7 @@ private:
 	Float3 _position;
 	Float3 _scale;
 public:
-	Transform();
+	Transform(GameObject* gameObject);
 	~Transform();
 
 	void Start() override;

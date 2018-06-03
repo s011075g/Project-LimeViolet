@@ -3,7 +3,7 @@
 GameObject::GameObject() 
 	: _isStatic(false)
 {
-	_transform = new Transform();
+	_transform = new Transform(this);
 	_components.push_back(_transform);
 }
 
@@ -15,13 +15,13 @@ GameObject::~GameObject()
 
 void GameObject::Start()
 {
-	for (std::_Vector_iterator<IComponent *>::value_type component = _components.begin(); component != _components.end(); ++component)
+	for(auto component : _components)
 		component->Start();
 }
 
 void GameObject::Update()
 {
-	for (std::_Vector_iterator<IComponent *>::value_type component = _components.begin(); component != _components.end(); ++component)
+	for (auto component : _components)
 		component->Update();
 }
 
@@ -43,12 +43,12 @@ constexpr bool GameObject::IsStatic() const
 template <class T>
 bool GameObject::AddComponent()
 {
-	for (std::_Vector_iterator<IComponent *>::value_type component = _components.begin(); component != _components.end(); ++component)
+	for(std::vector<IComponent*>::value_type component : _components)
 	{
 		if (T* c = dynamic_cast<T *>(component))
 			return false;
 	}
-	_components.push_back(new T());
+	_components.push_back(new T(this));
 	return true;
 }
 
@@ -56,17 +56,18 @@ template <class T>
 bool GameObject::RemoveComponent()
 {
 	bool found = false;
-	std::_Vector_iterator<IComponent *>::value_type component;
-	for (component = _components.begin(); component != _components.end(); ++component)
+	std::vector<IComponent*>::value_type result;
+	for (auto component : _components)
 		if (T * c = dynamic_cast<T *>(component))
 		{
 			found = true;
+			result = component;
 			break;
 		}
 	if (found)
 	{
-		_components.erase(component);
-		delete component;
+		_components.erase(result);
+		delete result;
 	}
 	return found;
 }
@@ -74,12 +75,8 @@ bool GameObject::RemoveComponent()
 template <class T>
 T * GameObject::GetComponent()
 {
-	for (std::_Vector_iterator<IComponent *>::value_type component = _components.begin(); component != _components.end(); ++component)
-	{
+	for (auto component : _components)
 		if (T const * c = dynamic_cast<T *>(component))
-		{
 			return c;
-		}
-	}
 	return nullptr;
 }

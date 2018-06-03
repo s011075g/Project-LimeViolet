@@ -1,6 +1,7 @@
 #include "Transform.h"
 
-Transform::Transform()
+Transform::Transform(GameObject* gameObject)
+	: IComponent(gameObject)
 { }
 
 Transform::~Transform()

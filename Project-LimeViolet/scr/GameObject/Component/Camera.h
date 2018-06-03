@@ -6,11 +6,7 @@
 class Camera : public IComponent
 {
 private:
-	Float4x4 _view;
-	Float4x4 _projection;
-
-	Float4 _eye;
-	Float4 _at;
+	//Camera's up vector
 	Float4 _up;
 	//What the background is cleared to
 	Color _clearColor;
@@ -18,14 +14,18 @@ private:
 	//Clipping plane
 	float _near, _far;
 public:
-	Camera();
+	Camera(GameObject* gameObject);
 	~Camera();
 
 	void Start() override;
 	void Update() override;
 
-	Float4x4 GetView() const;
-	Float4x4 GetProjection() const;
-	Float4x4 GetViewProjection() const;
+	void SetUp(Float3 vector);
+	void SetFOV(float fov);
+
+	float GetFOV() const;
+	Float4 GetEye() const;
+	Float4 GetAt() const;
+	Float4 GetUp() const;
 };
 
