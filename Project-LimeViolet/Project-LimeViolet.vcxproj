@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Entity\Component\Component.cpp" />
     <ClCompile Include="scr\Common\Geometry.cpp" />
     <ClCompile Include="scr\Common\Material.cpp" />
     <ClCompile Include="scr\IO\Model\OBJFileReader.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="scr\Common\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Entity\Component\Component.h" />
     <ClInclude Include="scr\Common\Geometry.h" />
     <ClInclude Include="scr\Common\ObjectVertex.h" />
     <ClInclude Include="scr\IO\Model\OBJFileReader.h" />

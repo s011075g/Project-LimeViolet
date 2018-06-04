@@ -10,7 +10,7 @@ bool OBJFileReader::CompareCharValues::operator()(const char* left, const char* 
 }
 
 OBJFileReader::Packed::Packed(Float3 vertex, Float3 normal, Float2 uv)
-	: vertex(vertex), normal(normal), uv(uv), tangent(Float4(0,0,0,0))
+	: vertex(vertex), normal(normal), uv(uv), tangent(Float4(0, 0, 0, 0))
 { }
 
 bool OBJFileReader::Packed::operator<(const Packed& right) const
@@ -42,7 +42,7 @@ Geometry* OBJFileReader::ReadFile(const char* fileLocation)
 	//Clean up
 	delete obj;
 	//Calculate Tangents if needed
-	if(mtls.size() != 0)
+	if (mtls.size() != 0)
 	{
 		bool tangents = false;
 		for (auto m : mtls)
@@ -51,7 +51,7 @@ Geometry* OBJFileReader::ReadFile(const char* fileLocation)
 				tangents = true;
 				break;
 			}
-		if(tangents)
+		if (tangents)
 			CalculateTangents(vertex, indices, material);
 	}
 	//Create Materials that fit
@@ -61,7 +61,7 @@ Geometry* OBJFileReader::ReadFile(const char* fileLocation)
 		for (auto j : material)
 		{
 			auto data = i->materials.find(j);
-			if(data == i->materials.end())
+			if (data == i->materials.end())
 				break;
 			material.erase(std::remove(material.begin(), material.end(), j), material.end());
 			MaterialValues* values = new MaterialValues();
@@ -74,12 +74,12 @@ Geometry* OBJFileReader::ReadFile(const char* fileLocation)
 			materials[materials.size() - 1]->SetTextureNormal(i->materials[j].fileLocationNormal);
 			materials[materials.size() - 1]->SetTextureSpecular(i->materials[j].fileLocationSpecular);
 		}
-	} 
-	if(materials.empty())
+	}
+	if (materials.empty())
 	{
 		MaterialValues* values = new MaterialValues();
-		values->ambient = Float4( 0, 0, 0, 0);
-		values->diffuse = Float4( 0, 0, 0, 0);
+		values->ambient = Float4(0, 0, 0, 0);
+		values->diffuse = Float4(0, 0, 0, 0);
 		values->specular = Float3(0, 0, 0);
 		values->specularPower = 0.0f;
 		materials.push_back(new Material(values));
@@ -96,7 +96,7 @@ OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation) const
 {
 	std::ifstream stream;
 	stream.open(fileLocation);
-	if(!stream.good())
+	if (!stream.good())
 		return nullptr;
 	Obj* data(nullptr);
 	try
@@ -125,7 +125,7 @@ OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation) const
 				material = location + line.substr(8);
 		}
 	}
-	catch(std::exception e)
+	catch (std::exception e)
 	{
 		delete data;
 		stream.close(); //Safe closing of the file
@@ -142,7 +142,7 @@ OBJFileReader::Mtl* OBJFileReader::LoadMtl(const char* fileLocation) const
 	if (!stream.good())
 		return nullptr;
 	Mtl* data(nullptr);
-	try 
+	try
 	{
 		data = new Mtl();
 		std::string line;
@@ -178,7 +178,7 @@ OBJFileReader::Mtl* OBJFileReader::LoadMtl(const char* fileLocation) const
 			}
 		}
 	}
-	catch(std::exception e)
+	catch (std::exception e)
 	{
 		delete data;
 		stream.close();
@@ -188,7 +188,7 @@ OBJFileReader::Mtl* OBJFileReader::LoadMtl(const char* fileLocation) const
 	return data;
 }
 
-void OBJFileReader::PackData(Obj* obj, std::map<unsigned short, std::vector<ObjectVertex>>& outVertex, 
+void OBJFileReader::PackData(Obj* obj, std::map<unsigned short, std::vector<ObjectVertex>>& outVertex,
 	std::map<unsigned short, std::vector<unsigned short>>& outIndices, std::vector<const char*>& outMaterial)
 {
 	//Filling out the data set
@@ -202,12 +202,12 @@ void OBJFileReader::PackData(Obj* obj, std::map<unsigned short, std::vector<Obje
 		for (auto j = 0; j < obj->indicesVertices[i.first].size(); j++)
 		{
 			Packed data = Packed(obj->vertices[obj->indicesVertices[i.first][j]],
-								  obj->normals[obj->indicesNormals[i.first][j]],
-								  obj->uvs[obj->indicesUvs[i.first][j]]);
+				obj->normals[obj->indicesNormals[i.first][j]],
+				obj->uvs[obj->indicesUvs[i.first][j]]);
 			unsigned short index;
-			if(!FindSameData(map[outMaterial.size()-1], data, index))
+			if (!FindSameData(map[outMaterial.size() - 1], data, index))
 			{
-				outVertex[outMaterial.size() - 1].push_back({data.vertex, data.uv, data.normal, data.tangent });
+				outVertex[outMaterial.size() - 1].push_back({ data.vertex, data.uv, data.normal, data.tangent });
 				index = outVertex.size() - 1;
 				map[outMaterial.size() - 1][data] = index;
 			}
@@ -216,16 +216,16 @@ void OBJFileReader::PackData(Obj* obj, std::map<unsigned short, std::vector<Obje
 	}
 }
 
-void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<ObjectVertex>>& vertex, 
+void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<ObjectVertex>>& vertex,
 	std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*> materials)
 {
 	//// http://www.terathon.com/code/tangent.html ////
 	for (unsigned short i = 0; i < materials.size(); i++)
 	{
-		Float3* tan1 = new Float3[indices[i].size() * 2]{Float3()};
+		Float3* tan1 = new Float3[indices[i].size() * 2]{ Float3() };
 		Float3* tan2 = tan1 + indices[i].size();
 		unsigned short x, y, z; //Moving out the for loops allows us not have to assign memory every iteration, but keeping the code readable is difficult
-		for(auto j = 0; j < indices[i].size(); j += 3) //Triangles have 3 points
+		for (auto j = 0; j < indices[i].size(); j += 3) //Triangles have 3 points
 		{
 			x = indices[i][j];
 			y = indices[i][j + 1];
@@ -250,12 +250,12 @@ void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<Objec
 			const float r = 1.0f / (h1.x * h2.y - h2.x * h1.y);
 
 			//Tangent Direction
-			Float3 sdir((h2.y * g1.x - h1.y * g2.x) * r, 
-						(h2.y * g1.y - h1.y * g2.y) * r,
-						(h2.y * g1.z - h1.y * g2.z) * r);
+			Float3 sdir((h2.y * g1.x - h1.y * g2.x) * r,
+				(h2.y * g1.y - h1.y * g2.y) * r,
+				(h2.y * g1.z - h1.y * g2.z) * r);
 			Float3 tdir((h1.x * g2.x - g2.x * g1.x) * r,
-						(h1.x * g2.y - g2.x * g1.y) * r,
-						(h1.x * g2.z - g2.x * g1.z) * r);
+				(h1.x * g2.y - g2.x * g1.y) * r,
+				(h1.x * g2.z - g2.x * g1.z) * r);
 			//Working the tangents out
 			tan1[x] += sdir;
 			tan1[y] += sdir;
@@ -264,9 +264,9 @@ void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<Objec
 			tan2[y] += tdir;
 			tan2[z] += tdir;
 		}
-		Float3 tangent; 
+		Float3 tangent;
 		float w;
-		for(auto j = 0; j < indices[i].size(); j++)
+		for (auto j = 0; j < indices[i].size(); j++)
 		{
 			tangent = tan1[i] - vertex[i][j].normal * tan1[i].Dot(vertex[i][j].normal);
 			w = vertex[i][j].normal.Cross(tan1[i]).Dot(tan2[i]) < 0 ? -1.0f : 1.0f;
@@ -281,7 +281,7 @@ void OBJFileReader::ReadFace(const char* line, const char* material, Obj*& data)
 	UShort3 vertex;
 	UShort3 uv;
 	UShort3 normal;
-	if(sscanf_s(line, "f %hu %hu %hu", &vertex.x, &vertex.y, &vertex.z) == 3)
+	if (sscanf_s(line, "f %hu %hu %hu", &vertex.x, &vertex.y, &vertex.z) == 3)
 	{
 		data->indicesVertices[material].push_back(vertex.x - 1);
 		data->indicesVertices[material].push_back(vertex.y - 1);
