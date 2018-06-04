@@ -162,6 +162,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\IO\Model\OBJFileReader.cpp" />
+    <ClCompile Include="scr\Render\Octree\Octree.cpp" />
     <ClCompile Include="scr\Render\IRender.cpp" />
     <ClCompile Include="scr\GameObject\Component\Camera.cpp" />
     <ClCompile Include="scr\Maths\Quaternion.cpp" />
@@ -172,11 +174,14 @@
     <ClCompile Include="scr\Observer\Switch.cpp" />
     <ClCompile Include="scr\GameObject\Component\Transform.cpp" />
     <ClCompile Include="scr\Maths\MathStructs.cpp" />
-    <ClCompile Include="scr\Utilities.cpp" />
+    <ClCompile Include="scr\Common\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\IO\Model\OBJFileReader.h" />
+    <ClInclude Include="scr\Common\Material.h" />
+    <ClInclude Include="scr\Render\Octree\Octree.h" />
     <ClInclude Include="scr\Render\IRender.h" />
-    <ClInclude Include="scr\Color.h" />
+    <ClInclude Include="scr\Common\Color.h" />
     <ClInclude Include="scr\GameObject\Component\Camera.h" />
     <ClInclude Include="scr\Maths\Quaternion.h" />
     <ClInclude Include="scr\GameObject\Component\IComponent.h" />
@@ -185,7 +190,7 @@
     <ClInclude Include="scr\Observer\Switch.h" />
     <ClInclude Include="scr\GameObject\Component\Transform.h" />
     <ClInclude Include="scr\Maths\MathStructs.h" />
-    <ClInclude Include="scr\Utilities.h" />
+    <ClInclude Include="scr\Common\Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

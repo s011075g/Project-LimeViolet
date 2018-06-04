@@ -4,7 +4,14 @@ namespace Utilities
 {
 	enum LEVEL : unsigned short
 	{
-		NORMAL_LEVEL = 15u, WARNING_LEVEL = 14u, ERROR_LEVEL = 12u, EXTREME_LEVEL = 203u
+		//White
+		NORMAL_LEVEL = 15u, 
+		//Yellow
+		WARNING_LEVEL = 14u,
+		//Red
+		ERROR_LEVEL = 12u, 
+		//Red background
+		EXTREME_LEVEL = 203u
 	};
 
 	//Used to write to console. Level shows the message in a different colour.

@@ -1,12 +1,14 @@
 #pragma once
 //Reference DirectXMath.h Copyright Microsoft Corporation
 
+typedef float Float;
+
 struct Float2
 {
 	float x, y;
 
 	Float2() = default;
-	constexpr Float2(float x, float y);
+	Float2(float x, float y);
 
 	Float2& operator= (const Float2& right);
 
@@ -23,7 +25,7 @@ struct Float3
 	float x, y, z;
 
 	Float3() = default;
-	constexpr Float3(float x, float y, float z);
+	Float3(float x, float y, float z);
 
 	Float3& operator= (const Float3& right);
 
@@ -47,8 +49,8 @@ struct Float4
 	float x, y, z, w;
 
 	Float4() = default;
-	constexpr Float4(float x, float y, float z, float w);
-	constexpr Float4(Float3 xyz, float w);
+	Float4(float x, float y, float z, float w);
+	Float4(Float3 xyz, float w);
 
 	Float4& operator= (const Float4& right);
 
@@ -58,6 +60,13 @@ struct Float4
 	float MagnitudeSqrt() const;
 
 	float Dot(const Float4& right) const;
+};
+
+struct UShort3
+{
+	unsigned short x, y, z;
+	UShort3() = default;
+	UShort3(unsigned short x, unsigned short y, unsigned short z);
 };
 
 struct Float3x3

@@ -1,7 +1,7 @@
 #pragma once
 #include "IComponent.h"
-#include "../../Color.h"
 #include "../../Maths/MathStructs.h"
+#include "../../Common/Color.h"
 
 class Camera : public IComponent
 {
