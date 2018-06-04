@@ -33,6 +33,9 @@ struct Float3
 	Float3 operator* (const float& right) const;
 
 	Float3 operator+ (const Float3& right) const;
+	Float3& operator+=(const Float3& right);
+
+	Float3 operator- (const Float3& right) const;
 
 	void Normalize();
 

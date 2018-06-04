@@ -2,15 +2,14 @@
 #include <vector>
 #include <map>
 #include "../../Maths/MathStructs.h"
+#include "../../Common/ObjectVertex.h"
 
 class OBJFileReader
 {
 private:
 	struct CompareCharValues //Used to compare values in a map
 	{
-		bool operator()(const char* left, const char* right) const {
-			return std::strcmp(left, right) < 0;
-		}
+		bool operator()(const char* left, const char* right) const;
 	};
 
 	struct Obj //Used to store the Obj files data
@@ -24,18 +23,33 @@ private:
 		std::map<const char*, std::vector<unsigned short>, CompareCharValues> indicesUvs;
 		std::vector<const char*> materialPaths;
 	};
+	struct MTLData
+	{
+		Float3 ambient;
+		Float3 diffuse;
+		Float3 specular;
+		float specularPower;
+		float transparency;
+		void* fileLocationDiffuse;
+		void* fileLocationNormal;
+		void* fileLocationSpecular;
+	};
 
 	struct Mtl //Used to store a Mtl files data
 	{
 		Mtl() = default;
-		std::map<const char*,Float3, CompareCharValues> ambient;
-		std::map<const char*, Float3, CompareCharValues> diffuse;
-		std::map<const char*, Float3, CompareCharValues> specular;
-		std::map<const char*, float, CompareCharValues> shine;
-		std::map<const char*, float, CompareCharValues> transparency;
-		std::map<const char*, const char*, CompareCharValues> fileLocationDiffuse;
-		std::map<const char*, const char*, CompareCharValues> fileLocationNormal;
-		std::map<const char*, const char*, CompareCharValues> fileLocationSpecular;
+		std::map<const char*, MTLData, CompareCharValues> materials;
+	};
+
+	struct Packed //Used for packing all data so that it uses one indice
+	{
+		Float3 vertex;
+		Float3 normal;
+		Float2 uv;
+		Float4 tangent;
+		Packed() = default;
+		Packed(Float3 vertex, Float3 normal, Float2 uv);
+		bool operator<(const Packed& right) const; //Map compare
 	};
 
 public:
@@ -50,7 +64,16 @@ private:
 	Obj* LoadObj(const char* fileLocation) const;
 	//Used to read Mtl file extensions
 	Mtl* LoadMtl(const char* fileLocation) const;
+	//Packs the data to use only one indice list. Puts them in to a map which seperates them depending on their material
+	static void PackData(Obj * obj, std::map<unsigned short, std::vector<ObjectVertex>>& outVertex, std::map<unsigned short, std::vector<unsigned short>>& outIndices, std::vector<const char*>& outMaterial);
+	//Calculates tangents to map a normal map on to the objects surface
+	static void CalculateTangents(std::map<unsigned short, std::vector<ObjectVertex>>& vertex, std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*> materials);
+	
 	//Used to read faces from Obj files
 	static void ReadFace(const char* line, const char* material, Obj*& data);
+	//Fill out missing information
+	static void FillData(Obj*& obj);
+	//Finds the same data in a map
+	static bool FindSameData(std::map<Packed, unsigned short>& map, Packed& data, unsigned short& outIndex);
 };
 

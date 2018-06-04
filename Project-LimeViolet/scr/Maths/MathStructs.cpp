@@ -47,6 +47,19 @@ Float3 Float3::operator+(const Float3& r) const
 	return Float3(x + r.x, y + r.y, z + r.z);
 }
 
+Float3& Float3::operator+=(const Float3& r)
+{
+	x += r.x;
+	y += r.y;
+	z += r.z;
+	return *this;
+}
+
+Float3 Float3::operator-(const Float3& r) const
+{
+	return Float3(x - r.x, y - r.y, z - r.z);
+}
+
 Float4& Float4::operator=(const Float4& r)
 {
 	x = r.x;
