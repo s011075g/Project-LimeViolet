@@ -57,6 +57,9 @@
     <ClCompile Include="scr\Common\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scr\Common\Geometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\GameObject\GameObject.h">
@@ -102,6 +105,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Common\ObjectVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Common\Geometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

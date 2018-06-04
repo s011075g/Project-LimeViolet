@@ -3,6 +3,7 @@
 #include <map>
 #include "../../Maths/MathStructs.h"
 #include "../../Common/ObjectVertex.h"
+#include "../../Common/Geometry.h"
 
 class OBJFileReader
 {
@@ -23,6 +24,7 @@ private:
 		std::map<const char*, std::vector<unsigned short>, CompareCharValues> indicesUvs;
 		std::vector<const char*> materialPaths;
 	};
+
 	struct MTLData
 	{
 		Float3 ambient;
@@ -53,11 +55,11 @@ private:
 	};
 
 public:
-	~OBJFileReader();
+	~OBJFileReader() = default;
 	//Singleton
 	static OBJFileReader * Instance();
 	//Read Obj model file
-	void ReadFile(const char* fileLocation);
+	Geometry* ReadFile(const char* fileLocation);
 private:
 	OBJFileReader() = default;
 	//Used to read Obj file extensions
@@ -76,4 +78,3 @@ private:
 	//Finds the same data in a map
 	static bool FindSameData(std::map<Packed, unsigned short>& map, Packed& data, unsigned short& outIndex);
 };
-

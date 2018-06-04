@@ -18,26 +18,23 @@ bool OBJFileReader::Packed::operator<(const Packed& right) const
 	return memcmp(this, &right, sizeof(Packed)) > 0;
 }
 
-OBJFileReader::~OBJFileReader()
-{ }
-
 OBJFileReader* OBJFileReader::Instance()
 {
 	static OBJFileReader instance;
 	return &instance;
 }
 
-void OBJFileReader::ReadFile(const char* fileLocation)
+Geometry* OBJFileReader::ReadFile(const char* fileLocation)
 {
 	if (_stricmp(&fileLocation[strlen(fileLocation) - 3], "obj") != 0)
-		return;
+		return nullptr;
 	Obj* obj = LoadObj(fileLocation);
 	if (!obj)
-		return; //TODO add suitable exception  
+		return nullptr;
 	std::vector<Mtl*> mtls;
 	for (auto c : obj->materialPaths) //Load all MTL files
 		mtls.push_back(LoadMtl(c));
-	//Pack Data in to VBO
+	//Pack Data in single indices
 	std::map<unsigned short, std::vector<ObjectVertex>> vertex;
 	std::map<unsigned short, std::vector<unsigned short>> indices;
 	std::vector<const char*> material;
@@ -78,11 +75,21 @@ void OBJFileReader::ReadFile(const char* fileLocation)
 			materials[materials.size() - 1]->SetTextureSpecular(i->materials[j].fileLocationSpecular);
 		}
 	} 
-	//TODO CLEAN UP AND RETURN DATA
-	//Clean up - quick
+	if(materials.empty())
+	{
+		MaterialValues* values = new MaterialValues();
+		values->ambient = Float4( 0, 0, 0, 0);
+		values->diffuse = Float4( 0, 0, 0, 0);
+		values->specular = Float3(0, 0, 0);
+		values->specularPower = 0.0f;
+		materials.push_back(new Material(values));
+	}
+	//Clean up
 	for (auto m : mtls)
 		delete m;
-	return;
+	for (auto m : material)
+		delete m;
+	return new Geometry(vertex, indices, materials);
 }
 
 OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation) const
@@ -111,11 +118,11 @@ OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation) const
 			else if (sscanf_s(line.c_str(), "vn %f %f %f", &value.x, &value.y, &value.z) == 3)
 				data->normals.push_back(value);
 			else if (sscanf_s(line.c_str(), "vt %f %f", &value.x, &value.y) == 2)
-				data->uvs.push_back(Float2(value.x, value.y));
+				data->uvs.emplace_back(value.x, value.y);
 			else if (c == 'f')
 				ReadFace(line.c_str(), material.c_str(), data);
 			else if (c == 'm' && line.substr(0, 6).compare("mtllib"))
-				material = location + line.substr(8).c_str();
+				material = location + line.substr(8);
 		}
 	}
 	catch(std::exception e)
@@ -160,6 +167,15 @@ OBJFileReader::Mtl* OBJFileReader::LoadMtl(const char* fileLocation) const
 				data->materials[material].transparency = value.x;
 			else if (c == 'n' && line.substr(0, 6).compare("newmtl")) //The first compare is to decrease the amount of substrings needed
 				material = line.substr(8).c_str(); //TODO add in texture path reading 
+			else if (c == 'm')
+			{
+				if (line.substr(0, 6).compare("map_Kd"))
+					data->materials[material].fileLocationDiffuse = (void *)line.substr(8).c_str();
+				else if (line.substr(0, 6).compare("map_Ks"))
+					data->materials[material].fileLocationSpecular = (void *)line.substr(8).c_str();
+				else if (line.substr(0, 8).compare("map_bump"))
+					data->materials[material].fileLocationSpecular = (void *)line.substr(10).c_str();
+			}
 		}
 	}
 	catch(std::exception e)
