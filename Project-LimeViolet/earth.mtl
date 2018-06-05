@@ -1,0 +1,13 @@
+newmtl 02___Default
+Ns 12
+Ka 0.200000 0.200000 0.200000
+Kd 0.600000 0.600000 0.600000
+Ks 0.800000 0.800000 0.800000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+map_Kd Textures/earth.bmp
+map_Ks Textures/earth_specular.jpg
+map_bump Textures/earth_normals.jpg

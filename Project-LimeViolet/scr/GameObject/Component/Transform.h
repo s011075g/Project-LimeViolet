@@ -5,15 +5,15 @@
 class Transform : public IComponent
 {
 private:
-	Float4x4 _positionMatrix;
-	Float4x4 _rotationMatrix;
-	Float4x4 _scaleMatrix;
+	Float4x4 position_matrix;
+	Float4x4 rotationMatrix;
+	Float4x4 scaleMatrix;
 
-	Float4x4 _worldMatrix;
+	Float4x4 worldMatrix;
 
-	Quaternion _rotation;
-	Float3 _position;
-	Float3 _scale;
+	Quaternion rotation;
+	Float3 position;
+	Float3 scale;
 public:
 	Transform(GameObject* gameObject);
 	~Transform();

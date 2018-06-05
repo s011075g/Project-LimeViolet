@@ -6,7 +6,8 @@ struct MaterialValues //48 bytes, 4 byte alligned
 	MaterialValues() = default;
 
 	Float4 ambient; //16
-	Float4 diffuse; //16
+	Float3 diffuse; //12
+	float transparency; //4
 	Float3 specular; //12
 	float specularPower; //4
 };

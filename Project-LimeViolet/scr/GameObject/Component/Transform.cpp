@@ -15,49 +15,49 @@ void Transform::Update()
 
 void Transform::UpdateMatrix()
 {
-	_worldMatrix = Float4x4::Identity() * _scaleMatrix * _rotationMatrix * _positionMatrix;
+	worldMatrix = Float4x4::Identity() * scaleMatrix * rotationMatrix * position_matrix;
 }
 
 void Transform::UpdateMatrix(Float4x4& parentMatrix)
 {
-	_worldMatrix = Float4x4::Identity() * _scaleMatrix * _rotationMatrix * _positionMatrix * parentMatrix;
+	worldMatrix = Float4x4::Identity() * scaleMatrix * rotationMatrix * position_matrix * parentMatrix;
 }
 
 void Transform::SetPosition(Float3& position)
 {
-	_position = position;
-	_positionMatrix.m41 = position.x;
-	_positionMatrix.m42 = position.y;
-	_positionMatrix.m43 = position.z;
-	_positionMatrix.m44 = 1.0f;
+	position = position;
+	position_matrix.m41 = position.x;
+	position_matrix.m42 = position.y;
+	position_matrix.m43 = position.z;
+	position_matrix.m44 = 1.0f;
 }
 
 void Transform::SetRotation(Quaternion& quaternion)
 {
-	_rotation = quaternion;
-	_rotationMatrix = Float4x4(_rotation.GetRotationMatrix());
+	rotation = quaternion;
+	rotationMatrix = Float4x4(rotation.GetRotationMatrix());
 }
 
 void Transform::SetScale(Float3& scale)
 {
-	_scale = scale;
-	_scaleMatrix.m11 = scale.x;
-	_scaleMatrix.m22 = scale.y;
-	_scaleMatrix.m33 = scale.z;
-	_scaleMatrix.m44 = 1.0f;
+	scale = scale;
+	scaleMatrix.m11 = scale.x;
+	scaleMatrix.m22 = scale.y;
+	scaleMatrix.m33 = scale.z;
+	scaleMatrix.m44 = 1.0f;
 }
 
 Float3 Transform::GetPosition() const
 {
-	return _position;
+	return position;
 }
 
 Quaternion Transform::GetRotation() const
 {
-	return _rotation;
+	return rotation;
 }
 
 Float3 Transform::GetScale() const
 {
-	return _scale;
+	return scale;
 }

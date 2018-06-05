@@ -162,8 +162,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Entity\Entity.cpp" />
     <ClCompile Include="scr\Entity\Component\Component.cpp" />
-    <ClCompile Include="scr\Common\Geometry.cpp" />
+    <ClCompile Include="scr\Render\Geometry.cpp" />
     <ClCompile Include="scr\Common\Material.cpp" />
     <ClCompile Include="scr\IO\Model\OBJFileReader.cpp" />
     <ClCompile Include="scr\Render\Octree\Octree.cpp" />
@@ -180,9 +181,12 @@
     <ClCompile Include="scr\Common\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Entity\Component\Camera.h" />
+    <ClInclude Include="scr\Entity\Entity.h" />
     <ClInclude Include="scr\Entity\Component\Component.h" />
-    <ClInclude Include="scr\Common\Geometry.h" />
+    <ClInclude Include="scr\Render\Geometry.h" />
     <ClInclude Include="scr\Common\ObjectVertex.h" />
+    <ClInclude Include="scr\Entity\Component\Transform.h" />
     <ClInclude Include="scr\IO\Model\OBJFileReader.h" />
     <ClInclude Include="scr\Common\Material.h" />
     <ClInclude Include="scr\Render\Octree\Octree.h" />

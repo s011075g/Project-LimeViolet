@@ -3,11 +3,11 @@
 #include <map>
 #include "../../Maths/MathStructs.h"
 #include "../../Common/ObjectVertex.h"
-#include "../../Common/Geometry.h"
+#include "../../Render/Geometry.h"
 
 class OBJFileReader
 {
-private:
+public:
 	struct CompareCharValues 
 	{
 		//Used to compare values in a map rather than memory addresses
@@ -17,6 +17,7 @@ private:
 	struct Obj //Used to store the Obj files data
 	{
 		Obj() = default;
+		~Obj();
 		std::vector<Float3> vertices;
 		std::map<const char*, std::vector<unsigned short>, CompareCharValues> indicesVertices;
 		std::vector<Float3> normals;
@@ -42,6 +43,7 @@ private:
 	{
 		Mtl() = default;
 		std::map<const char*, MTLData, CompareCharValues> materials;
+		bool isNormalMap;
 	};
 
 	struct Packed //Used for packing all data so that it uses one indice
@@ -59,6 +61,7 @@ public:
 	~OBJFileReader() = default;
 	//Singleton
 	static OBJFileReader * Instance();
+	
 	//Read Obj model file
 	Geometry* ReadFile(const char* fileLocation) const;
 private:
@@ -72,6 +75,8 @@ private:
 	//Calculates tangents to map a normal map on to the objects surface
 	static void CalculateTangents(std::map<unsigned short, std::vector<ObjectVertex>>& vertex, std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*> materials);
 	
+	//Load all mtl files
+	void LoadMtlFiles(std::vector<const char*>& paths, std::vector<Mtl*> & mtls) const;
 	//Used to read faces from Obj files
 	static void ReadFace(const char* line, const char* material, Obj*& data);
 	//Fill out missing information
