@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 typedef void* EntityHandler;
-typedef unsigned int uint32;
+typedef unsigned int uint32; 
 typedef unsigned char uint8;
 
 struct BasicComponent;
@@ -11,7 +11,7 @@ typedef void (*ComponentFreeFunction)(BasicComponent* comp);
 
 struct BasicComponent
 {
-	static uint32 NextID();
+	static uint32 NextId();
 	EntityHandler entity;
 };
 
@@ -22,4 +22,9 @@ struct Component : BasicComponent
 	static const ComponentFreeFunction FREE_FUNCTION;
 	static const uint32 ID;
 	static const size_t SIZE;
+};
+
+struct Example : Component<Example>
+{
+	float x, y;
 };

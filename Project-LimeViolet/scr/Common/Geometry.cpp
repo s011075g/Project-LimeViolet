@@ -5,8 +5,8 @@ Geometry::Geometry(std::map<unsigned short, std::vector<ObjectVertex>>& vertex,
 	: _vertex(vertex), _indices(indices), _materials(materials)
 { }
 
-Geometry::~Geometry()
+Geometry::~Geometry() //Cleans up materials
 {
-	for (Material* m : _materials)
+	for (Material* m : _materials) 
 		delete m;
 }

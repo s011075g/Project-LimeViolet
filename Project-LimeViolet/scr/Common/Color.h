@@ -1,4 +1,5 @@
 #pragma once
+//Holds 4 values, assigned to R,G,B,A
 struct Color
 {
 	union

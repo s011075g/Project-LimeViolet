@@ -8,8 +8,9 @@
 class OBJFileReader
 {
 private:
-	struct CompareCharValues //Used to compare values in a map
+	struct CompareCharValues 
 	{
+		//Used to compare values in a map rather than memory addresses
 		bool operator()(const char* left, const char* right) const;
 	};
 
@@ -25,7 +26,7 @@ private:
 		std::vector<const char*> materialPaths;
 	};
 
-	struct MTLData
+	struct MTLData //Store a materials information
 	{
 		Float3 ambient;
 		Float3 diffuse;
@@ -59,7 +60,7 @@ public:
 	//Singleton
 	static OBJFileReader * Instance();
 	//Read Obj model file
-	Geometry* ReadFile(const char* fileLocation);
+	Geometry* ReadFile(const char* fileLocation) const;
 private:
 	OBJFileReader() = default;
 	//Used to read Obj file extensions

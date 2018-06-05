@@ -13,16 +13,19 @@ public:
 	
 	~Quaternion();
 
+	//Normalise the axis the Quaternion uses
 	void Normalise();
 
 	void AddScaledVector(const Float3& vector, float scale);
-	
+
+	//Rotate this quaternion by a vector
 	void RotateByVector(const Float3& vector);
 
 	void operator *=(const Quaternion& right);
 
+	//Rotate Vector by this Quaternion
 	Float3 RotateVector(const Float3& vector) const;
 
+	//Get a rotation matrix from the quaternion
 	Float3x3 GetRotationMatrix() const;
 };
-

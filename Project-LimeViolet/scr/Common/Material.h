@@ -11,17 +11,18 @@ struct MaterialValues //48 bytes, 4 byte alligned
 	float specularPower; //4
 };
 
-class Material
+class Material //Material holds information for what the triangles will look like once rendered
 {
 private:
-	MaterialValues * _material;
-	void* _textureDiffuse;
+	MaterialValues * _material; //Holds the colors for the material
+	void* _textureDiffuse; 
 	void* _textureNormal;
 	void* _textureSpecular;
 public:
 	Material() = default;
 	explicit Material(MaterialValues *& material);
 
+	//Set a texture, possible for it to hold any pointer, so I can give it a char* which I can then take to load in that image and return a pointer in its place
 	void SetTextureDiffuse(void * textre);
 	void SetTextureNormal(void *textre);
 	void SetTextureSpecular(void * textre);
