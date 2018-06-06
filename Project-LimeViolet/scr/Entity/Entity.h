@@ -3,11 +3,15 @@
 
 class Entity //Will have a list of Components
 {
+private:
+	std::vector<uint8_t> _memory;
 public:
 	Entity();
 	~Entity();
-	//todo Better to make it templated so memory is correct assigned
+	
+	template<typename Component>
 	bool AddComponent(); //todo add component only once
-	bool RemoveComponent(); //todo remove component correctly
-};
 
+	template<typename Component>
+	void RemoveComponent(); //todo remove component correctly
+};

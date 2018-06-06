@@ -1,8 +1,6 @@
 #pragma once
 //Reference DirectXMath.h Copyright Microsoft Corporation
 
-typedef float Float;
-
 struct Float2
 {
 	float x, y;
@@ -12,10 +10,28 @@ struct Float2
 
 	Float2& operator= (const Float2& right);
 
+	Float2 operator* (const Float2& right) const;
+	Float2& operator*=(const Float2& right);
+
+	Float2 operator* (const float& right) const;
+	Float2& operator*=(const float &right);
+
+	Float2 operator/ (const Float2& right) const;
+	Float2& operator/=(const Float2 &right);
+
+	Float2 operator/ (const float& right) const;
+	Float2& operator/=(const float &right);
+
+	Float2 operator+ (const Float2& right) const;
+	Float2& operator+=(const Float2& right);
+
+	Float2 operator- (const Float2& right) const;
+	Float2& operator-=(const Float2& right);
+
 	void Normalize();
 
-	constexpr float Magnitude() const;
-	float MagnitudeSqrt() const;
+	float Magnitude() const;
+	float MagnitudeSq() const;
 
 	float Dot(const Float2& right) const;
 };
@@ -30,17 +46,27 @@ struct Float3
 	Float3& operator= (const Float3& right);
 
 	Float3 operator* (const Float3& right) const;
+	Float3& operator*=(const Float3& right);
+
 	Float3 operator* (const float& right) const;
+	Float3& operator*=(const float &right);
+
+	Float3 operator/ (const Float3& right) const;
+	Float3& operator/=(const Float3 &right);
+
+	Float3 operator/ (const float& right) const;
+	Float3& operator/=(const float &right);
 
 	Float3 operator+ (const Float3& right) const;
 	Float3& operator+=(const Float3& right);
 
 	Float3 operator- (const Float3& right) const;
+	Float3& operator-=(const Float3& right);
 
 	void Normalize();
 
-	constexpr float Magnitude() const;
-	float MagnitudeSqrt() const;
+	float Magnitude() const;
+	float MagnitudeSq() const;
 
 	float Dot(const Float3& right) const;
 
@@ -57,10 +83,28 @@ struct Float4
 
 	Float4& operator= (const Float4& right);
 
+	Float4 operator* (const Float4& right) const;
+	Float4& operator*=(const Float4& right);
+
+	Float4 operator* (const float& right) const;
+	Float4& operator*=(const float &right);
+
+	Float4 operator/ (const Float4& right) const;
+	Float4& operator/=(const Float4 &right);
+
+	Float4 operator/ (const float& right) const;
+	Float4& operator/=(const float &right);
+
+	Float4 operator+ (const Float4& right) const;
+	Float4& operator+=(const Float4& right);
+
+	Float4 operator- (const Float4& right) const;
+	Float4& operator-=(const Float4& right);
+
 	void Normalize();
 
-	constexpr float Magnitude() const;
-	float MagnitudeSqrt() const;
+	float Magnitude() const;
+	float MagnitudeSq() const;
 
 	float Dot(const Float4& right) const;
 };

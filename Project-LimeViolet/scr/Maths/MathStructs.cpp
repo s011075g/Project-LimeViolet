@@ -24,6 +24,78 @@ Float2& Float2::operator=(const Float2& r)
 	return *this;
 }
 
+Float2 Float2::operator*(const Float2& r) const
+{
+	return Float2(x * r.x, y * r.y);
+}
+
+Float2& Float2::operator*=(const Float2& r)
+{
+	x *= r.x;
+	y *= r.y;
+	return *this;
+}
+
+Float2 Float2::operator*(const float& r) const
+{
+	return Float2(x * r, y * r);
+}
+
+Float2& Float2::operator*=(const float& r)
+{
+	x *= r;
+	y *= r;
+	return *this;
+}
+
+Float2 Float2::operator/(const Float2& r) const
+{
+	return Float2(x * r.x, y * r.y);
+}
+
+Float2& Float2::operator/=(const Float2& r)
+{
+	x /= r.x;
+	y /= r.y;
+	return *this;
+}
+
+Float2 Float2::operator/(const float& r) const
+{
+	return Float2(x / r, y / r);
+}
+
+Float2& Float2::operator/=(const float& r)
+{
+	x /= r;
+	y /= r;
+	return *this;
+}
+
+Float2 Float2::operator+(const Float2& r) const
+{
+	return Float2(x + r.x, y + r.y);
+}
+
+Float2& Float2::operator+=(const Float2& r)
+{
+	x += r.x;
+	y += r.y;
+	return *this;
+}
+
+Float2 Float2::operator-(const Float2& r) const
+{
+	return Float2(x -  r.x, y - r.y);
+}
+
+Float2& Float2::operator-=(const Float2& r)
+{
+	x -= r.x;
+	y -= r.y;
+	return *this;
+}
+
 Float3& Float3::operator=(const Float3& r)
 {
 	x = r.x;
@@ -37,9 +109,51 @@ Float3 Float3::operator*(const Float3& r) const
 	return Float3(x * r.x, y * r.y, z * r.z);
 }
 
+Float3& Float3::operator*=(const Float3& r)
+{
+	x *= r.x;
+	y *= r.y;
+	z *= r.z;
+	return *this;
+}
+
 Float3 Float3::operator*(const float& r) const
 {
 	return Float3(x * r, y * r, z * r);
+}
+
+Float3& Float3::operator*=(const float& r)
+{
+	x *= r;
+	y *= r;
+	z *= r;
+	return *this;
+}
+
+Float3 Float3::operator/(const Float3& r) const
+{
+	return Float3(x / r.x, y / r.y, z / r.z);
+}
+
+Float3& Float3::operator/=(const Float3& r)
+{
+	x *= r.x;
+	y *= r.y;
+	z *= r.z;
+	return *this;
+}
+
+Float3 Float3::operator/(const float& r) const
+{
+	return Float3(x / r, y / r, z / r);
+}
+
+Float3& Float3::operator/=(const float& r)
+{
+	x /= r;
+	y /= r;
+	z /= r;
+	return *this;
 }
 
 Float3 Float3::operator+(const Float3& r) const
@@ -60,6 +174,14 @@ Float3 Float3::operator-(const Float3& r) const
 	return Float3(x - r.x, y - r.y, z - r.z);
 }
 
+Float3& Float3::operator-=(const Float3& r)
+{
+	x -= r.x;
+	y -= r.y;
+	z -= r.z;
+	return *this;
+}
+
 Float4& Float4::operator=(const Float4& r)
 {
 	x = r.x;
@@ -69,46 +191,130 @@ Float4& Float4::operator=(const Float4& r)
 	return *this;
 }
 
-constexpr float Float2::Magnitude() const
+Float4 Float4::operator*(const Float4& r) const
 {
-	return x * x + y * y;
+	return Float4(x * r.x, y * r.y, z * r.z, w*  r.w);
 }
 
-float Float2::MagnitudeSqrt() const
+Float4& Float4::operator*=(const Float4& r)
+{
+	x *= r.x;
+	y *= r.y;
+	z *= r.z;
+	w *= r.w;
+	return *this;
+}
+
+Float4 Float4::operator*(const float& r) const
+{
+	return Float4(x * r, y * r, z * r, w * r);
+}
+
+Float4& Float4::operator*=(const float& r)
+{
+	x *= r;
+	y *= r;
+	z *= r;
+	w *= r;
+	return *this;
+}
+
+Float4 Float4::operator/(const Float4& r) const
+{
+	return Float4(x / r.x, y / r.y, z / r.z, w / r.w);
+}
+
+Float4& Float4::operator/=(const Float4& r)
+{
+	x /= r.x;
+	y /= r.y;
+	z /= r.z;
+	w /= r.w;
+	return *this;
+}
+
+Float4 Float4::operator/(const float& r) const
+{
+	return Float4(x / r, y / r, z / r, w / r);
+}
+
+Float4& Float4::operator/=(const float& r)
+{
+	x /= r;
+	y /= r;
+	z /= r;
+	w /= r;
+	return *this;
+}
+
+Float4 Float4::operator+(const Float4& r) const
+{
+	return Float4(x + r.x, y + r.y, z + r.z, w + r.w);
+}
+
+Float4& Float4::operator+=(const Float4& r)
+{
+	x += r.x;
+	y += r.y;
+	z += r.z;
+	w += r.w;
+	return *this;
+}
+
+Float4 Float4::operator-(const Float4& r) const
+{
+	return Float4(x - r.x, y - r.y, z - r.z, w - r.w);
+}
+
+Float4& Float4::operator-=(const Float4& r)
+{
+	x -= r.x;
+	y -= r.y;
+	z -= r.z;
+	w -= r.w;
+	return *this;
+}
+
+float Float2::Magnitude() const
 {
 	return std::sqrt(x * x + y * y);
 }
 
-constexpr float Float3::Magnitude() const
+float Float2::MagnitudeSq() const
 {
-	return x * x + y * y + z * z;
+	return x * x + y * y;
 }
 
-float Float3::MagnitudeSqrt() const
+float Float3::Magnitude() const
 {
 	return std::sqrt(x * x + y * y + z * z);
 }
 
-constexpr float Float4::Magnitude() const
+float Float3::MagnitudeSq() const
 {
-	return x * x + y * y + z * z + w * w;
+	return x * x + y * y + z * z;
 }
 
-float Float4::MagnitudeSqrt() const
+float Float4::Magnitude() const
 {
 	return std::sqrt(x * x + y * y + z * z + w * w);
 }
 
+float Float4::MagnitudeSq() const
+{
+	return x * x + y * y + z * z + w * w;
+}
+
 void Float2::Normalize()
 {
-	const float mag = MagnitudeSqrt();
+	const float mag = Magnitude();
 	x /= mag;
 	y /= mag;
 }
 
 void Float3::Normalize()
 {
-	const float mag = MagnitudeSqrt();
+	const float mag = Magnitude();
 	x /= mag;
 	y /= mag;
 	z /= mag;
@@ -116,7 +322,7 @@ void Float3::Normalize()
 
 void Float4::Normalize()
 {
-	const float mag = MagnitudeSqrt();
+	const float mag = Magnitude();
 	x /= mag;
 	y /= mag;
 	z /= mag;
