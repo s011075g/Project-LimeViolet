@@ -7,14 +7,14 @@
 
 class OBJFileReader
 {
-public:
+private:
 	struct CompareCharValues 
 	{
 		//Used to compare values in a map rather than memory addresses
 		bool operator()(const char* left, const char* right) const;
 	};
-
-	struct Obj //Used to store the Obj files data
+	//Used to store the Obj files data
+	struct Obj 
 	{
 		Obj() = default;
 		~Obj();
@@ -26,8 +26,8 @@ public:
 		std::map<const char*, std::vector<unsigned short>, CompareCharValues> indicesUvs;
 		std::vector<const char*> materialPaths;
 	};
-
-	struct MTLData //Store a materials information
+	//Store a materials information
+	struct MTLData 
 	{
 		Float3 ambient;
 		Float3 diffuse;
@@ -38,15 +38,15 @@ public:
 		void* fileLocationNormal;
 		void* fileLocationSpecular;
 	};
-
-	struct Mtl //Used to store a Mtl files data
+	//Used to store a Mtl files data
+	struct Mtl 
 	{
 		Mtl() = default;
 		std::map<const char*, MTLData, CompareCharValues> materials;
 		bool isNormalMap;
 	};
-
-	struct Packed //Used for packing all data so that it uses one indice
+	//Used for packing all data so that it uses one indice
+	struct Packed 
 	{
 		Float3 vertex;
 		Float3 normal;
@@ -54,29 +54,24 @@ public:
 		Float4 tangent;
 		Packed() = default;
 		Packed(Float3 vertex, Float3 normal, Float2 uv);
-		bool operator<(const Packed& right) const; //Map compare
+		bool operator<(const Packed& right) const; //Map comparison
 	};
 
 public:
-	~OBJFileReader() = default;
-	//Singleton
-	static OBJFileReader * Instance();
-	
 	//Read Obj model file
-	Geometry* ReadFile(const char* fileLocation) const;
+	static Geometry* ReadFile(const char* fileLocation);
 private:
-	OBJFileReader() = default;
 	//Used to read Obj file extensions
-	Obj* LoadObj(const char* fileLocation) const;
+	static Obj* LoadObj(const char* fileLocation);
 	//Used to read Mtl file extensions
-	Mtl* LoadMtl(const char* fileLocation) const;
+	static Mtl* LoadMtl(const char* fileLocation);
 	//Packs the data to use only one indice list. Puts them in to a map which seperates them depending on their material
 	static void PackData(Obj * obj, std::map<unsigned short, std::vector<ObjectVertex>>& outVertex, std::map<unsigned short, std::vector<unsigned short>>& outIndices, std::vector<const char*>& outMaterial);
 	//Calculates tangents to map a normal map on to the objects surface
-	static void CalculateTangents(std::map<unsigned short, std::vector<ObjectVertex>>& vertex, std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*> materials);
+	static void CalculateTangents(std::map<unsigned short, std::vector<ObjectVertex>>& vertex, std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*>& materials);
 	
 	//Load all mtl files
-	void LoadMtlFiles(std::vector<const char*>& paths, std::vector<Mtl*> & mtls) const;
+	static void LoadMtlFiles(std::vector<const char*>& paths, std::vector<Mtl*> & mtls);
 	//Used to read faces from Obj files
 	static void ReadFace(const char* line, const char* material, Obj*& data);
 	//Fill out missing information

@@ -1,5 +1,4 @@
 #pragma once
-
 namespace Utilities
 {
 	enum LEVEL : unsigned short
@@ -13,9 +12,9 @@ namespace Utilities
 		//Red background
 		EXTREME_LEVEL = 203u
 	};
-
+	
 	//Used to write to console. Level shows the message in a different colour.
-	void Write(const char* ptr, LEVEL level);
+	void Write(const char* ptr, const LEVEL level);
 	//Used to write to console. Colour will be default.
 	void Write(const char* ptr);
 	//Causes the console to pause by requesting input.
@@ -27,4 +26,3 @@ namespace Utilities
 	//Querry if the console window is showing.
 	bool IsConsoleVisible();
 };
-

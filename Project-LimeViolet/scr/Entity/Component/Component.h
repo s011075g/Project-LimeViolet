@@ -1,30 +1,23 @@
 #pragma once
 #include <vector>
 typedef void* EntityHandler;
-typedef unsigned int uint32; 
-typedef unsigned char uint8;
 
-struct BasicComponent;
+struct BaseComponent;
 
-typedef uint32 (*ComponentCreateFunction)(std::vector<uint8*> memory, EntityHandler entity, BasicComponent* comp);
-typedef void (*ComponentFreeFunction)(BasicComponent* comp);
+typedef uint32_t(*ComponentCreateFunction)(std::vector<uint8_t>& memory, EntityHandler entity, BaseComponent* comp);
+typedef void (*ComponentFreeFunction)(BaseComponent* comp);
 
-struct BasicComponent
+struct BaseComponent
 {
-	static uint32 NextId();
-	EntityHandler entity;
+	static uint32_t NextId();
+	EntityHandler entity = nullptr;
 };
 
 template<typename T>
-struct Component : BasicComponent
+struct Component : BaseComponent
 {
 	static const ComponentCreateFunction CREATE_FUNCTION;
 	static const ComponentFreeFunction FREE_FUNCTION;
-	static const uint32 ID;
+	static const uint32_t ID;
 	static const size_t SIZE;
-};
-
-struct Example : Component<Example>
-{
-	float x, y;
 };

@@ -24,13 +24,7 @@ bool OBJFileReader::Packed::operator<(const Packed& right) const
 	return memcmp(this, &right, sizeof(Packed)) > 0;
 }
 
-OBJFileReader* OBJFileReader::Instance()
-{
-	static OBJFileReader instance;
-	return &instance;
-}
-
-Geometry* OBJFileReader::ReadFile(const char* fileLocation) const
+Geometry* OBJFileReader::ReadFile(const char* fileLocation)
 {
 	Obj* obj = LoadObj(fileLocation); //First loads the OBJ file in to memory
 	if (!obj)
@@ -100,20 +94,20 @@ Geometry* OBJFileReader::ReadFile(const char* fileLocation) const
 	return new Geometry(vertex, indices, materials); //return
 }
 
-OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation) const
+OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation)
 {
 	std::ifstream stream; //Opens file in to a stream
-	stream.open(fileLocation);
+	stream.open(fileLocation, std::ios_base::in);
 	if (!stream.good())
 		return nullptr;
 	Obj* data(nullptr);
-	std::string line;
 	try //Just encase any error happen so the file can be correctly closed
 	{
 		std::string location = std::string(fileLocation).substr(0, std::string(fileLocation).find_last_of("/") + 1);
 		Float3 value;
 		const char* material(nullptr);
 		data = new Obj();
+		std::string line;
 		while (getline(stream, line))
 		{
 			if (line.empty())
@@ -121,14 +115,15 @@ OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation) const
 			const char c = line[0]; 
 			if (c == '#' || c == '\n' || c == 'o' || c == 'g' || c == ' ' || c == 's') //Skips these characters or continues to read information
 				continue;
-			if(sscanf_s(line.c_str(), "v %f %f %f", &value.x, &value.y, &value.z) == 3)
+			const char* ptr = line.c_str();
+			if(sscanf_s(ptr, "v %f %f %f", &value.x, &value.y, &value.z) == 3)
 				data->vertices.push_back(value);
-			else if (sscanf_s(line.c_str(), "vn %f %f %f", &value.x, &value.y, &value.z) == 3)
+			else if (sscanf_s(ptr, "vn %f %f %f", &value.x, &value.y, &value.z) == 3)
 				data->normals.push_back(value);
-			else if (sscanf_s(line.c_str(), "vt %f %f", &value.x, &value.y) == 2)
+			else if (sscanf_s(ptr, "vt %f %f", &value.x, &value.y) == 2)
 				data->uvs.emplace_back(value.x, value.y);
 			else if (c == 'f') 
-				ReadFace(line.c_str(), material, data);
+				ReadFace(ptr, material, data);
 			else if (c == 'm' && line.substr(0, 6).compare("mtllib") == 0)
 			{
 				std::string spath = location + line.substr(7);
@@ -154,10 +149,10 @@ OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation) const
 	return data;
 }
 
-OBJFileReader::Mtl* OBJFileReader::LoadMtl(const char* fileLocation) const
+OBJFileReader::Mtl* OBJFileReader::LoadMtl(const char* fileLocation)
 {
 	std::ifstream stream; //Opens file in to a stream
-	stream.open(fileLocation); 
+	stream.open(fileLocation, std::ios_base::in); 
 	if (!stream.good())
 		return nullptr;
 	Mtl* data(nullptr);
@@ -174,15 +169,16 @@ OBJFileReader::Mtl* OBJFileReader::LoadMtl(const char* fileLocation) const
 			const char c = line[0];
 			if (c == '#' || c == '\n' || c == ' ')
 				continue;
-			if (sscanf_s(line.c_str(), "Kd %f %f %f", &value.x, &value.y, &value.z) == 3)
+			const char* ptr = line.c_str();
+			if (sscanf_s(ptr, "Kd %f %f %f", &value.x, &value.y, &value.z) == 3)
 				data->materials[material].diffuse = value;
-			else if (sscanf_s(line.c_str(), "Ka %f %f %f", &value.x, &value.y, &value.z) == 3)
+			else if (sscanf_s(ptr, "Ka %f %f %f", &value.x, &value.y, &value.z) == 3)
 				data->materials[material].ambient = value;
-			else if (sscanf_s(line.c_str(), "Ks %f %f %f", &value.x, &value.y, &value.z) == 3)
+			else if (sscanf_s(ptr, "Ks %f %f %f", &value.x, &value.y, &value.z) == 3)
 				data->materials[material].specular = value;
-			else if (sscanf_s(line.c_str(), "Ns %f", &value.x) == 1)
+			else if (sscanf_s(ptr, "Ns %f", &value.x) == 1)
 				data->materials[material].specularPower = value.x;
-			else if (sscanf_s(line.c_str(), "d %f", &value.x) == 1)
+			else if (sscanf_s(ptr, "d %f", &value.x) == 1)
 				data->materials[material].transparency = value.x;
 			else if (c == 'n' && line.substr(0, 6).compare("newmtl") == 0) //The first compare is to decrease the amount of substrings needed
 			{
@@ -253,7 +249,7 @@ void OBJFileReader::PackData(Obj* obj, std::map<unsigned short, std::vector<Obje
 }
 
 void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<ObjectVertex>>& vertex,
-	std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*> materials)
+	std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*>& materials)
 {
 	//// http://www.terathon.com/code/tangent.html was used as a base for this piece of code
 	for (unsigned short i = 0; i < materials.size(); i++)
@@ -261,19 +257,21 @@ void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<Objec
 		Float3* tan1 = new Float3[indices[i].size() * 2]{ Float3() }; //Just request memory twice the size so we can get a pointer half way
 		Float3* tan2 = tan1 + indices[i].size();
 		unsigned short x, y, z; //Moving out the for loops allows us not have to assign memory every iteration, but keeping the code readable is difficult
+		Float3 v1, v2, v3;
+		Float2 w1, w2, w3;
 		for (auto j = 0; j < indices[i].size(); j += 3) //Triangles have 3 points
 		{
 			x = indices[i][j];
 			y = indices[i][j + 1];
 			z = indices[i][j + 2];
 
-			const Float3& v1 = vertex[i][x].vertex;
-			const Float3& v2 = vertex[i][y].vertex;
-			const Float3& v3 = vertex[i][z].vertex;
+			v1 = vertex[i][x].vertex;
+			v2 = vertex[i][y].vertex;
+			v3 = vertex[i][z].vertex;
 
-			const Float2& w1 = vertex[i][x].uv;
-			const Float2& w2 = vertex[i][y].uv;
-			const Float2& w3 = vertex[i][z].uv;
+			w1 = vertex[i][x].uv;
+			w2 = vertex[i][y].uv;
+			w3 = vertex[i][z].uv;
 
 			//The difference
 			const Float3 g1(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
@@ -286,18 +284,18 @@ void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<Objec
 			const float r = 1.0f / (h1.x * h2.y - h2.x * h1.y);
 
 			//Tangent Direction
-			Float3 sdir((h2.y * g1.x - h1.y * g2.x) * r,
+			const Float3 sdir((h2.y * g1.x - h1.y * g2.x) * r,
 				(h2.y * g1.y - h1.y * g2.y) * r,
 				(h2.y * g1.z - h1.y * g2.z) * r);
-			Float3 tdir((h1.x * g2.x - g2.x * g1.x) * r,
+			const Float3 tdir((h1.x * g2.x - g2.x * g1.x) * r,
 				(h1.x * g2.y - g2.x * g1.y) * r,
 				(h1.x * g2.z - g2.x * g1.z) * r);
-			//Adding the values together so we can later norlize them 
+			//Adding the values together so we can later normalize them 
 			tan1[x] += sdir;
-			tan1[y] += sdir;
-			tan1[z] += sdir;
 			tan2[x] += tdir;
+			tan1[y] += sdir;
 			tan2[y] += tdir;
+			tan1[z] += sdir;
 			tan2[z] += tdir;
 		}
 		Float3 tangent;
@@ -314,7 +312,7 @@ void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<Objec
 }
 
 //Used to load in all the Mtl files
-void OBJFileReader::LoadMtlFiles(std::vector<const char*>& paths, std::vector<Mtl*> & mtls) const
+void OBJFileReader::LoadMtlFiles(std::vector<const char*>& paths, std::vector<Mtl*> & mtls)
 {
 	for (int i = 0; i < paths.size(); i++) //Load all MTL files
 		mtls.push_back(LoadMtl(paths[i]));
@@ -326,11 +324,18 @@ void OBJFileReader::ReadFace(const char* line, const char* material, Obj*& data)
 	UShort3 vertex;
 	UShort3 uv;
 	UShort3 normal;
-	if (sscanf_s(line, "f %hu %hu %hu", &vertex.x, &vertex.y, &vertex.z) == 3)
+	//We subtract 1 so we can used the value to access an array element, as OBJ files indexing start at 1 not 0
+	if (sscanf_s(line, "f %hu/%hu/%hu %hu/%hu/%hu %hu/%hu/%hu", &vertex.x, &uv.x, &normal.x, &vertex.y, &uv.y, &normal.y, &vertex.z, &uv.z, &normal.z) == 9)
 	{
-		data->indicesVertices[material].push_back(vertex.x - 1); //We subtract 1 so we can used the value to access an array element, as OBJ files indexing start at 1 not 0
+		data->indicesVertices[material].push_back(vertex.x - 1);
 		data->indicesVertices[material].push_back(vertex.y - 1);
 		data->indicesVertices[material].push_back(vertex.z - 1);
+		data->indicesUvs[material].push_back(uv.x - 1);
+		data->indicesUvs[material].push_back(uv.y - 1);
+		data->indicesUvs[material].push_back(uv.z - 1);
+		data->indicesNormals[material].push_back(normal.x - 1);
+		data->indicesNormals[material].push_back(normal.y - 1);
+		data->indicesNormals[material].push_back(normal.z - 1);
 	}
 	else if (sscanf_s(line, "f %hu/%hu %hu/%hu %hu/%hu", &vertex.x, &uv.x, &vertex.y, &uv.y, &vertex.z, &uv.z) == 6)
 	{
@@ -350,17 +355,11 @@ void OBJFileReader::ReadFace(const char* line, const char* material, Obj*& data)
 		data->indicesNormals[material].push_back(normal.y - 1);
 		data->indicesNormals[material].push_back(normal.z - 1);
 	}
-	else if (sscanf_s(line, "f %hu/%hu/%hu %hu/%hu/%hu %hu/%hu/%hu", &vertex.x, &uv.x, &normal.x, &vertex.y, &uv.y, &normal.y, &vertex.z, &uv.z, &normal.z) == 9)
+	else if (sscanf_s(line, "f %hu %hu %hu", &vertex.x, &vertex.y, &vertex.z) == 3)
 	{
-		data->indicesVertices[material].push_back(vertex.x - 1);
+		data->indicesVertices[material].push_back(vertex.x - 1); 
 		data->indicesVertices[material].push_back(vertex.y - 1);
 		data->indicesVertices[material].push_back(vertex.z - 1);
-		data->indicesUvs[material].push_back(uv.x - 1);
-		data->indicesUvs[material].push_back(uv.y - 1);
-		data->indicesUvs[material].push_back(uv.z - 1);
-		data->indicesNormals[material].push_back(normal.x - 1);
-		data->indicesNormals[material].push_back(normal.y - 1);
-		data->indicesNormals[material].push_back(normal.z - 1);
 	}
 }
 

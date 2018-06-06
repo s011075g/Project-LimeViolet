@@ -128,5 +128,8 @@
     <ClInclude Include="scr\Render\Geometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="scr\Entity\Component\RenderModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

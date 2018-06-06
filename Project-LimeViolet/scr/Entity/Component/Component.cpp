@@ -2,35 +2,34 @@
 #include <array>
 
 //Awful public static variable, but quick and easy to do
-static uint32 componentID = 0;
+static uint32_t ComponentId = 0;
 
-uint32 BasicComponent::NextId()
+uint32_t BaseComponent::NextId()
 {
-	return componentID++;
+	return ComponentId++;
 }
 
 //Creates the component at a certain point in memory. As we're putting it in an array to hold it all
 template<typename Component>
-uint32 ComponentCreate(std::vector<uint8*> memory, EntityHandler entity, BasicComponent* comp)
+uint32_t ComponentCreate(std::vector<uint8_t>& memory, const EntityHandler entity, BaseComponent* comp)
 {
-	uint32 index = memory.size();
-	memory.resize(index + Component::SIZE); //request memory
-	//new keyword can take in a memory address
-	Component* component = new(&memory[index]) Component(*static_cast<Component*>(comp));
+	const uint32_t index = memory.size();
+	memory.resize(index + Component::SIZE);
+	Component* component = new(&memory[index]/*Tells new a point in memory where to put it*/) Component(*static_cast<Component*>(comp));
 	component->entity = entity;
 	return index;
 }
 
 //Used to free up memory rather than the traditional delete
 template<typename Component>
-void ComponentFree(BasicComponent* comp)
+void ComponentFree(BaseComponent* comp)
 {
 	Component* component = static_cast<Component*>(comp);
-	component->~Component();
+	component->~Component(); //Frees Component not memory, handled elsewhere
 }
 
 template<typename T>
-const uint32 Component<T>::ID(NextId());
+const uint32_t Component<T>::ID(NextId());
 
 template<typename T>
 const size_t Component<T>::SIZE(sizeof(T));
