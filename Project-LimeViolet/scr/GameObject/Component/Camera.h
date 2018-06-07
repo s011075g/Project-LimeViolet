@@ -7,7 +7,7 @@ class Camera : public IComponent
 {
 private:
 	//Camera's up vector
-	Float4 _up;
+	Float3 _up;
 	//What the background is cleared to
 	Color _clearColor;
 	float _fieldOfView;
@@ -22,10 +22,13 @@ public:
 
 	void SetUp(Float3 vector);
 	void SetFOV(float fov);
+	void SetClippingPlanes(float near, float far);
 
 	float GetFOV() const;
-	Float4 GetEye() const;
-	Float4 GetAt() const;
-	Float4 GetUp() const;
+	float GetNear() const;
+	float GetFar() const;
+	Float3 GetEye() const;
+	Float3 GetAt() const;
+	Float3 GetUp() const;
 };
 

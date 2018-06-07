@@ -344,6 +344,10 @@ float Float4::Dot(const Float4& r) const
 	return x * r.x + y * r.y + z * r.z + w * r.w;
 }
 
+Int2::Int2(int x, int y)
+	: x(x), y(y)
+{ }
+
 Float3 Float3::Cross(const Float3& r) const
 {
 	return Float3(y * r.z - z * r.y,

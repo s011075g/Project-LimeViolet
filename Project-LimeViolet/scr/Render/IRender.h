@@ -1,5 +1,6 @@
 #pragma once
 #include "../GameObject/Component/Camera.h"
+#include <windows.h>
 
 class IRender
 {
@@ -8,19 +9,30 @@ protected:
 	Float4x4 _view;
 	Float4x4 _projection;
 	//Screen size
-	float _windowWidth, _windowHeight;
+	int _windowWidth, _windowHeight;
 	//To hold the currently active Camera
-	Camera * _activeCamera;
+	Camera * _activeCamera; //todo update for new component system
+
+	HINSTANCE _hInst;
+	HWND _hWnd;
 public:
 	IRender();
 	virtual ~IRender();
 
+	virtual HRESULT InitWindow(const HINSTANCE hInstance, const int nCmdShow, RECT& rc) = 0;
+	virtual HRESULT InitRenderer() = 0;
+
 	void SetActiveCamera(Camera* camera);
+	Int2 GetWindowSize() const;
+	int GetWindowWidth() const;
+	int GetWindowHeight() const;
 
 	virtual void Update();
 
-	virtual void UpdateScreenSize(float windowWidth, float windowHeight);
+	virtual void UpdateScreenSize(const int windowWidth, const int windowHeight);
 protected:
+	virtual void CleanUp() = 0;
+
 	virtual void UpdateViewMatrix() = 0;
 	virtual void UpdateProjectionMatrix() = 0;
 };

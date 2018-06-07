@@ -1,7 +1,10 @@
 #include "Common/Utilities.h"
+#include <windows.h>
 #include <chrono>
 #include <iostream>
 #include "IO/Model/OBJFileReader.h"
+#include "Render/IRender.h"
+#include "Render/DX11Render.h"
 
 int main()
 {
@@ -25,5 +28,24 @@ int main()
 	Utilities::PauseConsole();
 	delete  ptr;
 
+	return 0;
+}
+
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+{
+	Utilities::CreateConsole();
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+	Utilities::Write("Running...");
+
+	IRender* render = new DX11Render();
+	RECT rc = { 0, 0, 1280, 720 };
+	if(FAILED(render->InitWindow(hInstance, nCmdShow, rc)))
+		Utilities::Write("FAILED: Created Window");
+	else
+		Utilities::Write("SUCCESS: Created Window");
+
+	delete render;
+	Utilities::CloseConsole();
 	return 0;
 }

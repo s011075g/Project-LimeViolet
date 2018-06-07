@@ -1,0 +1,2 @@
+#define IDI_ICON1 129
+#define IDI_TUTORIAL1 109

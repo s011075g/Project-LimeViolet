@@ -66,6 +66,9 @@
     <ClCompile Include="scr\Render\Geometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scr\Render\DX11Render.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\GameObject\GameObject.h">
@@ -131,5 +134,14 @@
     <ClInclude Include="scr\Entity\Component\RenderModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="scr\Render\DX11Render.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Common\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -16,7 +16,7 @@ void Camera::Update()
 
 void Camera::SetUp(const Float3 vector)
 {
-	_up = Float4(vector, 0.0f);
+	_up = vector;
 }
 
 void Camera::SetFOV(float fov)
@@ -24,23 +24,39 @@ void Camera::SetFOV(float fov)
 	_fieldOfView = fov;
 }
 
+void Camera::SetClippingPlanes(float near, float far)
+{
+	_near = near;
+	_far = far;
+}
+
 float Camera::GetFOV() const
 {
 	return _fieldOfView;
 }
 
-Float4 Camera::GetEye() const
+float Camera::GetNear() const
+{
+	return _near;
+}
+
+float Camera::GetFar() const
+{
+	return _far;
+}
+
+Float3 Camera::GetEye() const
 {
 	const Float3 direction(0.0f, 0.0f, 1.0f); //TODO Change depending on right or left handed systems
-	return Float4(_gameObject->GetTransform()->GetRotation().RotateVector(direction), 1.0f);
+	return _gameObject->GetTransform()->GetRotation().RotateVector(direction);
 }
 
-Float4 Camera::GetAt() const
+Float3 Camera::GetAt() const
 {
-	return Float4(_gameObject->GetTransform()->GetPosition(), 1.0f);
+	return _gameObject->GetTransform()->GetPosition();
 }
 
-Float4 Camera::GetUp() const
+Float3 Camera::GetUp() const
 {
 	return _up;
 }

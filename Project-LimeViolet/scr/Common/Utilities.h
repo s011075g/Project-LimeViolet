@@ -17,6 +17,10 @@ namespace Utilities
 	void Write(const char* ptr, const LEVEL level);
 	//Used to write to console. Colour will be default.
 	void Write(const char* ptr);
+	//Creates a console
+	void CreateConsole();
+	//Close console
+	void CloseConsole();
 	//Causes the console to pause by requesting input.
 	void PauseConsole();
 	//Hide the console window.
@@ -25,4 +29,5 @@ namespace Utilities
 	void ShowConsole();
 	//Querry if the console window is showing.
 	bool IsConsoleVisible();
+
 };

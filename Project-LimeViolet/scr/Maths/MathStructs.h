@@ -109,6 +109,13 @@ struct Float4
 	float Dot(const Float4& right) const;
 };
 
+struct Int2
+{
+	int x, y;
+	Int2() = default;
+	Int2(int x, int y);
+};
+
 struct UShort3
 {
 	unsigned short x, y, z;
