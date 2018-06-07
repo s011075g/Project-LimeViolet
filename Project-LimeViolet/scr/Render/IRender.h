@@ -26,6 +26,7 @@ public:
 	Int2 GetWindowSize() const;
 	int GetWindowWidth() const;
 	int GetWindowHeight() const;
+	HWND GetWindowHandle() const;
 
 	virtual void Update();
 	virtual void Draw() = 0; //todo replace as this is for testing

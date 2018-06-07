@@ -33,6 +33,11 @@ int IRender::GetWindowHeight() const
 	return _windowHeight;
 }
 
+HWND IRender::GetWindowHandle() const
+{
+	return _hWnd;
+}
+
 void IRender::Update()
 {
 	UpdateViewMatrix();

@@ -5,6 +5,7 @@
 #include "IO/Model/OBJFileReader.h"
 #include "Render/IRender.h"
 #include "Render/DX11Render.h"
+#include "GameObject/GameObject.h"
 
 int main()
 {
@@ -45,12 +46,26 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	else
 		Utilities::Write("SUCCESS: Created Window");
 
+	if(FAILED(render->InitRenderer()))
+		Utilities::Write("FAILED: Render Init");
+	else
+		Utilities::Write("SUCCESS: Render Init");
+
+	//Test Camera
+	GameObject* camera = new GameObject();
+	camera->AddComponent<Camera>();
+	Camera* cam = camera->GetComponent<Camera>();
+	const Color color{0.0f, 1.0f, 0.42f, 1.0f};
+	cam->SetClearColor(color);
+
+	render->SetActiveCamera(cam);
+
 	// Main message loop for testing
 	MSG msg = { nullptr };
 
 	while (WM_QUIT != msg.message)
 	{
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -61,6 +76,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		}
 	}
 
+	delete camera;
 	delete render;
 	Utilities::CloseConsole();
 	return 0;
