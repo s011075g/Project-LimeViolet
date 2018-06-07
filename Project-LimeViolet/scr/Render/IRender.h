@@ -28,6 +28,7 @@ public:
 	int GetWindowHeight() const;
 
 	virtual void Update();
+	virtual void Draw() = 0; //todo replace as this is for testing
 
 	virtual void UpdateScreenSize(const int windowWidth, const int windowHeight);
 protected:

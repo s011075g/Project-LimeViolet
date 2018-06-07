@@ -23,6 +23,8 @@ public:
 	~DX11Render();
 	HRESULT InitWindow(const HINSTANCE hInstance, const int nCmdShow, RECT& rc) override;
 	HRESULT InitRenderer() override;
+
+	void Draw() override;
 protected:
 	void CleanUp() override;
 

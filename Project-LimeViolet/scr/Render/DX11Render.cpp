@@ -199,6 +199,15 @@ HRESULT DX11Render::InitRenderer()
 	return hr;
 }
 
+void DX11Render::Draw()
+{
+	_context->OMSetRenderTargets(1, &_offScreenView, _depthStencilView);
+	_context->ClearRenderTargetView(_offScreenView, _activeCamera->GetClearColor().rgba);
+	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	_swapChain->Present(1, 0); //1 = vsync
+}
+
 void DX11Render::CleanUp()
 {
 	if (_context)

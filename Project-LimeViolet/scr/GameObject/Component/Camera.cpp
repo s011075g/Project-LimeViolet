@@ -30,6 +30,11 @@ void Camera::SetClippingPlanes(float near, float far)
 	_far = far;
 }
 
+void Camera::SetClearColor(Color color)
+{
+	_clearColor = color;
+}
+
 float Camera::GetFOV() const
 {
 	return _fieldOfView;
@@ -59,4 +64,9 @@ Float3 Camera::GetAt() const
 Float3 Camera::GetUp() const
 {
 	return _up;
+}
+
+Color Camera::GetClearColor() const
+{
+	return _clearColor;
 }

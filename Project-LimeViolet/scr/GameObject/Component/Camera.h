@@ -23,6 +23,7 @@ public:
 	void SetUp(Float3 vector);
 	void SetFOV(float fov);
 	void SetClippingPlanes(float near, float far);
+	void SetClearColor(Color color);
 
 	float GetFOV() const;
 	float GetNear() const;
@@ -30,5 +31,6 @@ public:
 	Float3 GetEye() const;
 	Float3 GetAt() const;
 	Float3 GetUp() const;
+	Color GetClearColor() const;
 };
 
