@@ -3,7 +3,11 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(hWnd, message, wParam, lParam);
+	if (message == WM_DESTROY)
+		PostQuitMessage(0);
+	else
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	return 0;
 }
 
 DX11Render::DX11Render()
