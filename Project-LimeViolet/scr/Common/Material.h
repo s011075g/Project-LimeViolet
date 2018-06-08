@@ -24,9 +24,9 @@ public:
 	explicit Material(MaterialValues *& material);
 
 	//Set a texture, possible for it to hold any pointer, so I can give it a char* which I can then take to load in that image and return a pointer in its place
-	void SetTextureDiffuse(void * textre);
-	void SetTextureNormal(void *textre);
-	void SetTextureSpecular(void * textre);
+	void SetTextureDiffuse(void * texture);
+	void SetTextureNormal(void *texture);
+	void SetTextureSpecular(void * texture);
 
 	MaterialValues * GetMaterial() const;
 	void * GetTextureDiffuse() const;

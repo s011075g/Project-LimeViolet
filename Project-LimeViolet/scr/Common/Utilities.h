@@ -14,6 +14,7 @@ namespace Utilities
 	};
 	
 	//Used to write to console. Level shows the message in a different colour.
+	//Extreme level forces the console to show, and send a message box informing the user to check the console.
 	void Write(const char* ptr, const LEVEL level);
 	//Used to write to console. Colour will be default.
 	void Write(const char* ptr);

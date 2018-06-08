@@ -6,6 +6,11 @@ void Utilities::Write(const char* ptr, const LEVEL level)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), level);
 	std::cout << ptr << std::endl;
+	if (level == LEVEL::EXTREME_LEVEL)
+	{
+		ShowConsole();
+		MessageBox(0, L"Error - Check console", L"Error", 0u);
+	}
 }
 
 void Utilities::Write(const char* ptr)

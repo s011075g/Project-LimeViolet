@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Render\IShaderManager.cpp" />
     <ClCompile Include="scr\Render\DX11Render.cpp" />
     <ClCompile Include="scr\Entity\Entity.cpp" />
     <ClCompile Include="scr\Entity\Component\Component.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="scr\Common\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Render\IShaderManager.h" />
     <ClInclude Include="scr\Common\resource.h" />
     <ClInclude Include="scr\Render\DX11Render.h" />
     <ClInclude Include="scr\Entity\Component\Camera.h" />

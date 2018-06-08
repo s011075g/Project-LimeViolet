@@ -15,3 +15,13 @@ public:
 	template<typename Component>
 	void RemoveComponent(); //todo remove component correctly
 };
+
+template<typename Component>
+bool Entity::AddComponent()
+{
+	return false;
+}
+
+template <typename Component>
+void Entity::RemoveComponent()
+{ }

@@ -21,6 +21,7 @@ public:
 	//Rotate this quaternion by a vector
 	void RotateByVector(const Float3& vector);
 
+	//todo add in better math operators
 	void operator *=(const Quaternion& right);
 
 	//Rotate Vector by this Quaternion

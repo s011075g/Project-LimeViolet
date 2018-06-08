@@ -15,7 +15,6 @@ int main()
 	//Utilities::HideConsole();
 #endif
 	Utilities::Write("Running...", Utilities::NORMAL_LEVEL);
-	//Utilities::PauseConsole();
 
 	Utilities::Write("Running tests...");
 	auto tStart = std::chrono::system_clock::now();
@@ -26,7 +25,6 @@ int main()
 	auto tEnd = std::chrono::system_clock::now();
 	std::chrono::duration<double> elapsedTime = tEnd - tStart;
 	std::cout << elapsedTime.count() << " : " << ptr << std::endl;
-	Utilities::PauseConsole();
 	delete  ptr;
 
 	return 0;
@@ -35,21 +33,34 @@ int main()
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	Utilities::CreateConsole();
+	Utilities::ShowConsole();
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	Utilities::Write("Running...");
 
+	main();
+
 	IRender* render = new DX11Render();
 	RECT rc = { 0, 0, 1280, 720 };
-	if(FAILED(render->InitWindow(hInstance, nCmdShow, rc)))
-		Utilities::Write("FAILED: Created Window");
+	if (FAILED(render->InitWindow(hInstance, nCmdShow, rc)))
+	{
+		Utilities::Write("FAILED: Created Window", Utilities::LEVEL::EXTREME_LEVEL);
+		delete render;
+		Utilities::CloseConsole();
+		return -1;
+	}
 	else
-		Utilities::Write("SUCCESS: Created Window");
+		Utilities::Write("SUCCESS: Created Window", Utilities::LEVEL::NORMAL_LEVEL);
 
-	if(FAILED(render->InitRenderer()))
-		Utilities::Write("FAILED: Render Init");
+	if (FAILED(render->InitRenderer()))
+	{
+		Utilities::Write("FAILED: Render Init", Utilities::LEVEL::EXTREME_LEVEL);
+		delete render;
+		Utilities::CloseConsole();
+		return -1;
+	}
 	else
-		Utilities::Write("SUCCESS: Render Init");
+		Utilities::Write("SUCCESS: Render Init", Utilities::LEVEL::NORMAL_LEVEL);
 
 	//Test Camera
 	GameObject* camera = new GameObject();
@@ -75,8 +86,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 			render->Draw();
 		}
 	}
-
-	
 
 	delete camera;
 	delete render;

@@ -121,7 +121,7 @@ HRESULT DX11Render::InitRenderer()
 	depthDesc.MipLevels = 1;
 	depthDesc.ArraySize = 1;
 	depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	depthDesc.SampleDesc.Count = 1;
+	depthDesc.SampleDesc.Count = 4;
 	depthDesc.SampleDesc.Quality = 0;
 	depthDesc.Usage = D3D11_USAGE_DEFAULT;
 	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
