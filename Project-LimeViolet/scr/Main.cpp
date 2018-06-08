@@ -6,6 +6,7 @@
 #include "Render/IRender.h"
 #include "Render/DX11Render.h"
 #include "GameObject/GameObject.h"
+#include <string>
 
 int main()
 {
@@ -24,9 +25,9 @@ int main()
 
 	auto tEnd = std::chrono::system_clock::now();
 	std::chrono::duration<double> elapsedTime = tEnd - tStart;
-	std::cout << elapsedTime.count() << " : " << ptr << std::endl;
-	delete  ptr;
+	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
 
+	delete  ptr;
 	return 0;
 }
 

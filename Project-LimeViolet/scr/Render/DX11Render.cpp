@@ -251,5 +251,5 @@ void DX11Render::UpdateViewMatrix()
 
 void DX11Render::UpdateProjectionMatrix()
 {
-	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_projection.m), DirectX::XMMatrixPerspectiveFovLH(_activeCamera->GetFOV(), _windowWidth / _windowHeight, _activeCamera->GetNear(), _activeCamera->GetFar()));
+	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_projection.m), DirectX::XMMatrixPerspectiveFovLH(_activeCamera->GetFOV(), static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight), _activeCamera->GetNear(), _activeCamera->GetFar()));
 }
