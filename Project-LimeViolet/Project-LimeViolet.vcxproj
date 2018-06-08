@@ -162,6 +162,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Render\DX11VBOManager.cpp" />
+    <ClCompile Include="scr\Render\RawGeometry.cpp" />
     <ClCompile Include="scr\Render\ITextureManager.cpp" />
     <ClCompile Include="scr\Render\IVBOManager.cpp" />
     <ClCompile Include="scr\Render\IShaderManager.cpp" />
@@ -185,6 +187,8 @@
     <ClCompile Include="scr\Common\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Render\DX11VBOManager.h" />
+    <ClInclude Include="scr\Render\RawGeometry.h" />
     <ClInclude Include="scr\Render\ITextureManager.h" />
     <ClInclude Include="scr\Render\IVBOManager.h" />
     <ClInclude Include="scr\Render\IShaderManager.h" />

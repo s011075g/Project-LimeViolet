@@ -1,17 +1,14 @@
 #pragma once
-#include <vector> 
-#include <map>
-#include "../Common/ObjectVertex.h"
+#include <vector>
 #include "../Common/Material.h"
 
-class Geometry //Geometry current holds raw model data, future plan to make it hold pointers to VBO data
+class Geometry
 {
 private:
-	std::map<unsigned short, std::vector<ObjectVertex>> _vertex;
-	std::map<unsigned short, std::vector<unsigned short>> _indices;
+	void* _vertexBuffer;
+	std::vector<void*> _indexBuffer;
 	std::vector<Material*> _materials; //TODO make a material manager to hold all the materials so that if objects use the same material, it can be reused to save memory
 public:
-	Geometry() = default;
-	Geometry(std::map<unsigned short, std::vector<ObjectVertex>>& vertex, std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<Material*>& materials);
+	Geometry(void*& vertex, std::vector<void*>& indices, std::vector<Material*>& materials);
 	~Geometry();
 };

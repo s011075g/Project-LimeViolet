@@ -24,7 +24,7 @@ bool OBJFileReader::Packed::operator<(const Packed& right) const
 	return memcmp(this, &right, sizeof(Packed)) > 0;
 }
 
-Geometry* OBJFileReader::ReadFile(const char* fileLocation)
+RawGeometry* OBJFileReader::ReadFile(const char* fileLocation)
 {
 	Obj* obj = LoadObj(fileLocation); //First loads the OBJ file in to memory
 	if (!obj)
@@ -34,7 +34,7 @@ Geometry* OBJFileReader::ReadFile(const char* fileLocation)
 	//As realistically,there will only be about 1 material file to read even if its possible to add more than 1
 	LoadMtlFiles(obj->materialPaths, mtls); 
 	//Pack Data in single indices
-	std::map<unsigned short, std::vector<ObjectVertex>> vertex;
+	std::vector<ObjectVertex> vertex;
 	std::map<unsigned short, std::vector<unsigned short>> indices;
 	std::vector<const char*> material;
 	PackData(obj, vertex, indices, material);
@@ -91,7 +91,7 @@ Geometry* OBJFileReader::ReadFile(const char* fileLocation)
 		delete mtls[i];
 	for (int i = 0; i < material.size(); i++)
 		delete material[i];
-	return new Geometry(vertex, indices, materials); //return
+	return new RawGeometry(vertex, indices, materials); //return
 }
 
 OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation)
@@ -220,36 +220,33 @@ OBJFileReader::Mtl* OBJFileReader::LoadMtl(const char* fileLocation)
 	return data;
 }
 
-void OBJFileReader::PackData(Obj* obj, std::map<unsigned short, std::vector<ObjectVertex>>& outVertex,
-	std::map<unsigned short, std::vector<unsigned short>>& outIndices, std::vector<const char*>& outMaterial)
+void OBJFileReader::PackData(Obj* obj, std::vector<ObjectVertex>& outVertex, std::map<unsigned short, std::vector<unsigned short>>& outIndices, std::vector<const char*>& outMaterial)
 {
 	//Filling out the data set, so we don't happen to access memory that we don't use
 	FillData(obj);
 	//Sorting all in to one
-	std::map<unsigned short, std::map<Packed, unsigned short>> map; //First map is for materials, second is for the vertices and their indice
-	; //Orders the materials
+	std::map<Packed, unsigned short> map; //First map is for materials, second is for the vertices and their indice
 	for (auto i : obj->indicesVertices)
 	{
 		outMaterial.push_back(i.first);
 		for (auto j = 0; j < obj->indicesVertices[i.first].size(); j++)
 		{
 			Packed data = Packed(obj->vertices[obj->indicesVertices[i.first][j]],
-				obj->normals[obj->indicesNormals[i.first][j]],
-				obj->uvs[obj->indicesUvs[i.first][j]]);
+									obj->normals[obj->indicesNormals[i.first][j]],
+									obj->uvs[obj->indicesUvs[i.first][j]]);
 			unsigned short index;
-			if (!FindSameData(map[static_cast<unsigned short>(outMaterial.size()) - 1u], data, index))
+			if (!FindSameData(map, data, index))
 			{
-				outVertex[static_cast<unsigned short>(outMaterial.size()) - 1u].push_back({ data.vertex, data.uv, data.normal, data.tangent });
+				outVertex.push_back({ data.vertex, data.uv, data.normal, data.tangent });
 				index = static_cast<unsigned short>(outVertex.size()) - 1;
-				map[static_cast<unsigned short>(outMaterial.size()) - 1u][data] = index;
+				map[data] = index;
 			}
 			outIndices[static_cast<unsigned short>(outMaterial.size()) - 1u].push_back(index);
 		}
 	}
 }
 
-void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<ObjectVertex>>& vertex,
-	std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*>& materials)
+void OBJFileReader::CalculateTangents(std::vector<ObjectVertex>& vertex, std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*>& materials)
 {
 	//// http://www.terathon.com/code/tangent.html was used as a base for this piece of code
 	for (unsigned short i = 0; i < materials.size(); i++)
@@ -265,13 +262,13 @@ void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<Objec
 			y = indices[i][j + 1];
 			z = indices[i][j + 2];
 
-			v1 = vertex[i][x].vertex;
-			v2 = vertex[i][y].vertex;
-			v3 = vertex[i][z].vertex;
+			v1 = vertex[x].vertex;
+			v2 = vertex[y].vertex;
+			v3 = vertex[z].vertex;
 
-			w1 = vertex[i][x].uv;
-			w2 = vertex[i][y].uv;
-			w3 = vertex[i][z].uv;
+			w1 = vertex[x].uv;
+			w2 = vertex[y].uv;
+			w3 = vertex[z].uv;
 
 			//The difference
 			const Float3 g1(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
@@ -300,12 +297,12 @@ void OBJFileReader::CalculateTangents(std::map<unsigned short, std::vector<Objec
 		}
 		Float3 tangent;
 		float w;
-		for (auto j = 0; j < vertex[i].size(); j++)
+		for (auto j = 0; j < vertex.size(); j++)
 		{
-			tangent = tan1[i] - vertex[i][j].normal * tan1[i].Dot(vertex[i][j].normal);
+			tangent = tan1[j] - vertex[j].normal * tan1[j].Dot(vertex[j].normal);
 			tangent.Normalize();
-			w = vertex[i][j].normal.Cross(tan1[i]).Dot(tan2[i]) < 0 ? -1.0f : 1.0f;
-			vertex[i][j].tangent = Float4(tangent, w);
+			w = vertex[j].normal.Cross(tan1[i]).Dot(tan2[j]) < 0 ? -1.0f : 1.0f;
+			vertex[j].tangent = Float4(tangent, w);
 		}
 		delete[] tan1;
 	}

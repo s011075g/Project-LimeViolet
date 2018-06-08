@@ -3,7 +3,7 @@
 #include <map>
 #include "../../Maths/MathStructs.h"
 #include "../../Common/ObjectVertex.h"
-#include "../../Render/Geometry.h"
+#include "../../Render/RawGeometry.h"
 
 class OBJFileReader
 {
@@ -59,16 +59,16 @@ private:
 
 public:
 	//Read Obj model file
-	static Geometry* ReadFile(const char* fileLocation);
+	static RawGeometry* ReadFile(const char* fileLocation);
 private:
 	//Used to read Obj file extensions
 	static Obj* LoadObj(const char* fileLocation);
 	//Used to read Mtl file extensions
 	static Mtl* LoadMtl(const char* fileLocation);
 	//Packs the data to use only one indice list. Puts them in to a map which seperates them depending on their material
-	static void PackData(Obj * obj, std::map<unsigned short, std::vector<ObjectVertex>>& outVertex, std::map<unsigned short, std::vector<unsigned short>>& outIndices, std::vector<const char*>& outMaterial);
+	static void PackData(Obj * obj, std::vector<ObjectVertex>& outVertex, std::map<unsigned short, std::vector<unsigned short>>& outIndices, std::vector<const char*>& outMaterial);
 	//Calculates tangents to map a normal map on to the objects surface
-	static void CalculateTangents(std::map<unsigned short, std::vector<ObjectVertex>>& vertex, std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*>& materials);
+	static void CalculateTangents(std::vector<ObjectVertex>& vertex, std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*>& materials);
 	
 	//Load all mtl files
 	static void LoadMtlFiles(std::vector<const char*>& paths, std::vector<Mtl*> & mtls);
