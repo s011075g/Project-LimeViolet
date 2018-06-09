@@ -18,10 +18,13 @@ private:
 
 	ID3D11RenderTargetView* _offScreenView;
 	ID3D11ShaderResourceView*_offScreen; //Used for Preprocessing
+
+	//Window handler - might not be needed anymoe
+	HWND _hWnd;
 public:
 	DX11Render();
 	~DX11Render();
-	HRESULT InitWindow(const HINSTANCE hInstance, const int nCmdShow, RECT& rc) override;
+	HRESULT InitWindow(RECT& rc) override;
 	HRESULT InitRenderer() override;
 
 	void Draw() override;

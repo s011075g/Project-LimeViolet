@@ -348,6 +348,7 @@ Int2::Int2(int x, int y)
 	: x(x), y(y)
 { }
 
+
 Float3 Float3::Cross(const Float3& r) const
 {
 	return Float3(y * r.z - z * r.y,
@@ -409,6 +410,20 @@ Float4x4 Float4x4::operator*(const Float4x4& r) const
 	result.m42 = m41 * r.m12 + m42 * r.m22 + m43 * r.m32 + m44 * r.m42;
 	result.m43 = m41 * r.m13 + m42 * r.m23 + m43 * r.m33 + m44 * r.m43;
 	result.m44 = m41 * r.m14 + m42 * r.m24 + m43 * r.m34 + m44 * r.m44;
+	return result;
+}
+
+const Float4x4& Float4x4::ProjectionMatrix(const float fov, const float aspect, const float near, const float far, const bool leftHanded)
+{
+	Float4x4 result = Float4x4(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	float oneOverDepth = 1 / (far - near);
+
+	result.m22 = 1 / tan(0.5f * fov);
+	result.m11 = (leftHanded ? 1 : -1) * result.m22 / aspect;
+	result.m33 = far * oneOverDepth;
+	result.m43 = (-far * near) * oneOverDepth;
+	result.m34 = 1;
 	return result;
 }
 

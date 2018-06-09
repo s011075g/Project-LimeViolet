@@ -7,5 +7,4 @@ public:
 
 	void LoadShader(const char*);
 	void* GetShader() const;
-
 };

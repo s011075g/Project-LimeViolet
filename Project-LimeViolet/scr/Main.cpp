@@ -8,6 +8,7 @@
 #include "GameObject/GameObject.h"
 #include <string>
 #include "Render/DX11/DX11VBOManager.h"
+#include "Render/Vulkan/VulkanRender.h"
 
 int main()
 {
@@ -16,23 +17,14 @@ int main()
 #else
 	//Utilities::HideConsole();
 #endif
-	
-	return 0;
-}
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
-{
 	Utilities::CreateConsole();
 	Utilities::ShowConsole();
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
 	Utilities::Write("Running...");
-
-	
 
 	IRender* render = new DX11Render();
 	RECT rc = { 0, 0, 1280, 720 };
-	if (FAILED(render->InitWindow(hInstance, nCmdShow, rc)))
+	if (FAILED(render->InitWindow(rc)))
 	{
 		Utilities::Write("FAILED: Created Window", Utilities::LEVEL::EXTREME_LEVEL);
 		delete render;
@@ -53,23 +45,24 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		Utilities::Write("SUCCESS: Render Init", Utilities::LEVEL::NORMAL_LEVEL);
 
 	///Model loading tests
-	Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
+	/*Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
 
 	auto tStart = std::chrono::system_clock::now();
 
 	//READ OBJ
 	RawGeometry* ptr = OBJFileReader::ReadFile("earth.obj");
 
-	auto tEnd = std::chrono::system_clock::now();
-	std::chrono::duration<double> elapsedTime = tEnd - tStart;
-	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
+	auto tMid = std::chrono::system_clock::now();
 
 	Geometry* geometry = render->LoadRawGeometry(ptr);
 	render->FreeGeometry(geometry);
 
-	tEnd = std::chrono::system_clock::now();
-	elapsedTime = tEnd - tStart;
+	auto tEnd = std::chrono::system_clock::now();
+
+	std::chrono::duration<double> elapsedTime = tMid - tStart;
 	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
+	elapsedTime = tEnd - tStart;
+	Utilities::Write(std::to_string(elapsedTime.count()).c_str());*/
 	///---
 
 	//Test Camera

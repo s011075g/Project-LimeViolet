@@ -13,10 +13,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 DX11Render::DX11Render()
-	: _driverType(), _featureLevel(),  _device(nullptr), _context(nullptr), _swapChain(nullptr),
-	_renderTargetView(nullptr), _depthStencilView(nullptr), _offScreenView(nullptr), _offScreen(nullptr)
-{
-}
+	: _driverType(), _featureLevel(), _device(nullptr), _context(nullptr), _swapChain(nullptr), _renderTargetView(nullptr), 
+	_depthStencilView(nullptr), _offScreenView(nullptr), _offScreen(nullptr), _hWnd(nullptr)
+{ }
 
 DX11Render::~DX11Render()
 {
@@ -25,7 +24,7 @@ DX11Render::~DX11Render()
 
 #define IDI_TUTORIAL1 109
 
-HRESULT DX11Render::InitWindow(const HINSTANCE hInstance, const int nCmdShow, RECT& rc)
+HRESULT DX11Render::InitWindow(RECT& rc)
 {
 	WNDCLASSEX wcex;
 	wcex.cbSize = sizeof(WNDCLASSEX);
@@ -33,8 +32,8 @@ HRESULT DX11Render::InitWindow(const HINSTANCE hInstance, const int nCmdShow, RE
 	wcex.lpfnWndProc = WndProc;
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
-	wcex.hInstance = hInstance;
-	wcex.hIcon = LoadIcon(hInstance, reinterpret_cast<LPCTSTR>(IDI_ICON1));
+	wcex.hInstance = GetModuleHandle(nullptr);;
+	wcex.hIcon = LoadIcon(GetModuleHandle(nullptr), reinterpret_cast<LPCTSTR>(IDI_ICON1));
 	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
 	wcex.lpszMenuName = nullptr;
@@ -47,17 +46,17 @@ HRESULT DX11Render::InitWindow(const HINSTANCE hInstance, const int nCmdShow, RE
 		return E_FAIL;
 	}
 
-	_hInst = hInstance;
+	//_hInst = GetModuleHandle(NULL);
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 	_hWnd = CreateWindow(L"WindowClass", L"Window", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 
-							rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
+							rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, GetModuleHandle(nullptr), nullptr);
 	if (!_hWnd)
 	{
 		MessageBox(nullptr, L"Failed to create window: " + GetLastError(), L"", 0);
 		return E_FAIL;
 	}
 
-	ShowWindow(_hWnd, nCmdShow);
+	ShowWindow(_hWnd, 10);
 
 	_windowWidth = rc.right - rc.left;
 	_windowHeight = rc.bottom - rc.top;

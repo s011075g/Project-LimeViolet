@@ -5,6 +5,7 @@ class Entity //Will have a list of Components
 { //todo add an ID to each Entity
 private:
 	std::vector<uint8_t> _memory;
+	const uint32_t _id;
 public:
 	Entity();
 	~Entity();
@@ -14,6 +15,10 @@ public:
 
 	template<typename Component>
 	void RemoveComponent(); //todo remove component correctly
+
+	uint32_t GetId() const;
+private:
+	static uint32_t NextId();
 };
 
 template<typename Component>

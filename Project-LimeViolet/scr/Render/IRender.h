@@ -15,23 +15,19 @@ protected:
 	//To hold the currently active Camera
 	Camera * _activeCamera; //todo update for new component system
 
-	HINSTANCE _hInst;
-	HWND _hWnd;
-
 	IVBOManager* _vboManager;
 	ITextureManager* _textureManager;
 public:
 	IRender();
 	virtual ~IRender();
 
-	virtual HRESULT InitWindow(const HINSTANCE hInstance, const int nCmdShow, RECT& rc) = 0;
+	virtual HRESULT InitWindow(RECT& rc) = 0;
 	virtual HRESULT InitRenderer() = 0;
 
 	void SetActiveCamera(Camera* camera);
 	Int2 GetWindowSize() const;
 	int GetWindowWidth() const;
 	int GetWindowHeight() const;
-	HWND GetWindowHandle() const;
 
 	virtual void Update();
 	virtual void Draw() = 0; //todo replace as this is for testing
@@ -44,5 +40,5 @@ protected:
 	virtual void CleanUp() = 0;
 
 	virtual void UpdateViewMatrix() = 0;
-	virtual void UpdateProjectionMatrix() = 0;
+	virtual void UpdateProjectionMatrix();
 };

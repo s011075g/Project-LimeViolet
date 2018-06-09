@@ -1,19 +1,18 @@
 #include "IRender.h"
-#include <complex>
 
 IRender::IRender()
-	: _windowWidth(0), _windowHeight(0), _activeCamera(nullptr), _hInst(nullptr), _hWnd(nullptr), _vboManager(nullptr)
-{
-}
+	: _windowWidth(0), _windowHeight(0), _activeCamera(nullptr), _vboManager(nullptr),
+	  _textureManager(nullptr)
+{ }
 
 IRender::~IRender()
 {
-	if(_vboManager) delete _vboManager;
+	if (_vboManager) delete _vboManager;
+	if (_textureManager) delete _textureManager;
 }
 
-HRESULT IRender::InitWindow(const HINSTANCE hInstance, const int nCmdShow, RECT& rc)
+HRESULT IRender::InitWindow(RECT& rc)
 {
-	_hInst = hInstance;
 	return 0;
 }
 
@@ -35,11 +34,6 @@ int IRender::GetWindowWidth() const
 int IRender::GetWindowHeight() const
 {
 	return _windowHeight;
-}
-
-HWND IRender::GetWindowHandle() const
-{
-	return _hWnd;
 }
 
 void IRender::Update()
@@ -77,4 +71,10 @@ void IRender::UpdateScreenSize(const int windowWidth, const int windowHeight)
 	_windowWidth = windowWidth;
 	_windowHeight = windowHeight;
 	UpdateProjectionMatrix();
+}
+
+void IRender::UpdateProjectionMatrix()
+{
+	//Default lefthanded
+	_projection = Float4x4::ProjectionMatrix(_activeCamera->GetFOV(), static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight),_activeCamera->GetNear(), _activeCamera->GetFar());
 }

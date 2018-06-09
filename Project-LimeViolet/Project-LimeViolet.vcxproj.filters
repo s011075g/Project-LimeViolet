@@ -87,6 +87,9 @@
     <ClCompile Include="scr\Render\DX11\DX11TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scr\Render\Vulkan\VulkanRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\GameObject\GameObject.h">
@@ -174,6 +177,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Render\DX11\DX11TextureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render\Vulkan\VulkanRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
