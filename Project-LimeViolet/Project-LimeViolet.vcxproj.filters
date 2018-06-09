@@ -84,6 +84,9 @@
     <ClCompile Include="scr\Render\DX11\DX11VBOManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scr\Render\DX11\DX11TextureManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\GameObject\GameObject.h">
@@ -168,6 +171,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Render\DX11\DX11VBOManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render\DX11\DX11TextureManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

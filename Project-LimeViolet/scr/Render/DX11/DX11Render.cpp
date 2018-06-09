@@ -1,6 +1,7 @@
 #include "DX11Render.h"
 #include "../../Common/resource.h"
 #include "DX11VBOManager.h"
+#include "DX11TextureManager.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -205,6 +206,7 @@ HRESULT DX11Render::InitRenderer()
 		return hr;
 
 	_vboManager = new DX11VBOManager(_device);
+	_textureManager = new DX11TextureManager(_device);
 
 	return hr;
 }

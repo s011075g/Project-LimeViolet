@@ -19,3 +19,8 @@ const std::vector<void*>& Geometry::GetIndexBuffer() const
 {
 	return _indexBuffer;
 }
+
+const std::vector<Material*> Geometry::GetMaterials() const
+{
+	return _materials;
+}

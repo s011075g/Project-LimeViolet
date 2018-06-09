@@ -53,6 +53,17 @@ Geometry* IRender::LoadRawGeometry(RawGeometry*& geometry)
 		return nullptr;
 	Geometry* result = _vboManager->VBOGeometry(geometry);
 	delete geometry;
+
+	for (auto m : result->GetMaterials())
+	{
+		if (auto t = m->GetTextureDiffuse())
+			m->SetTextureDiffuse(_textureManager->GetTexture(static_cast<const char*>(t)));
+		if (auto t = m->GetTextureNormal())
+			m->SetTextureNormal(_textureManager->GetTexture(static_cast<const char*>(t)));
+		if (auto t = m->GetTextureSpecular())
+			m->SetTextureSpecular(_textureManager->GetTexture(static_cast<const char*>(t)));
+	}
+
 	return result;
 }
 

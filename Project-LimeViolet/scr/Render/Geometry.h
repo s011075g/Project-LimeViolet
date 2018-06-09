@@ -14,4 +14,5 @@ public:
 
 	void* GetVertexBuffer() const;
 	const std::vector<void*>& GetIndexBuffer() const;
+	const std::vector<Material*> GetMaterials() const;
 };

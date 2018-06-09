@@ -2,6 +2,7 @@
 #include "../GameObject/Component/Camera.h"
 #include <windows.h>
 #include "IVBOManager.h"
+#include "ITextureManager.h"
 
 class IRender
 {
@@ -16,7 +17,9 @@ protected:
 
 	HINSTANCE _hInst;
 	HWND _hWnd;
+
 	IVBOManager* _vboManager;
+	ITextureManager* _textureManager;
 public:
 	IRender();
 	virtual ~IRender();

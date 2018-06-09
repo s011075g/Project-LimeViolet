@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Render\DX11\DX11TextureManager.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11VBOManager.cpp" />
     <ClCompile Include="scr\Render\RawGeometry.cpp" />
     <ClCompile Include="scr\Render\ITextureManager.cpp" />
@@ -187,6 +188,7 @@
     <ClCompile Include="scr\Common\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Render\DX11\DX11TextureManager.h" />
     <ClInclude Include="scr\Render\DX11\DX11VBOManager.h" />
     <ClInclude Include="scr\Render\RawGeometry.h" />
     <ClInclude Include="scr\Render\ITextureManager.h" />
