@@ -11,4 +11,7 @@ private:
 public:
 	Geometry(void*& vertex, std::vector<void*>& indices, std::vector<Material*>& materials);
 	~Geometry();
+
+	void* GetVertexBuffer() const;
+	const std::vector<void*>& GetIndexBuffer() const;
 };

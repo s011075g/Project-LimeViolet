@@ -1,6 +1,7 @@
 #pragma once
 #include "../GameObject/Component/Camera.h"
 #include <windows.h>
+#include "IVBOManager.h"
 
 class IRender
 {
@@ -15,6 +16,7 @@ protected:
 
 	HINSTANCE _hInst;
 	HWND _hWnd;
+	IVBOManager* _vboManager;
 public:
 	IRender();
 	virtual ~IRender();
@@ -30,6 +32,9 @@ public:
 
 	virtual void Update();
 	virtual void Draw() = 0; //todo replace as this is for testing
+
+	virtual Geometry* LoadRawGeometry(RawGeometry*& geometry);
+	virtual void FreeGeometry(Geometry*& geometry);
 
 	virtual void UpdateScreenSize(const int windowWidth, const int windowHeight);
 protected:

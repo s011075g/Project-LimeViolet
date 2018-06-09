@@ -1,5 +1,5 @@
 #pragma once
-#include "IRender.h"
+#include "../IRender.h"
 #include <d3d11_1.h>
 
 class DX11Render : public IRender
@@ -8,10 +8,10 @@ private:
 	D3D_DRIVER_TYPE _driverType;
 	D3D_FEATURE_LEVEL _featureLevel;
 
-	IDXGISwapChain* _swapChain;
-
 	ID3D11Device* _device;
 	ID3D11DeviceContext* _context;
+
+	IDXGISwapChain* _swapChain;
 
 	ID3D11RenderTargetView* _renderTargetView;
 	ID3D11DepthStencilView* _depthStencilView;

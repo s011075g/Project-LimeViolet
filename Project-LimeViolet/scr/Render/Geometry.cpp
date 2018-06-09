@@ -9,3 +9,13 @@ Geometry::~Geometry()  //Cleans up materials
 	for(Material* m : _materials)
 		delete m;
 }
+
+void* Geometry::GetVertexBuffer() const
+{
+	return _vertexBuffer;
+}
+
+const std::vector<void*>& Geometry::GetIndexBuffer() const
+{
+	return _indexBuffer;
+}

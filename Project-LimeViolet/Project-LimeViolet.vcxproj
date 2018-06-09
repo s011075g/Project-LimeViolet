@@ -162,12 +162,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="scr\Render\DX11VBOManager.cpp" />
+    <ClCompile Include="scr\Render\DX11\DX11VBOManager.cpp" />
     <ClCompile Include="scr\Render\RawGeometry.cpp" />
     <ClCompile Include="scr\Render\ITextureManager.cpp" />
     <ClCompile Include="scr\Render\IVBOManager.cpp" />
     <ClCompile Include="scr\Render\IShaderManager.cpp" />
-    <ClCompile Include="scr\Render\DX11Render.cpp" />
+    <ClCompile Include="scr\Render\DX11\DX11Render.cpp" />
     <ClCompile Include="scr\Entity\Entity.cpp" />
     <ClCompile Include="scr\Entity\Component\Component.cpp" />
     <ClCompile Include="scr\Render\Geometry.cpp" />
@@ -187,13 +187,13 @@
     <ClCompile Include="scr\Common\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="scr\Render\DX11VBOManager.h" />
+    <ClInclude Include="scr\Render\DX11\DX11VBOManager.h" />
     <ClInclude Include="scr\Render\RawGeometry.h" />
     <ClInclude Include="scr\Render\ITextureManager.h" />
     <ClInclude Include="scr\Render\IVBOManager.h" />
     <ClInclude Include="scr\Render\IShaderManager.h" />
     <ClInclude Include="scr\Common\resource.h" />
-    <ClInclude Include="scr\Render\DX11Render.h" />
+    <ClInclude Include="scr\Render\DX11\DX11Render.h" />
     <ClInclude Include="scr\Entity\Component\Camera.h" />
     <ClInclude Include="scr\Entity\Component\RenderModel.h" />
     <ClInclude Include="scr\Entity\Entity.h" />

@@ -1,8 +1,8 @@
 #pragma once
-#include "IVBOManager.h"
+#include "../IVBOManager.h"
 #include <d3d11.h>
 
-class DX11VBOManager : IVBOManager
+class DX11VBOManager : public IVBOManager
 {
 private:
 	ID3D11Device * _device;
@@ -10,7 +10,7 @@ public:
 	DX11VBOManager(ID3D11Device* device);
 	~DX11VBOManager();
 	Geometry* VBOGeometry(RawGeometry* geometry) override;
-	void FreeVBO(Geometry* geometry) override;
+	void DeleteVBO(Geometry*& geometry) override;
 private:
 	template<class T>
 	ID3D11Buffer* BufferData(std::vector<T> data, const UINT bindFlag);

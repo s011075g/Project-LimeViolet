@@ -4,9 +4,10 @@
 #include <iostream>
 #include "IO/Model/OBJFileReader.h"
 #include "Render/IRender.h"
-#include "Render/DX11Render.h"
+#include "Render/DX11/DX11Render.h"
 #include "GameObject/GameObject.h"
 #include <string>
+#include "Render/DX11/DX11VBOManager.h"
 
 int main()
 {
@@ -15,19 +16,7 @@ int main()
 #else
 	//Utilities::HideConsole();
 #endif
-	Utilities::Write("Running...", Utilities::NORMAL_LEVEL);
-
-	Utilities::Write("Running tests...");
-	auto tStart = std::chrono::system_clock::now();
-
-	//READ OBJ
-	Geometry* ptr = OBJFileReader::ReadFile("earth.obj");
-
-	auto tEnd = std::chrono::system_clock::now();
-	std::chrono::duration<double> elapsedTime = tEnd - tStart;
-	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
-
-	delete  ptr;
+	
 	return 0;
 }
 
@@ -39,7 +28,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	Utilities::Write("Running...");
 
-	main();
+	
 
 	IRender* render = new DX11Render();
 	RECT rc = { 0, 0, 1280, 720 };
@@ -62,6 +51,26 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	}
 	else
 		Utilities::Write("SUCCESS: Render Init", Utilities::LEVEL::NORMAL_LEVEL);
+
+	///Model loading tests
+	Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
+
+	auto tStart = std::chrono::system_clock::now();
+
+	//READ OBJ
+	RawGeometry* ptr = OBJFileReader::ReadFile("earth.obj");
+
+	auto tEnd = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsedTime = tEnd - tStart;
+	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
+
+	Geometry* geometry = render->LoadRawGeometry(ptr);
+	render->FreeGeometry(geometry);
+
+	tEnd = std::chrono::system_clock::now();
+	elapsedTime = tEnd - tStart;
+	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
+	///---
 
 	//Test Camera
 	GameObject* camera = new GameObject();

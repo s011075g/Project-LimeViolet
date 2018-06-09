@@ -66,9 +66,6 @@
     <ClCompile Include="scr\Render\Geometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Render\DX11Render.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="scr\Render\IShaderManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -81,7 +78,10 @@
     <ClCompile Include="scr\Render\RawGeometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Render\DX11VBOManager.cpp">
+    <ClCompile Include="scr\Render\DX11\DX11Render.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Render\DX11\DX11VBOManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -149,9 +149,6 @@
     <ClInclude Include="scr\Entity\Component\RenderModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Render\DX11Render.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scr\Common\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -167,7 +164,10 @@
     <ClInclude Include="scr\Render\RawGeometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Render\DX11VBOManager.h">
+    <ClInclude Include="scr\Render\DX11\DX11Render.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render\DX11\DX11VBOManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,10 +2,14 @@
 #include <complex>
 
 IRender::IRender()
-{ }
+	: _windowWidth(0), _windowHeight(0), _activeCamera(nullptr), _hInst(nullptr), _hWnd(nullptr), _vboManager(nullptr)
+{
+}
 
 IRender::~IRender()
-{ }
+{
+	if(_vboManager) delete _vboManager;
+}
 
 HRESULT IRender::InitWindow(const HINSTANCE hInstance, const int nCmdShow, RECT& rc)
 {
@@ -41,6 +45,20 @@ HWND IRender::GetWindowHandle() const
 void IRender::Update()
 {
 	UpdateViewMatrix();
+}
+
+Geometry* IRender::LoadRawGeometry(RawGeometry*& geometry)
+{
+	if (!_vboManager) 
+		return nullptr;
+	Geometry* result = _vboManager->VBOGeometry(geometry);
+	delete geometry;
+	return result;
+}
+
+void IRender::FreeGeometry(Geometry*& geometry)
+{
+	_vboManager->DeleteVBO(geometry);
 }
 
 void IRender::UpdateScreenSize(const int windowWidth, const int windowHeight)

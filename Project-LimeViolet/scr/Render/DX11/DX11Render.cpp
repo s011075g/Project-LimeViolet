@@ -1,5 +1,6 @@
 #include "DX11Render.h"
-#include "../Common/resource.h"
+#include "../../Common/resource.h"
+#include "DX11VBOManager.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -11,11 +12,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 DX11Render::DX11Render()
-{ }
+	: _driverType(), _featureLevel(),  _device(nullptr), _context(nullptr), _swapChain(nullptr),
+	_renderTargetView(nullptr), _depthStencilView(nullptr), _offScreenView(nullptr), _offScreen(nullptr)
+{
+}
 
 DX11Render::~DX11Render()
 {
-	CleanUp();
+	DX11Render::CleanUp();
 }
 
 #define IDI_TUTORIAL1 109
@@ -199,6 +203,8 @@ HRESULT DX11Render::InitRenderer()
 
 	if (FAILED(hr))
 		return hr;
+
+	_vboManager = new DX11VBOManager(_device);
 
 	return hr;
 }

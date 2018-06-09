@@ -18,3 +18,12 @@ Geometry* DX11VBOManager::VBOGeometry(RawGeometry* geometry)
 		index.push_back(static_cast<void*>(BufferData(i.second, D3D11_BIND_INDEX_BUFFER)));
 	return new Geometry(vertex, index, geometry->materials);
 }
+
+void DX11VBOManager::DeleteVBO(Geometry*& geometry)
+{
+	static_cast<ID3D11Buffer*>(geometry->GetVertexBuffer())->Release();
+	for (auto buffer : geometry->GetIndexBuffer())
+		static_cast<ID3D11Buffer*>(buffer)->Release();
+	delete geometry;
+	geometry = nullptr;
+}
