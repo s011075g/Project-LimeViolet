@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+//#include <tuple> //Included in <vector>
+
 //Means the Component doesn't have to know anything about the entity
 typedef void* EntityHandler;
 
@@ -12,9 +14,15 @@ typedef void (*ComponentFreeFunction)(BaseComponent* comp);
 
 struct BaseComponent
 {
-	//Gets the next Component ID so we can then identify it
-	static uint32_t NextId();
+public:
+	static uint32_t RegisterComponentType(ComponentCreateFunction create, ComponentFreeFunction free, size_t size);
 	EntityHandler entity = nullptr;
+
+	inline static ComponentCreateFunction GetTypeCreateFunction(const uint32_t id);
+	inline static ComponentFreeFunction GetTypeFreeFunction(const uint32_t id);
+	inline static size_t GetTypeSize(const uint32_t id);
+private:
+	static std::vector<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>> _componentTypes;
 };
 
 template<typename T>
@@ -45,9 +53,10 @@ void ComponentFree(BaseComponent* comp)
 	component->~Component(); //Frees Component not memory, handled elsewhere
 }
 
+///Code dup ensure it is changed correctly
 //Sets it to the next possible ID
 template<typename T>
-const uint32_t Component<T>::ID(NextId());
+const uint32_t Component<T>::ID(RegisterComponentType(ComponentCreate<T>, ComponentFree<T>, sizeof(T)));
 
 //Calculates the Components size so memory required can be easily know
 template<typename T>

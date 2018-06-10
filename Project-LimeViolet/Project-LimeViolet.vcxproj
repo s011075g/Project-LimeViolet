@@ -170,6 +170,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\ECS\ECS.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11TextureManager.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11VBOManager.cpp" />
     <ClCompile Include="scr\Render\RawGeometry.cpp" />
@@ -177,8 +178,7 @@
     <ClCompile Include="scr\Render\IVBOManager.cpp" />
     <ClCompile Include="scr\Render\IShaderManager.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11Render.cpp" />
-    <ClCompile Include="scr\Entity\Entity.cpp" />
-    <ClCompile Include="scr\Entity\Component\Component.cpp" />
+    <ClCompile Include="scr\ECS\Component.cpp" />
     <ClCompile Include="scr\Render\Geometry.cpp" />
     <ClCompile Include="scr\Common\Material.cpp" />
     <ClCompile Include="scr\IO\Model\OBJFileReader.cpp" />
@@ -195,8 +195,10 @@
     <ClCompile Include="scr\Maths\MathStructs.cpp" />
     <ClCompile Include="scr\Common\Utilities.cpp" />
     <ClCompile Include="scr\Render\Vulkan\VulkanRender.cpp" />
+    <ClCompile Include="scr\ECS\System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\ECS\ECS.h" />
     <ClInclude Include="scr\Render\DX11\DX11TextureManager.h" />
     <ClInclude Include="scr\Render\DX11\DX11VBOManager.h" />
     <ClInclude Include="scr\Render\RawGeometry.h" />
@@ -207,8 +209,7 @@
     <ClInclude Include="scr\Render\DX11\DX11Render.h" />
     <ClInclude Include="scr\Entity\Component\Camera.h" />
     <ClInclude Include="scr\Entity\Component\RenderModel.h" />
-    <ClInclude Include="scr\Entity\Entity.h" />
-    <ClInclude Include="scr\Entity\Component\Component.h" />
+    <ClInclude Include="scr\ECS\Component.h" />
     <ClInclude Include="scr\Render\Geometry.h" />
     <ClInclude Include="scr\Common\ObjectVertex.h" />
     <ClInclude Include="scr\Entity\Component\Transform.h" />
@@ -227,6 +228,7 @@
     <ClInclude Include="scr\Maths\MathStructs.h" />
     <ClInclude Include="scr\Common\Utilities.h" />
     <ClInclude Include="scr\Render\Vulkan\VulkanRender.h" />
+    <ClInclude Include="scr\ECS\System.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

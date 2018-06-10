@@ -73,23 +73,15 @@ int main()
 	Camera* cam = camera->GetComponent<Camera>();
 	const Color color{0.0f, 1.0f, 0.42f, 1.0f};
 	cam->SetClearColor(color);
+	cam->SetUp(Float3(0, 1, 0));
 
 	render->SetActiveCamera(cam);
 
-	// Main message loop for testing
-	MSG msg = { nullptr };
-
-	while (WM_QUIT != msg.message)
+	while (render->ShouldExit())
 	{
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			render->Draw();
-		}
+		render->Update();
+
+		render->Draw();
 	}
 
 	delete camera;

@@ -5,6 +5,8 @@
 class DX11Render : public IRender
 {
 private:
+	MSG _msg;
+
 	D3D_DRIVER_TYPE _driverType;
 	D3D_FEATURE_LEVEL _featureLevel;
 
@@ -27,7 +29,9 @@ public:
 	HRESULT InitWindow(RECT& rc) override;
 	HRESULT InitRenderer() override;
 
+	void Update() override;
 	void Draw() override;
+	bool ShouldExit() override;
 protected:
 	void CleanUp() override;
 

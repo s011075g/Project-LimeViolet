@@ -18,10 +18,16 @@ public:
 	~VulkanRender();
 	HRESULT InitWindow(RECT& rc) override;
 	HRESULT InitRenderer() override;
+
+	void Update() override;
 	void Draw() override;
+	bool ShouldExit() override;
 protected:
 	void CleanUp() override;
 	void UpdateViewMatrix() override;
 	void UpdateProjectionMatrix() override;
+private:
+	//Prints a list of supported extensions to the console
+	static void SupportedExtensions();
 };
 

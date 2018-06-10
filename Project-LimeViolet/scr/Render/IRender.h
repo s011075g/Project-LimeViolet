@@ -31,6 +31,7 @@ public:
 
 	virtual void Update();
 	virtual void Draw() = 0; //todo replace as this is for testing
+	virtual bool ShouldExit() = 0;
 
 	virtual Geometry* LoadRawGeometry(RawGeometry*& geometry);
 	virtual void FreeGeometry(Geometry*& geometry);

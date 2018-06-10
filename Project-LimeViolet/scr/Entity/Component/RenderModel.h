@@ -1,5 +1,5 @@
 #pragma once
-#include "Component.h"
+#include "../../ECS/Component.h"
 #include "../../Render/Geometry.h"
 
 struct RenderModel : Component<RenderModel>

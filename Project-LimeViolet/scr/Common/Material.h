@@ -32,5 +32,4 @@ public:
 	void * GetTextureDiffuse() const;
 	void * GetTextureNormal() const;
 	void * GetTextureSpecular() const;
-
 };

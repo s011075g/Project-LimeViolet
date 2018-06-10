@@ -57,12 +57,6 @@
     <ClCompile Include="scr\Common\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Entity\Component\Component.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="scr\Entity\Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="scr\Render\Geometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -88,6 +82,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="scr\Render\Vulkan\VulkanRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\ECS\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\ECS\Component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\ECS\ECS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,13 +140,7 @@
     <ClInclude Include="scr\Common\ObjectVertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Entity\Component\Component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scr\Entity\Component\Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Entity\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Entity\Component\Camera.h">
@@ -180,6 +177,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Render\Vulkan\VulkanRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\ECS\System.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\ECS\Component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\ECS\ECS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

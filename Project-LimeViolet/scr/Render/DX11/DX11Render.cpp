@@ -13,8 +13,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 DX11Render::DX11Render()
-	: _driverType(), _featureLevel(), _device(nullptr), _context(nullptr), _swapChain(nullptr), _renderTargetView(nullptr), 
-	_depthStencilView(nullptr), _offScreenView(nullptr), _offScreen(nullptr), _hWnd(nullptr)
+	:_msg({nullptr}) ,_driverType(), _featureLevel(), _device(nullptr), _context(nullptr), _swapChain(nullptr), 
+	_renderTargetView(nullptr), _depthStencilView(nullptr), _offScreenView(nullptr), _offScreen(nullptr), _hWnd(nullptr)
 { }
 
 DX11Render::~DX11Render()
@@ -210,6 +210,16 @@ HRESULT DX11Render::InitRenderer()
 	return hr;
 }
 
+void DX11Render::Update()
+{
+	IRender::Update();
+	if (PeekMessage(&_msg, nullptr, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&_msg);
+		DispatchMessage(&_msg);
+	}
+}
+
 void DX11Render::Draw()
 {
 	ID3D11ShaderResourceView* null = nullptr;
@@ -219,6 +229,11 @@ void DX11Render::Draw()
 	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	_swapChain->Present(1, 0); //1 = vsync
+}
+
+bool DX11Render::ShouldExit()
+{
+	return _msg.message != WM_QUIT;
 }
 
 void DX11Render::CleanUp()
@@ -247,13 +262,14 @@ void DX11Render::CleanUp()
 
 void DX11Render::UpdateViewMatrix()
 {
-	Float3 eye_ = _activeCamera->GetEye();
-	const DirectX::XMVECTOR eye = DirectX::XMLoadFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(&eye_));
-	Float3 at_ = _activeCamera->GetAt();
-	const DirectX::XMVECTOR at = DirectX::XMLoadFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(&at_));
-	Float3 up_ = _activeCamera->GetUp();
-	const DirectX::XMVECTOR up = DirectX::XMLoadFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(&up_));
-	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_view), DirectX::XMMatrixLookAtLH(eye, at, up));
+	DirectX::XMFLOAT3 eye(_activeCamera->GetEye().x, _activeCamera->GetEye().y, _activeCamera->GetEye().z);
+	DirectX::XMFLOAT3 at(_activeCamera->GetAt().x, _activeCamera->GetAt().y, _activeCamera->GetAt().z);
+	DirectX::XMFLOAT3 up(_activeCamera->GetUp().x, _activeCamera->GetUp().y, _activeCamera->GetUp().z);
+	DirectX::XMFLOAT4X4 m;
+	DirectX::XMStoreFloat4x4(&m, DirectX::XMMatrixLookAtLH(DirectX::XMLoadFloat3(&eye), DirectX::XMLoadFloat3(&at), DirectX::XMLoadFloat3(&up)));
+	for(int x = 0; x != 4; x++)
+		for(int y = 0; y != 4; y++)
+			_view.m[x][y] = m.m[x][y];
 }
 
 void DX11Render::UpdateProjectionMatrix()
