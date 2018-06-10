@@ -10,6 +10,8 @@
 #include "Render/DX11/DX11VBOManager.h"
 #include "Render/Vulkan/VulkanRender.h"
 
+//#define MODEL_TESTING
+
 int main()
 {
 #if defined(DEBUG) || defined(_DEBUG)
@@ -44,8 +46,8 @@ int main()
 	else
 		Utilities::Write("SUCCESS: Render Init", Utilities::LEVEL::NORMAL_LEVEL);
 
-	///Model loading tests
-	/*Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
+#ifdef MODEL_TESTING
+	Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
 
 	auto tStart = std::chrono::system_clock::now();
 
@@ -62,8 +64,8 @@ int main()
 	std::chrono::duration<double> elapsedTime = tMid - tStart;
 	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
 	elapsedTime = tEnd - tStart;
-	Utilities::Write(std::to_string(elapsedTime.count()).c_str());*/
-	///---
+	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
+#endif
 
 	//Test Camera
 	GameObject* camera = new GameObject();
