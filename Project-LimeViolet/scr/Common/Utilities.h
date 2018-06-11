@@ -15,20 +15,19 @@ namespace Utilities
 	
 	//Used to write to console. Level shows the message in a different colour.
 	//Extreme level forces the console to show, and send a message box informing the user to check the console.
-	void Write(const char* ptr, const LEVEL level);
+	static void Write(const char* ptr, const LEVEL level);
 	//Used to write to console. Colour will be default.
-	void Write(const char* ptr);
+	static void Write(const char* ptr);
 	//Creates a console
-	void CreateConsole();
+	static void CreateConsole();
 	//Close console
-	void CloseConsole();
+	static void CloseConsole();
 	//Causes the console to pause by requesting input.
-	void PauseConsole();
+	static void PauseConsole();
 	//Hide the console window.
-	void HideConsole();
+	static void HideConsole();
 	//Show the console window.
-	void ShowConsole();
+	static void ShowConsole();
 	//Querry if the console window is showing.
-	bool IsConsoleVisible();
-
+	static bool IsConsoleVisible();
 };

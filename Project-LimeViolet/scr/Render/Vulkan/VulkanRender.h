@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 struct QueueFamilyIndices;
+struct SwapChainSupportDetails;
 
 class VulkanRender : public IRender
 {
@@ -14,9 +15,19 @@ private:
 	VkInstance _instance;
 	VkDevice _device;
 	VkPhysicalDevice _physicalDevice;
-	VkQueue _graphicsQueue;
+	VkQueue _graphicsQueue; 
+	VkSurfaceKHR _surface;
+	VkQueue _presentQueue;
+
+	VkSwapchainKHR _swapChain;
+	std::vector<VkImage> _swapChainImages;
+	VkFormat _swapChainImageFormat;
+	VkExtent2D _swapChainExtent;
+
+	std::vector<VkImageView> _swapChainImageViews;
 
 	const std::vector<const char*> _validationLayers;
+
 public:
 	VulkanRender();
 	~VulkanRender();
@@ -32,14 +43,28 @@ protected:
 	void UpdateProjectionMatrix() override;
 private:
 	HRESULT InitInstance();
+	HRESULT CreateSurface();
 	HRESULT PickPhysicalDevice();
 	HRESULT CreateLogicDevice();
+	HRESULT CreateSwapChain();
+	HRESULT CreateImageViews();
+	HRESULT CreateGraphicsPipeLine();
 
 	//Prints a list of supported extensions to the console
 	static void SupportedExtensions();
 	//
-	static bool IsDeviceSuitable(const VkPhysicalDevice device);
+	bool IsDeviceSuitable(const VkPhysicalDevice device) const;
 
-	static QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice device);
+	QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice device) const;
+
+	static bool CheckDeviceExtensionSupport(const VkPhysicalDevice device);
+
+	SwapChainSupportDetails QuerySwapChainSupport(const VkPhysicalDevice device) const;
+
+	static VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+
+	static VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
+
+	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
 };
 

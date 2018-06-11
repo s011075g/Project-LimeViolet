@@ -208,6 +208,7 @@
     <ClCompile Include="scr\Common\Utilities.cpp" />
     <ClCompile Include="scr\Render\Vulkan\VulkanRender.cpp" />
     <ClCompile Include="scr\ECS\System.cpp" />
+    <ClCompile Include="scr\Render\Vulkan\VulkanShaderManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\ECS\ECS.h" />
@@ -241,6 +242,7 @@
     <ClInclude Include="scr\Common\Utilities.h" />
     <ClInclude Include="scr\Render\Vulkan\VulkanRender.h" />
     <ClInclude Include="scr\ECS\System.h" />
+    <ClInclude Include="scr\Render\Vulkan\VulkanShaderManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
