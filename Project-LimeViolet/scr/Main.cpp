@@ -24,9 +24,10 @@ int main()
 	Utilities::ShowConsole();
 	Utilities::Write("Running...");
 
-	IRender* render = new DX11Render();
+	IRender* render = new VulkanRender();
 	RECT rc = { 0, 0, 1280, 720 };
-	if (FAILED(render->InitWindow(rc)))
+	const char* title = "Window";
+	if (FAILED(render->InitWindow(rc, title)))
 	{
 		Utilities::Write("FAILED: Created Window", Utilities::LEVEL::EXTREME_LEVEL);
 		delete render;

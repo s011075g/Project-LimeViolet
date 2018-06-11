@@ -11,11 +11,6 @@ IRender::~IRender()
 	if (_textureManager) delete _textureManager;
 }
 
-HRESULT IRender::InitWindow(RECT& rc)
-{
-	return 0;
-}
-
 void IRender::SetActiveCamera(Camera* camera)
 {
 	_activeCamera = camera;

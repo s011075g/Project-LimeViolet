@@ -21,7 +21,7 @@ public:
 	IRender();
 	virtual ~IRender();
 
-	virtual HRESULT InitWindow(RECT& rc) = 0;
+	virtual HRESULT InitWindow(RECT& rc, const char*& windowTitle) = 0;
 	virtual HRESULT InitRenderer() = 0;
 
 	void SetActiveCamera(Camera* camera);

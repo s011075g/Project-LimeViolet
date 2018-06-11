@@ -26,7 +26,7 @@ private:
 public:
 	DX11Render();
 	~DX11Render();
-	HRESULT InitWindow(RECT& rc) override;
+	HRESULT InitWindow(RECT& rc, const char*& windowTitle) override;
 	HRESULT InitRenderer() override;
 
 	void Update() override;

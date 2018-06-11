@@ -24,7 +24,7 @@ DX11Render::~DX11Render()
 
 #define IDI_TUTORIAL1 109
 
-HRESULT DX11Render::InitWindow(RECT& rc)
+HRESULT DX11Render::InitWindow(RECT& rc, const char*& windowTitle)
 {
 	WNDCLASSEX wcex;
 	wcex.cbSize = sizeof(WNDCLASSEX);
@@ -48,7 +48,9 @@ HRESULT DX11Render::InitWindow(RECT& rc)
 
 	//_hInst = GetModuleHandle(NULL);
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	_hWnd = CreateWindow(L"WindowClass", L"Window", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 
+	std::string title_(windowTitle); //todo find a better soultion 
+	std::wstring title(title_.begin(), title_.end());
+	_hWnd = CreateWindow(L"WindowClass", title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
 							rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, GetModuleHandle(nullptr), nullptr);
 	if (!_hWnd)
 	{
