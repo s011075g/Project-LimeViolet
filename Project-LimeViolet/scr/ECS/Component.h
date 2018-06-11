@@ -3,24 +3,25 @@
 //#include <tuple> //Included in <vector>
 
 //Means the Component doesn't have to know anything about the entity
-typedef void* EntityHandler;
+typedef void* EntityHandle;
 
 //Forward declare
 struct BaseComponent;
 
 //Typedef function pointers so code is more readable
-typedef uint32_t(*ComponentCreateFunction)(std::vector<uint8_t>& memory, EntityHandler entity, BaseComponent* comp);
+typedef uint32_t(*ComponentCreateFunction)(std::vector<uint8_t>& memory, EntityHandle entity, BaseComponent* comp);
 typedef void (*ComponentFreeFunction)(BaseComponent* comp);
 
 struct BaseComponent
 {
 public:
 	static uint32_t RegisterComponentType(ComponentCreateFunction create, ComponentFreeFunction free, size_t size);
-	EntityHandler entity = nullptr;
+	EntityHandle entity = nullptr;
 
-	inline static ComponentCreateFunction GetTypeCreateFunction(const uint32_t id);
-	inline static ComponentFreeFunction GetTypeFreeFunction(const uint32_t id);
-	inline static size_t GetTypeSize(const uint32_t id);
+	static ComponentCreateFunction GetTypeCreateFunction(const uint32_t id);
+	static ComponentFreeFunction GetTypeFreeFunction(const uint32_t id);
+	static size_t GetTypeSize(const uint32_t id);
+	static bool IsTypeValid(uint32_t id);
 private:
 	static std::vector<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>> _componentTypes;
 };
@@ -36,7 +37,7 @@ struct Component : BaseComponent
 
 //Creates the component at a certain point in memory. As we're putting it in an array to hold it all
 template<typename Component>
-uint32_t ComponentCreate(std::vector<uint8_t>& memory, const EntityHandler entity, BaseComponent* comp)
+uint32_t ComponentCreate(std::vector<uint8_t>& memory, const EntityHandle entity, BaseComponent* comp)
 {
 	const uint32_t index = memory.size();
 	memory.resize(index + Component::SIZE); //Extends the memory pool to add the new Component

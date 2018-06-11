@@ -44,7 +44,7 @@ RawGeometry* OBJFileReader::ReadFile(const char* fileLocation)
 	if (mtls.size() != 0)
 	{
 		bool tangents = false; //Finds out if we need tangents calculated
-		for(int i = 0; i < mtls.size(); i++)
+		for(size_t i = 0; i < mtls.size(); i++)
 			if(mtls[i]->isNormalMap)
 			{
 				tangents = true;
@@ -55,7 +55,7 @@ RawGeometry* OBJFileReader::ReadFile(const char* fileLocation)
 	}
 	//Create Materials that fit
 	std::vector<Material*> materials;
-	for(int i = 0; i < mtls.size(); i++)
+	for(size_t i = 0; i < mtls.size(); i++)
 		for (auto j : material)
 		{
 			auto data = mtls[i]->materials.find(j);
@@ -75,7 +75,7 @@ RawGeometry* OBJFileReader::ReadFile(const char* fileLocation)
 		}
 	if (materials.empty()) //If no names of the materials match, we set default values
 	{
-		for (int i = 0; i < material.size(); i++)
+		for (size_t i = 0; i < material.size(); i++)
 		{
 			MaterialValues* values = new MaterialValues();
 			values->ambient = Float4(0, 0, 0, 0);
@@ -87,9 +87,9 @@ RawGeometry* OBJFileReader::ReadFile(const char* fileLocation)
 		}
 	}
 	//Clean up
-	for (int i = 0; i < mtls.size(); i++)
+	for (size_t i = 0; i < mtls.size(); i++)
 		delete mtls[i];
-	for (int i = 0; i < material.size(); i++)
+	for (size_t i = 0; i < material.size(); i++)
 		delete material[i];
 	return new RawGeometry(vertex, indices, materials); //return
 }
@@ -229,7 +229,7 @@ void OBJFileReader::PackData(Obj* obj, std::vector<ObjectVertex>& outVertex, std
 	for (auto i : obj->indicesVertices)
 	{
 		outMaterial.push_back(i.first);
-		for (auto j = 0; j < obj->indicesVertices[i.first].size(); j++)
+		for (size_t j = 0; j < obj->indicesVertices[i.first].size(); j++)
 		{
 			Packed data = Packed(obj->vertices[obj->indicesVertices[i.first][j]],
 									obj->normals[obj->indicesNormals[i.first][j]],
@@ -256,7 +256,7 @@ void OBJFileReader::CalculateTangents(std::vector<ObjectVertex>& vertex, std::ma
 		unsigned short x, y, z; //Moving out the for loops allows us not have to assign memory every iteration, but keeping the code readable is difficult
 		Float3 v1, v2, v3;
 		Float2 w1, w2, w3;
-		for (auto j = 0; j < indices[i].size(); j += 3) //Triangles have 3 points
+		for (size_t j = 0; j < indices[i].size(); j += 3) //Triangles have 3 points
 		{
 			x = indices[i][j];
 			y = indices[i][j + 1];
@@ -297,7 +297,7 @@ void OBJFileReader::CalculateTangents(std::vector<ObjectVertex>& vertex, std::ma
 		}
 		Float3 tangent;
 		float w;
-		for (auto j = 0; j < vertex.size(); j++)
+		for (size_t j = 0; j < vertex.size(); j++)
 		{
 			tangent = tan1[j] - vertex[j].normal * tan1[j].Dot(vertex[j].normal);
 			tangent.Normalize();
@@ -311,7 +311,7 @@ void OBJFileReader::CalculateTangents(std::vector<ObjectVertex>& vertex, std::ma
 //Used to load in all the Mtl files
 void OBJFileReader::LoadMtlFiles(std::vector<const char*>& paths, std::vector<Mtl*> & mtls)
 {
-	for (int i = 0; i < paths.size(); i++) //Load all MTL files
+	for (size_t i = 0; i < paths.size(); i++) //Load all MTL files
 		mtls.push_back(LoadMtl(paths[i]));
 }
 

@@ -25,3 +25,8 @@ size_t BaseComponent::GetTypeSize(const uint32_t id)
 {
 	return std::get<2>(_componentTypes[id]);
 }
+
+bool BaseComponent::IsTypeValid(const uint32_t id)
+{
+	return id < _componentTypes.size();
+}

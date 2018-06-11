@@ -42,7 +42,7 @@ HRESULT VulkanRender::InitRenderer()
 	const char ** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
 	std::cout << "Required extensions:" << std::endl;
-	for (int i = 0; i < glfwExtensionCount; i++)
+	for (uint32_t i = 0; i < glfwExtensionCount; i++)
 		std::cout << "\t" << glfwExtensions[i] << std::endl;
 
 	SupportedExtensions();

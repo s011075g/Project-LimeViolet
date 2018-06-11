@@ -413,7 +413,7 @@ Float4x4 Float4x4::operator*(const Float4x4& r) const
 	return result;
 }
 
-const Float4x4& Float4x4::ProjectionMatrix(const float fov, const float aspect, const float near, const float far, const bool leftHanded)
+Float4x4 Float4x4::ProjectionMatrix(const float fov, const float aspect, const float near, const float far, const bool leftHanded)
 {
 	Float4x4 result = Float4x4(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 

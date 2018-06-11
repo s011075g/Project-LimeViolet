@@ -173,8 +173,8 @@ struct Float4x4
 	Float4x4 operator* (const Float4x4& right) const;
 
 	//Compute Projection Matrix;
-	static const Float4x4& ProjectionMatrix(float fov, float aspect, float near, float far, bool leftHanded = true);
-
+	static Float4x4 ProjectionMatrix(float fov, float aspect, float near, float far, bool leftHanded = true);
+	
 	//Returns an identity matrix
 	static Float4x4 Identity();
 };
