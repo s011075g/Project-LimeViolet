@@ -26,6 +26,8 @@ private:
 
 	std::vector<VkImageView> _swapChainImageViews;
 
+	VkPipelineLayout _pipelineLayout;
+
 	const std::vector<const char*> _validationLayers;
 
 public:
