@@ -26,7 +26,9 @@ private:
 
 	std::vector<VkImageView> _swapChainImageViews;
 
+	VkRenderPass _renderPass;
 	VkPipelineLayout _pipelineLayout;
+	VkPipeline _graphicsPipeline;
 
 	const std::vector<const char*> _validationLayers;
 
@@ -50,6 +52,7 @@ private:
 	HRESULT CreateLogicDevice();
 	HRESULT CreateSwapChain();
 	HRESULT CreateImageViews();
+	HRESULT CreateRenderPass();
 	HRESULT CreateGraphicsPipeLine();
 
 	//Prints a list of supported extensions to the console
