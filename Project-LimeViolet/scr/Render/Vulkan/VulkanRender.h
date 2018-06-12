@@ -30,8 +30,11 @@ private:
 	VkPipelineLayout _pipelineLayout;
 	VkPipeline _graphicsPipeline;
 
-	const std::vector<const char*> _validationLayers;
+	VkCommandPool _commandPool;
 
+	std::vector<VkFramebuffer> _swapChainFramebuffers;
+	std::vector<VkCommandBuffer> _commandBuffers;
+	const std::vector<const char*> _validationLayers;
 public:
 	VulkanRender();
 	~VulkanRender();
@@ -54,6 +57,9 @@ private:
 	HRESULT CreateImageViews();
 	HRESULT CreateRenderPass();
 	HRESULT CreateGraphicsPipeLine();
+	HRESULT CreateFrameBuffers();
+	HRESULT CreateCommandPool();
+	HRESULT CreateCommandBuffers();
 
 	//Prints a list of supported extensions to the console
 	static void SupportedExtensions();
