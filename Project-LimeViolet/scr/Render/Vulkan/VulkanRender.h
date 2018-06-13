@@ -34,9 +34,12 @@ private:
 
 	std::vector<VkFramebuffer> _swapChainFramebuffers;
 	std::vector<VkCommandBuffer> _commandBuffers;
-	VkSemaphore _imageAvailableSemaphore;
-	VkSemaphore _renderFinishedSemaphore;
+	std::vector<VkSemaphore> _imageAvailableSemaphores;
+	std::vector<VkSemaphore> _renderFinishedSemaphores;
+	std::vector<VkFence> _inFlightFences;
 	const std::vector<const char*> _validationLayers;
+
+	size_t _currentFrame = 0;
 public:
 	VulkanRender();
 	~VulkanRender();
@@ -55,15 +58,18 @@ private:
 	HRESULT CreateSurface();
 	HRESULT PickPhysicalDevice();
 	HRESULT CreateLogicDevice();
-	HRESULT CreateSwapChain();
-	HRESULT CreateImageViews();
-	HRESULT CreateRenderPass();
-	HRESULT CreateGraphicsPipeLine();
-	HRESULT CreateFrameBuffers();
+	HRESULT RecreateSwapChain();
+		HRESULT CreateSwapChain();
+		HRESULT CreateImageViews();
+		HRESULT CreateRenderPass();
+		HRESULT CreateGraphicsPipeLine();
+		HRESULT CreateFrameBuffers();
 	HRESULT CreateCommandPool();
 	HRESULT CreateCommandBuffers();
-	HRESULT CreateSemaphores();
+	HRESULT CreateSyncObjects();
 
+
+	void CleanupSwapChain();
 	//Prints a list of supported extensions to the console
 	static void SupportedExtensions();
 	//
