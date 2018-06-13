@@ -34,6 +34,8 @@ private:
 
 	std::vector<VkFramebuffer> _swapChainFramebuffers;
 	std::vector<VkCommandBuffer> _commandBuffers;
+	VkSemaphore _imageAvailableSemaphore;
+	VkSemaphore _renderFinishedSemaphore;
 	const std::vector<const char*> _validationLayers;
 public:
 	VulkanRender();
@@ -60,6 +62,7 @@ private:
 	HRESULT CreateFrameBuffers();
 	HRESULT CreateCommandPool();
 	HRESULT CreateCommandBuffers();
+	HRESULT CreateSemaphores();
 
 	//Prints a list of supported extensions to the console
 	static void SupportedExtensions();
