@@ -69,6 +69,8 @@ HRESULT VulkanRender::InitRenderer()
 	if (CreateLogicDevice() != S_OK)
 		return E_FAIL;
 
+	_vboManager = new VulkanVBOManager();
+
 	if (RecreateSwapChain() != S_OK)
 		return E_FAIL;
 
@@ -487,10 +489,14 @@ HRESULT VulkanRender::CreateGraphicsPipeLine()
 	//VERTEX
 	VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
 	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-	vertexInputInfo.vertexBindingDescriptionCount = 0;
-	vertexInputInfo.pVertexBindingDescriptions = nullptr; // Optional
-	vertexInputInfo.vertexAttributeDescriptionCount = 0;
-	vertexInputInfo.pVertexAttributeDescriptions = nullptr; // Optional
+	
+	auto bindingDescript = VulkanVBOManager::GetObjectVertexBindingDescription();
+	auto attributeDescriptions = VulkanVBOManager::GetObjectVertexAttributeDescriptions();
+	
+	vertexInputInfo.vertexBindingDescriptionCount = 1;
+	vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());; // Optional
+	vertexInputInfo.pVertexBindingDescriptions = &bindingDescript;
+	vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 	
 	//Input Assembly
 	VkPipelineInputAssemblyStateCreateInfo inputAssembly = {};

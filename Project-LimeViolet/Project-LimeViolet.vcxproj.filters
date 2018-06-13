@@ -96,6 +96,9 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanShaderManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\GameObject\GameObject.h">
@@ -192,6 +195,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Render\Vulkan\VulkanShaderManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render\Vulkan\VulkanVBOManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

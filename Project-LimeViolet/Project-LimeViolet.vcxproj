@@ -209,6 +209,7 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanRender.cpp" />
     <ClCompile Include="scr\ECS\System.cpp" />
     <ClCompile Include="scr\Render\Vulkan\VulkanShaderManager.cpp" />
+    <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\ECS\ECS.h" />
@@ -243,6 +244,7 @@
     <ClInclude Include="scr\Render\Vulkan\VulkanRender.h" />
     <ClInclude Include="scr\ECS\System.h" />
     <ClInclude Include="scr\Render\Vulkan\VulkanShaderManager.h" />
+    <ClInclude Include="scr\Render\Vulkan\VulkanVBOManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
