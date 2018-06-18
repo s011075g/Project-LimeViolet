@@ -13,7 +13,7 @@ public:
 	void RemoveEntity(EntityHandle handle);
 	//Component methods
 	template<class Component>
-	inline void AddComponent(EntityHandle entity, Component* component);
+	void AddComponent(EntityHandle entity, Component* component);
 	template<class Component>
 	bool RemoveComponent(EntityHandle entity);
 	template<class Component>
@@ -44,7 +44,7 @@ private:
 };
 
 template <class Component>
-inline void ECS::AddComponent(EntityHandle entity, Component* component)
+void ECS::AddComponent(EntityHandle entity, Component* component)
 {
 	AddComponentInternal(entity, HandleToEntity(entity), Component::ID, component);
 }

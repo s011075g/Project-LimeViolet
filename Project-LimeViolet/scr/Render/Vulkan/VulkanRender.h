@@ -41,6 +41,9 @@ private:
 	const std::vector<const char*> _validationLayers;
 
 	size_t _currentFrame = 0;
+
+	//TEMP
+	Geometry* _triangle;
 public:
 	VulkanRender();
 	~VulkanRender();

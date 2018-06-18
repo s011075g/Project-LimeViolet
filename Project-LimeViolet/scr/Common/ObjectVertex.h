@@ -1,7 +1,8 @@
 #pragma once
 #include "../Maths/MathStructs.h"
 
-struct ObjectVertex //48 bytes
+//48 bytes
+struct ObjectVertex 
 {
 	Float3 vertex; //12
 	Float2 uv; //8

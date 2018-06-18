@@ -4,7 +4,7 @@
 
 ECS::~ECS()
 {
-	for(auto it = _components.begin(); it != _components.end(); ++it)
+	for(std::map<uint32_t, std::vector<uint8_t>>::iterator it = _components.begin(); it != _components.end(); ++it)
 	{
 		size_t typeSize = BaseComponent::GetTypeSize(it->first);
 		ComponentFreeFunction free = BaseComponent::GetTypeFreeFunction(it->first);
@@ -15,37 +15,36 @@ ECS::~ECS()
 		delete _entities[i];
 }
 
-EntityHandle ECS::MakeEntity(BaseComponent* entityComponets, const uint32_t* componentIds, size_t numComponents)
+EntityHandle ECS::MakeEntity(BaseComponent* entityComponets, const uint32_t* componentIds, const size_t numComponents)
 {
-	auto entity = new std::pair<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>();
-	EntityHandle handle = static_cast<EntityHandle>(entity);
+	auto newEntity = new std::pair<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>();
+	EntityHandle handle = static_cast<EntityHandle>(newEntity);
 	for(uint32_t i = 0; i < numComponents; i++)
 	{
 		if(!BaseComponent::IsTypeValid(componentIds[i]))
 		{
-			Utilities::Write("Component Type not valid: " + componentIds[i], Utilities::LEVEL::WARNING_LEVEL);
-			delete entity;
+			Utilities::Write("ECS Component Type not valid: " + componentIds[i], Utilities::LEVEL::ERROR_LEVEL);
+			delete newEntity;
 			return nullptr;
 		}
-		AddComponentInternal(handle, entity->second, componentIds[i], &entityComponets[i]);
+		AddComponentInternal(handle, newEntity->second, componentIds[i], &entityComponets[i]);
 	}
 
-	entity->first = _entities.size();
-	_entities.push_back(entity);
+	newEntity->first = _entities.size();
+	_entities.push_back(newEntity);
 	return handle;
 }
 
-void ECS::RemoveEntity(EntityHandle handle)
+void ECS::RemoveEntity(const EntityHandle handle)
 {
 	std::vector<std::pair<uint32_t, uint32_t>>& entity = HandleToEntity(handle);
 	for (uint32_t i = 0; i < entity.size(); i++)
 		DeleteComponent(entity[i].first, entity[i].second);
-	//Destination 
-	uint32_t desIndex = HandleToEntityIndex(handle);
-	//Source
-	uint32_t srcIndex = _entities.size() - 1;
-	delete _entities[desIndex];
-	_entities[desIndex] = _entities[srcIndex];
+
+	uint32_t destination = HandleToEntityIndex(handle);
+	uint32_t source = _entities.size() - 1;
+	delete _entities[destination];
+	_entities[destination] = _entities[source];
 	_entities.pop_back();
 }
 
@@ -102,7 +101,7 @@ std::vector<std::pair<uint32_t, uint32_t>>& ECS::HandleToEntity(const EntityHand
 	return HandleToRawType(handle)->second;
 }
 
-void ECS::AddComponentInternal(EntityHandle handle, std::vector<std::pair<uint32_t, uint32_t>>& entity, uint32_t componentId, BaseComponent* component)
+void ECS::AddComponentInternal(const EntityHandle handle, std::vector<std::pair<uint32_t, uint32_t>>& entity, const uint32_t componentId, BaseComponent* component)
 {
 	ComponentCreateFunction create = BaseComponent::GetTypeCreateFunction(componentId);
 	std::pair<uint32_t, uint32_t> pair;
@@ -111,7 +110,7 @@ void ECS::AddComponentInternal(EntityHandle handle, std::vector<std::pair<uint32
 	entity.push_back(pair);
 }
 
-void ECS::DeleteComponent(uint32_t componentId, uint32_t index)
+void ECS::DeleteComponent(const uint32_t componentId, const uint32_t index)
 {
 	std::vector<uint8_t>& array = _components[componentId];
 	ComponentFreeFunction free = BaseComponent::GetTypeFreeFunction(componentId);
@@ -139,7 +138,7 @@ void ECS::DeleteComponent(uint32_t componentId, uint32_t index)
 	array.resize(srcIndex);
 }
 
-bool ECS::RemoveComponentInternal(EntityHandle handle, uint32_t componentId)
+bool ECS::RemoveComponentInternal(const EntityHandle handle, const uint32_t componentId)
 {
 	std::vector<std::pair<uint32_t, uint32_t>>& entityComponents = HandleToEntity(handle);
 	for(uint32_t destIndex = 0; destIndex < entityComponents.size(); destIndex++)
@@ -164,7 +163,7 @@ BaseComponent* ECS::GetComponentInternal(std::vector<std::pair<uint32_t, uint32_
 
 
 
-void ECS::UpdateSystemsWithMultipleComponents(uint32_t index, float delta, const std::vector<uint32_t>& componentTypes, std::vector<BaseComponent*> componentParam, std::vector<std::vector<uint8_t>*>& componentArrays)
+void ECS::UpdateSystemsWithMultipleComponents(const uint32_t index, const float delta, const std::vector<uint32_t>& componentTypes, std::vector<BaseComponent*> componentParam, std::vector<std::vector<uint8_t>*>& componentArrays)
 {
 	componentParam.resize(std::max(componentParam.size(), componentTypes.size()));
 	componentArrays.resize(std::max(componentArrays.size(), componentTypes.size()));

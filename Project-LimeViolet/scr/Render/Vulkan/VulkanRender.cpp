@@ -34,7 +34,7 @@ struct SwapChainSupportDetails
 VulkanRender::VulkanRender()
 	: _window(nullptr), _instance(nullptr), _device(nullptr), _physicalDevice(nullptr), _graphicsQueue(nullptr),
 	  _surface(0), _presentQueue(nullptr), _swapChain(0), _swapChainImageFormat(), _renderPass(0), _pipelineLayout(0),
-	  _graphicsPipeline(0), _commandPool(0)
+	  _graphicsPipeline(0), _commandPool(0), _triangle(nullptr)
 { }
 
 VulkanRender::~VulkanRender()
@@ -69,7 +69,7 @@ HRESULT VulkanRender::InitRenderer()
 	if (CreateLogicDevice() != S_OK)
 		return E_FAIL;
 
-	_vboManager = new VulkanVBOManager();
+	_vboManager = new VulkanVBOManager(_device, _physicalDevice);
 
 	if (RecreateSwapChain() != S_OK)
 		return E_FAIL;
@@ -167,6 +167,9 @@ void VulkanRender::CleanUp()
 	vkDeviceWaitIdle(_device);
 
 	CleanupSwapChain();
+
+	if(_triangle)
+		_vboManager->DeleteVBO(_triangle);
 
 	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) 
 	{
@@ -494,7 +497,7 @@ HRESULT VulkanRender::CreateGraphicsPipeLine()
 	auto attributeDescriptions = VulkanVBOManager::GetObjectVertexAttributeDescriptions();
 	
 	vertexInputInfo.vertexBindingDescriptionCount = 1;
-	vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());; // Optional
+	vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size()); // Optional
 	vertexInputInfo.pVertexBindingDescriptions = &bindingDescript;
 	vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 	
@@ -685,6 +688,20 @@ HRESULT VulkanRender::CreateCommandBuffers()
 		throw std::runtime_error("Failed to allocate command buffers!");
 	}
 
+	//todo remove as following is for debug  
+
+	std::vector<ObjectVertex> vertex(3);
+	vertex[0] = ObjectVertex({ Float3(0.0f, -0.5f, 0.0f),Float2(0,0), Float3(1,1,1), Float4(0,0,0,0) });
+	vertex[1] = ObjectVertex({ Float3(0.5f, 0.5f, 0.0f),Float2(0,0), Float3(0,1,0), Float4(0,0,0,0) });
+	vertex[2] = ObjectVertex({Float3(-0.5f, 0.5f, 0.0f),Float2(0,0), Float3(0,0,1), Float4(0,0,0,0)});
+
+	auto indices = std::map<unsigned short, std::vector<unsigned short>>();
+	auto materials = std::vector<Material*>();
+	RawGeometry* geometry = new RawGeometry(vertex, indices, materials);
+
+	_triangle = _vboManager->VBOGeometry(geometry);
+	delete geometry;
+
 	for (size_t i = 0; i < _commandBuffers.size(); i++) 
 	{
 		VkCommandBufferBeginInfo beginInfo = {};
@@ -713,6 +730,11 @@ HRESULT VulkanRender::CreateCommandBuffers()
 		vkCmdBeginRenderPass(_commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 			vkCmdBindPipeline(_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, _graphicsPipeline);
+
+			VkBuffer vertexBuffers[] = { *static_cast<VkBuffer*>(_triangle->GetVertexBuffer()) };
+			VkDeviceSize offsets[] = { 0 };
+
+			vkCmdBindVertexBuffers(_commandBuffers[i], 0, 1, vertexBuffers, offsets);
 
 			vkCmdDraw(_commandBuffers[i], 3, 1, 0, 0);
 
