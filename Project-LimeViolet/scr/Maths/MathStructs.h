@@ -3,7 +3,14 @@
 
 struct Float2
 {
-	float x, y;
+	union
+	{
+		struct 
+		{
+			float x, y;
+		};
+		float xy[2];
+	};
 
 	Float2() = default;
 	Float2(float x, float y);
@@ -38,7 +45,14 @@ struct Float2
 
 struct Float3
 {
-	float x, y, z;
+	union 
+	{
+		struct
+		{
+			float x, y, z;
+		};
+		float xyz[3];
+	};
 
 	Float3() = default;
 	Float3(float x, float y, float z);
@@ -75,7 +89,14 @@ struct Float3
 
 struct Float4
 {
-	float x, y, z, w;
+	union
+	{
+		struct
+		{
+			float x, y, z, w;
+		};
+		float xyzw[4];
+	};
 
 	Float4() = default;
 	Float4(float x, float y, float z, float w);
@@ -111,14 +132,28 @@ struct Float4
 
 struct Int2
 {
-	int x, y;
+	union 
+	{
+		struct 
+		{
+			int x, y;
+		};
+		int xy[2];
+	};
 	Int2() = default;
 	Int2(int x, int y);
 };
 
 struct UShort3
 {
-	unsigned short x, y, z;
+	union
+	{
+		struct
+		{
+			unsigned short x, y, z;
+		};
+		unsigned short xyz[3];
+	};
 	UShort3() = default;
 	UShort3(unsigned short x, unsigned short y, unsigned short z);
 };
@@ -143,7 +178,6 @@ struct Float3x3
 
 	float operator() (const size_t row, const size_t column) const;
 	float& operator() (const size_t row, const size_t column);
-
 };
 
 struct Float4x4

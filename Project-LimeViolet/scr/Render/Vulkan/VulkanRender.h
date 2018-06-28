@@ -90,5 +90,11 @@ private:
 	static VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
 
 	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
+
+	//Get the maximun value for a uint32_t 
+	//Added to stop clashing with max() macro
+	static constexpr uint32_t Max_uint32_t();
 };
+
+
 

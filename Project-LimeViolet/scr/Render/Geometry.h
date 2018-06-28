@@ -1,18 +1,18 @@
 #pragma once
 #include <vector>
-#include "../Common/Material.h"
+#include "RawGeometry.h"
 
-class Geometry
+class Geometry //todo remove materials from geomtry
 {
 private:
 	void* _vertexBuffer;
 	std::vector<void*> _indexBuffer;
-	std::vector<Material*> _materials; //TODO make a material manager to hold all the materials so that if objects use the same material, it can be reused to save memory
+	std::vector<RawMaterial*> _materials; //TODO make a material manager to hold all the materials so that if objects use the same material, it can be reused to save memory
 public:
-	Geometry(void*& vertex, std::vector<void*>& indices, std::vector<Material*>& materials);
+	Geometry(void*& vertex, std::vector<void*>& indices, std::vector<RawMaterial*>& materials);
 	~Geometry();
 
 	void* GetVertexBuffer() const;
 	const std::vector<void*>& GetIndexBuffer() const;
-	const std::vector<Material*> GetMaterials() const;
+	const std::vector<RawMaterial*> GetMaterials() const;
 };

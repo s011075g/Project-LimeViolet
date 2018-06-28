@@ -12,12 +12,12 @@ DX11TextureManager::~DX11TextureManager()
 		if (i.second) static_cast<ID3D11ShaderResourceView*>(i.second)->Release();
 }
 
-Texture DX11TextureManager::GetTexture(const char* fileLocation)
+texture DX11TextureManager::GetTexture(const char* fileLocation)
 {
 	std::string path(fileLocation);
 	if (path.empty()) 
 		return nullptr;
-	Texture result = _loadedImages[path];
+	texture result = _loadedImages[path];
 	if (result)
 		return result;
 	return _loadedImages[path] = LoadTexture(path);
@@ -31,7 +31,7 @@ void DX11TextureManager::UnloadTexture(const char* fileLocation)
 	_loadedImages[path] = nullptr;
 }
 
-Texture DX11TextureManager::LoadTexture(std::string fileLocation)
+texture DX11TextureManager::LoadTexture(std::string fileLocation)
 {
 	ID3D11ShaderResourceView* result(nullptr);
 	std::wstring file(fileLocation.begin(), fileLocation.end());

@@ -12,52 +12,51 @@ Geometry* VulkanVBOManager::VBOGeometry(RawGeometry* geometry)
 {
 	VkBufferCreateInfo bufferInfo = {};
 	bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-	bufferInfo.size = 8;// sizeof(geometry->vertex[0]) * geometry->vertex.size();
+	bufferInfo.size = sizeof(geometry->vertex[0]) * geometry->vertex.size();
 	bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 	bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	bufferInfo.flags = 0;
 	bufferInfo.pNext = nullptr;
-	bufferInfo.queueFamilyIndexCount = 0u;
+	bufferInfo.queueFamilyIndexCount = 0;
 	bufferInfo.pQueueFamilyIndices = nullptr;
 
 	VkBuffer vertexBuffer;
-
 	if (vkCreateBuffer(_device, &bufferInfo, nullptr, &vertexBuffer) != VK_SUCCESS)
 	{
 		Utilities::Write("Failed to create vertex buffer!", Utilities::LEVEL::WARNING_LEVEL);
 		return nullptr;
 	}
 
-	VkMemoryRequirements memRequirements;
-	vkGetBufferMemoryRequirements(_device, vertexBuffer, &memRequirements);
+	VkMemoryRequirements memoryRequirements;
+	vkGetBufferMemoryRequirements(_device, vertexBuffer, &memoryRequirements);
 
 	VkMemoryAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-	allocInfo.allocationSize = memRequirements.size;
-	allocInfo.memoryTypeIndex = FindMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	allocInfo.allocationSize = memoryRequirements.size;
+	allocInfo.memoryTypeIndex = FindMemoryType(memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-	VkBuffer buffer;
+	VkDeviceMemory bufferMemory;
 
-	if (vkAllocateMemory(_device, &allocInfo, nullptr, &buffer) != VK_SUCCESS)
+	if (vkAllocateMemory(_device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS)
 	{
 		vkDestroyBuffer(_device, vertexBuffer, nullptr);
 		Utilities::Write("Failed to allocate vertex buffer memory!", Utilities::LEVEL::WARNING_LEVEL);
 		return nullptr;
 	}
 
-	vkBindBufferMemory(_device, vertexBuffer, buffer, 0);
+	vkBindBufferMemory(_device, vertexBuffer, bufferMemory, 0);
 
 
 	void* data;
 
-	vkMapMemory(_device, buffer, 0, bufferInfo.size, 0, &data);
+	vkMapMemory(_device, bufferMemory, 0, bufferInfo.size, 0, &data);
 	memcpy(data, geometry->vertex.data(), static_cast<size_t>(bufferInfo.size));
-	vkUnmapMemory(_device, buffer);
+	vkUnmapMemory(_device, bufferMemory);
 
 	std::vector<void*> indices {};
 
 	VkBuffer* vb = new VkBuffer(vertexBuffer);
-	_vertexBufferMemory[vb] = new VkBuffer(buffer);
+	_vertexBufferMemory[vb] = new VkDeviceMemory(bufferMemory);
 	void* vertex = static_cast<void*>(&vb);
 
 	return new Geometry(vertex, indices, geometry->materials); //TODO FINISH UP 

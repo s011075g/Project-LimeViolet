@@ -6,7 +6,7 @@ std::vector<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>> 
 //Returns the next Entity ID
 uint32_t BaseComponent::RegisterComponentType(ComponentCreateFunction create, ComponentFreeFunction free, size_t size)
 {
-	uint32_t componentId = _componentTypes.size();
+	uint32_t componentId = static_cast<uint32_t>(_componentTypes.size());
 	_componentTypes.push_back(std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>(create, free, size));
 	return componentId++;
 }

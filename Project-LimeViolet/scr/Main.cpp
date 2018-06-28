@@ -24,7 +24,7 @@ int main()
 	Utilities::ShowConsole();
 	Utilities::Write("Running...");
 
-	IRender* render = new VulkanRender();
+	IRender* render = new DX11Render();
 	RECT rc = { 0, 0, 1280, 720 };
 	const char* title = "Window";
 	if (FAILED(render->InitWindow(rc, title)))
@@ -72,7 +72,7 @@ int main()
 	GameObject* camera = new GameObject();
 	camera->AddComponent<Camera>();
 	Camera* cam = camera->GetComponent<Camera>();
-	const Color color{0.0f, 1.0f, 0.42f, 1.0f};
+	const Color4 color(0.0f, 1.0f, 0.42f, 0.25f);
 	cam->SetClearColor(color);
 	cam->SetUp(Float3(0, 1, 0));
 

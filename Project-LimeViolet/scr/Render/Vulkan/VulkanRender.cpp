@@ -94,11 +94,11 @@ void VulkanRender::Update()
 
 void VulkanRender::Draw()
 {
-	vkWaitForFences(_device, 1, &_inFlightFences[_currentFrame], VK_TRUE, reinterpret_cast<uint32_t>(std::numeric_limits<uint32_t>::max));
+	vkWaitForFences(_device, 1, &_inFlightFences[_currentFrame], VK_TRUE, Max_uint32_t());
 	vkResetFences(_device, 1, &_inFlightFences[_currentFrame]);
 
 	uint32_t imageIndex;
-	VkResult result = vkAcquireNextImageKHR(_device, _swapChain, reinterpret_cast<uint32_t>(std::numeric_limits<uint32_t>::max), _imageAvailableSemaphores[_currentFrame], VK_NULL_HANDLE, &imageIndex);
+	VkResult result = vkAcquireNextImageKHR(_device, _swapChain, Max_uint32_t(), _imageAvailableSemaphores[_currentFrame], VK_NULL_HANDLE, &imageIndex);
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR) 
 	{
@@ -691,12 +691,12 @@ HRESULT VulkanRender::CreateCommandBuffers()
 	//todo remove as following is for debug  
 
 	std::vector<ObjectVertex> vertex(3);
-	vertex[0] = ObjectVertex({ Float3(0.0f, -0.5f, 0.0f),Float2(0,0), Float3(1,1,1), Float4(0,0,0,0) });
-	vertex[1] = ObjectVertex({ Float3(0.5f, 0.5f, 0.0f),Float2(0,0), Float3(0,1,0), Float4(0,0,0,0) });
-	vertex[2] = ObjectVertex({Float3(-0.5f, 0.5f, 0.0f),Float2(0,0), Float3(0,0,1), Float4(0,0,0,0)});
+	vertex[0] = ObjectVertex({Float3( 0.0f, -0.5f, 0.0f),Float2(0,0), Float3(1,1,1), Float4(0,0,0,0)});
+	vertex[1] = ObjectVertex({Float3( 0.5f,  0.5f, 0.0f),Float2(0,0), Float3(0,1,0), Float4(0,0,0,0)});
+	vertex[2] = ObjectVertex({Float3(-0.5f,  0.5f, 0.0f),Float2(0,0), Float3(0,0,1), Float4(0,0,0,0)});
 
 	auto indices = std::map<unsigned short, std::vector<unsigned short>>();
-	auto materials = std::vector<Material*>();
+	auto materials = std::vector<RawMaterial*>();
 	RawGeometry* geometry = new RawGeometry(vertex, indices, materials);
 
 	_triangle = _vboManager->VBOGeometry(geometry);
@@ -922,7 +922,7 @@ VkPresentModeKHR VulkanRender::ChooseSwapPresentMode(const std::vector<VkPresent
 
 VkExtent2D VulkanRender::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const
 {
-	if (capabilities.currentExtent.width != reinterpret_cast<uint32_t>(std::numeric_limits<uint32_t>::max))
+	if (capabilities.currentExtent.width != Max_uint32_t())
 		return capabilities.currentExtent;
 
 	VkExtent2D actualExtent = { static_cast<uint32_t>(_windowWidth), static_cast<uint32_t>(_windowHeight) };
@@ -931,4 +931,10 @@ VkExtent2D VulkanRender::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabi
 	actualExtent.height = max(capabilities.minImageExtent.height, min(capabilities.maxImageExtent.height, actualExtent.height));
 
 	return actualExtent;
+}
+
+#undef max
+constexpr uint32_t VulkanRender::Max_uint32_t()
+{
+	return std::numeric_limits<uint32_t>::max();
 }

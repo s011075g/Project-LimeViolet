@@ -45,16 +45,10 @@
     <ClCompile Include="scr\Render\IRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Render\Octree\Octree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="scr\IO\Model\OBJFileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="scr\Common\Utilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="scr\Common\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="scr\Render\Geometry.cpp">
@@ -128,16 +122,7 @@
     <ClInclude Include="scr\Render\IRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Render\Octree\Octree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scr\IO\Model\OBJFileReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Common\Material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Common\Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Common\Utilities.h">
@@ -146,16 +131,7 @@
     <ClInclude Include="scr\Common\ObjectVertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Entity\Component\Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Entity\Component\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scr\Render\Geometry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Entity\Component\RenderModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Common\resource.h">
@@ -198,6 +174,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Render\Vulkan\VulkanVBOManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Components\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Components\RenderModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Components\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Components\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Common\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Common\Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

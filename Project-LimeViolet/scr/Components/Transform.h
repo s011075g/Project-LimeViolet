@@ -1,6 +1,6 @@
 #pragma once
-#include "../../ECS/Component.h"
-#include "../../Maths/Quaternion.h"
+#include "../ECS/Component.h"
+#include "../Maths/Quaternion.h"
 
 struct Transform : Component<Transform>
 {

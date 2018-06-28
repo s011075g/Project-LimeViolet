@@ -30,7 +30,7 @@ void Camera::SetClippingPlanes(float near, float far)
 	_far = far;
 }
 
-void Camera::SetClearColor(Color color)
+void Camera::SetClearColor(Color4 color)
 {
 	_clearColor = color;
 }
@@ -66,7 +66,7 @@ Float3 Camera::GetUp() const
 	return _up;
 }
 
-Color Camera::GetClearColor() const
+Color4 Camera::GetClearColor() const
 {
 	return _clearColor;
 }

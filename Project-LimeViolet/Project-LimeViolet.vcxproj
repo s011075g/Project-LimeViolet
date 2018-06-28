@@ -192,9 +192,7 @@
     <ClCompile Include="scr\Render\DX11\DX11Render.cpp" />
     <ClCompile Include="scr\ECS\Component.cpp" />
     <ClCompile Include="scr\Render\Geometry.cpp" />
-    <ClCompile Include="scr\Common\Material.cpp" />
     <ClCompile Include="scr\IO\Model\OBJFileReader.cpp" />
-    <ClCompile Include="scr\Render\Octree\Octree.cpp" />
     <ClCompile Include="scr\Render\IRender.cpp" />
     <ClCompile Include="scr\GameObject\Component\Camera.cpp" />
     <ClCompile Include="scr\Maths\Quaternion.cpp" />
@@ -212,6 +210,8 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Common\Texture.h" />
+    <ClInclude Include="scr\Components\Material.h" />
     <ClInclude Include="scr\ECS\ECS.h" />
     <ClInclude Include="scr\Render\DX11\DX11TextureManager.h" />
     <ClInclude Include="scr\Render\DX11\DX11VBOManager.h" />
@@ -221,15 +221,13 @@
     <ClInclude Include="scr\Render\IShaderManager.h" />
     <ClInclude Include="scr\Common\resource.h" />
     <ClInclude Include="scr\Render\DX11\DX11Render.h" />
-    <ClInclude Include="scr\Entity\Component\Camera.h" />
-    <ClInclude Include="scr\Entity\Component\RenderModel.h" />
+    <ClInclude Include="scr\Components\Camera.h" />
+    <ClInclude Include="scr\Components\RenderModel.h" />
     <ClInclude Include="scr\ECS\Component.h" />
     <ClInclude Include="scr\Render\Geometry.h" />
     <ClInclude Include="scr\Common\ObjectVertex.h" />
-    <ClInclude Include="scr\Entity\Component\Transform.h" />
+    <ClInclude Include="scr\Components\Transform.h" />
     <ClInclude Include="scr\IO\Model\OBJFileReader.h" />
-    <ClInclude Include="scr\Common\Material.h" />
-    <ClInclude Include="scr\Render\Octree\Octree.h" />
     <ClInclude Include="scr\Render\IRender.h" />
     <ClInclude Include="scr\Common\Color.h" />
     <ClInclude Include="scr\GameObject\Component\Camera.h" />

@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include "../../Common/Material.h"
 
 bool OBJFileReader::CompareCharValues::operator()(const char* left, const char* right) const
 {
@@ -54,7 +53,7 @@ RawGeometry* OBJFileReader::ReadFile(const char* fileLocation)
 			CalculateTangents(vertex, indices, material);
 	}
 	//Create Materials that fit
-	std::vector<Material*> materials;
+	std::vector<RawMaterial*> rawMaterials;
 	for(size_t i = 0; i < mtls.size(); i++)
 		for (auto j : material)
 		{
@@ -62,28 +61,30 @@ RawGeometry* OBJFileReader::ReadFile(const char* fileLocation)
 			if (data == mtls[i]->materials.end())
 				break;
 			material.erase(std::remove(material.begin(), material.end(), j), material.end());
-			MaterialValues* values = new MaterialValues();
-			values->ambient = Float4(mtls[i]->materials[j].ambient, 0);
-			values->diffuse = mtls[i]->materials[j].diffuse;
-			values->transparency = mtls[i]->materials[j].transparency;
-			values->specular = mtls[i]->materials[j].specular;
-			values->specularPower = mtls[i]->materials[j].specularPower;
-			materials.push_back(new Material(values));
-			materials[materials.size() - 1]->SetTextureDiffuse(mtls[i]->materials[j].fileLocationDiffuse);
-			materials[materials.size() - 1]->SetTextureNormal(mtls[i]->materials[j].fileLocationNormal);
-			materials[materials.size() - 1]->SetTextureSpecular(mtls[i]->materials[j].fileLocationSpecular);
+			RawMaterial* mat = new RawMaterial();
+			mat->diffuseTexturePath = mtls[i]->materials[j].fileLocationDiffuse;
+			mat->diffuseColor = Color4(mtls[i]->materials[j].diffuse, mtls[i]->materials[j].transparency);
+			mat->specularTexturePath = mtls[i]->materials[j].fileLocationSpecular;
+			mat->specularColor = Color3(mtls[i]->materials[j].specular);
+			mat->specularPower = mtls[i]->materials[j].specularPower;
+			mat->normalTexturePath = mtls[i]->materials[j].fileLocationNormal;
+			mat->occlusionTexturePath = nullptr;
+			rawMaterials.push_back(mat);
+			//vmtls[i]->materials[j].ambient
 		}
-	if (materials.empty()) //If no names of the materials match, we set default values
+	if (rawMaterials.empty()) //If no names of the materials match, we set default values
 	{
 		for (size_t i = 0; i < material.size(); i++)
 		{
-			MaterialValues* values = new MaterialValues();
-			values->ambient = Float4(0, 0, 0, 0);
-			values->diffuse = Float3(0, 0, 0);
-			values->transparency = 1.0f;
-			values->specular = Float3(0, 0, 0);
-			values->specularPower = 0.0f;
-			materials.push_back(new Material(values));
+			RawMaterial* mat = new RawMaterial();
+			mat->diffuseTexturePath = nullptr;
+			mat->diffuseColor = Color4(Float3(1,1,1), 1);
+			mat->specularTexturePath = nullptr;
+			mat->specularColor = Color3(Float3(1,1,1));
+			mat->specularPower = 0.5f;
+			mat->normalTexturePath = nullptr;
+			mat->occlusionTexturePath = nullptr;
+			rawMaterials.push_back(mat);
 		}
 	}
 	//Clean up
@@ -91,7 +92,7 @@ RawGeometry* OBJFileReader::ReadFile(const char* fileLocation)
 		delete mtls[i];
 	for (size_t i = 0; i < material.size(); i++)
 		delete material[i];
-	return new RawGeometry(vertex, indices, materials); //return
+	return new RawGeometry(vertex, indices, rawMaterials); //return
 }
 
 OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation)

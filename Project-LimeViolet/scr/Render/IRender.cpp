@@ -40,17 +40,17 @@ Geometry* IRender::LoadRawGeometry(RawGeometry*& geometry)
 {
 	if (!_vboManager) 
 		return nullptr;
-	Geometry* result = _vboManager->VBOGeometry(geometry);
+	Geometry* result = _vboManager->VBOGeometry(geometry); //todo update to remove materials from Geometry + switch to material component
 	delete geometry;
 
 	for (auto m : result->GetMaterials())
 	{
-		if (auto t = m->GetTextureDiffuse())
-			m->SetTextureDiffuse(_textureManager->GetTexture(static_cast<const char*>(t)));
-		if (auto t = m->GetTextureNormal())
-			m->SetTextureNormal(_textureManager->GetTexture(static_cast<const char*>(t)));
-		if (auto t = m->GetTextureSpecular())
-			m->SetTextureSpecular(_textureManager->GetTexture(static_cast<const char*>(t)));
+		if (auto t = m->diffuseTexturePath)
+			m->diffuseTexturePath = _textureManager->GetTexture(static_cast<const char*>(t));
+		if (auto t = m->normalTexturePath)
+			m->normalTexturePath = _textureManager->GetTexture(static_cast<const char*>(t));
+		if (auto t = m->specularTexturePath)
+			m->specularTexturePath = _textureManager->GetTexture(static_cast<const char*>(t));
 	}
 
 	return result;

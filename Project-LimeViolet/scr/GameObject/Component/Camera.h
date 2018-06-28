@@ -9,7 +9,7 @@ private:
 	//Camera's up vector
 	Float3 _up;
 	//What the background is cleared to
-	Color _clearColor;
+	Color4 _clearColor;
 	float _fieldOfView;
 	//Clipping plane
 	float _near, _far;
@@ -23,7 +23,7 @@ public:
 	void SetUp(Float3 vector);
 	void SetFOV(float fov);
 	void SetClippingPlanes(float near, float far);
-	void SetClearColor(Color color);
+	void SetClearColor(Color4 color);
 
 	float GetFOV() const;
 	float GetNear() const;
@@ -31,6 +31,6 @@ public:
 	Float3 GetEye() const;
 	Float3 GetAt() const;
 	Float3 GetUp() const;
-	Color GetClearColor() const;
+	Color4 GetClearColor() const;
 };
 
