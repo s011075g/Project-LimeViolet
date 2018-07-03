@@ -8,25 +8,24 @@
 #include "GameObject/GameObject.h"
 #include <string>
 #include "Render/DX11/DX11VBOManager.h"
-#include "Render/Vulkan/VulkanRender.h"
+//#include "Render/Vulkan/VulkanRender.h"
 
-//#define MODEL_TESTING
+#define MODEL_TESTING
 
 int main()
 {
 #if defined(DEBUG) || defined(_DEBUG)
+	Utilities::CreateConsole();
 	Utilities::ShowConsole();
 #else
 	//Utilities::HideConsole();
 #endif
 
-	Utilities::CreateConsole();
-	Utilities::ShowConsole();
 	Utilities::Write("Running...");
 
 	IRender* render = new DX11Render();
 	RECT rc = { 0, 0, 1280, 720 };
-	const char* title = "Window";
+	const char* title = "Game Window";
 	if (FAILED(render->InitWindow(rc, title)))
 	{
 		Utilities::Write("FAILED: Created Window", Utilities::LEVEL::EXTREME_LEVEL);
@@ -50,12 +49,13 @@ int main()
 #ifdef MODEL_TESTING
 	Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
 
+	std::chrono::time_point<std::chrono::system_clock> tMid; //When filling tMid, it won't have to request memory
 	auto tStart = std::chrono::system_clock::now();
 
 	//READ OBJ
-	RawGeometry* ptr = OBJFileReader::ReadFile("earth.obj");
+	RawGeometry* ptr = OBJFileReader::ReadFile("earth.obj", true);
 
-	auto tMid = std::chrono::system_clock::now();
+	tMid = std::chrono::system_clock::now();
 
 	Geometry* geometry = render->LoadRawGeometry(ptr);
 	render->FreeGeometry(geometry);

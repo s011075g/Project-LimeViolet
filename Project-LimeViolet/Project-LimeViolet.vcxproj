@@ -182,6 +182,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\jsoncpp.cpp" />
+    <ClCompile Include="scr\IO\Model\MTLFileReader.cpp" />
     <ClCompile Include="scr\ECS\ECS.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11TextureManager.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11VBOManager.cpp" />
@@ -210,8 +212,10 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\IO\Model\MTLFileReader.h" />
     <ClInclude Include="scr\Common\Texture.h" />
-    <ClInclude Include="scr\Components\Material.h" />
+    <ClInclude Include="scr\Common\Material.h" />
+    <ClInclude Include="scr\Components\MeshRender.h" />
     <ClInclude Include="scr\ECS\ECS.h" />
     <ClInclude Include="scr\Render\DX11\DX11TextureManager.h" />
     <ClInclude Include="scr\Render\DX11\DX11VBOManager.h" />

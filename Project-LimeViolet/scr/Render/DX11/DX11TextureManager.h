@@ -15,6 +15,6 @@ public:
 	texture GetTexture(const char* fileLocation) override;
 	void UnloadTexture(const char* fileLocation) override;
 protected:
-	texture LoadTexture(std::string fileLocation);
+	texture LoadTexture(std::string fileLocation) const;
 };
 

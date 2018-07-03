@@ -3,11 +3,6 @@
 #include <string>
 #include <algorithm>
 
-bool OBJFileReader::CompareCharValues::operator()(const char* left, const char* right) const
-{
-	return std::strcmp(left, right) < 0;
-}
-
 OBJFileReader::Obj::~Obj()
 {
 	for (auto i : materialPaths)
@@ -23,76 +18,21 @@ bool OBJFileReader::Packed::operator<(const Packed& right) const
 	return memcmp(this, &right, sizeof(Packed)) > 0;
 }
 
-RawGeometry* OBJFileReader::ReadFile(const char* fileLocation)
+RawGeometry* OBJFileReader::ReadFile(const char* fileLocation, const bool calculateTangents)
 {
 	Obj* obj = LoadObj(fileLocation); //First loads the OBJ file in to memory
 	if (!obj)
 		return nullptr;
-	std::vector<Mtl*> mtls; 
-	//Loads all the MTL files, was going to be threaded, but during testing it was fasting having it on the same thread.  
-	//As realistically,there will only be about 1 material file to read even if its possible to add more than 1
-	LoadMtlFiles(obj->materialPaths, mtls); 
 	//Pack Data in single indices
 	std::vector<ObjectVertex> vertex;
-	std::map<unsigned short, std::vector<unsigned short>> indices;
-	std::vector<const char*> material;
-	PackData(obj, vertex, indices, material);
+	std::vector<std::vector<unsigned short>> indices;
+	PackData(obj, vertex, indices);
+	//Calculates Tangents if needed
+	if (calculateTangents)
+		CalculateTangents(vertex, indices, obj->materialCount);
 	//Clean up
 	delete obj;
-	//Calculate Tangents if needed
-	if (mtls.size() != 0)
-	{
-		bool tangents = false; //Finds out if we need tangents calculated
-		for(size_t i = 0; i < mtls.size(); i++)
-			if(mtls[i]->isNormalMap)
-			{
-				tangents = true;
-				break;
-			}
-		if (tangents) //Was tested to put on a new thread but it made it slower when testing
-			CalculateTangents(vertex, indices, material);
-	}
-	//Create Materials that fit
-	std::vector<RawMaterial*> rawMaterials;
-	for(size_t i = 0; i < mtls.size(); i++)
-		for (auto j : material)
-		{
-			auto data = mtls[i]->materials.find(j);
-			if (data == mtls[i]->materials.end())
-				break;
-			material.erase(std::remove(material.begin(), material.end(), j), material.end());
-			RawMaterial* mat = new RawMaterial();
-			mat->diffuseTexturePath = mtls[i]->materials[j].fileLocationDiffuse;
-			mat->diffuseColor = Color4(mtls[i]->materials[j].diffuse, mtls[i]->materials[j].transparency);
-			mat->specularTexturePath = mtls[i]->materials[j].fileLocationSpecular;
-			mat->specularColor = Color3(mtls[i]->materials[j].specular);
-			mat->specularPower = mtls[i]->materials[j].specularPower;
-			mat->normalTexturePath = mtls[i]->materials[j].fileLocationNormal;
-			mat->occlusionTexturePath = nullptr;
-			rawMaterials.push_back(mat);
-			//vmtls[i]->materials[j].ambient
-		}
-	if (rawMaterials.empty()) //If no names of the materials match, we set default values
-	{
-		for (size_t i = 0; i < material.size(); i++)
-		{
-			RawMaterial* mat = new RawMaterial();
-			mat->diffuseTexturePath = nullptr;
-			mat->diffuseColor = Color4(Float3(1,1,1), 1);
-			mat->specularTexturePath = nullptr;
-			mat->specularColor = Color3(Float3(1,1,1));
-			mat->specularPower = 0.5f;
-			mat->normalTexturePath = nullptr;
-			mat->occlusionTexturePath = nullptr;
-			rawMaterials.push_back(mat);
-		}
-	}
-	//Clean up
-	for (size_t i = 0; i < mtls.size(); i++)
-		delete mtls[i];
-	for (size_t i = 0; i < material.size(); i++)
-		delete material[i];
-	return new RawGeometry(vertex, indices, rawMaterials); //return
+	return new RawGeometry(vertex, indices); //return
 }
 
 OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation)
@@ -106,7 +46,7 @@ OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation)
 	{
 		std::string location = std::string(fileLocation).substr(0, std::string(fileLocation).find_last_of("/") + 1);
 		Float3 value;
-		const char* material(nullptr);
+		int materialValue = -1;
 		data = new Obj();
 		std::string line;
 		while (getline(stream, line))
@@ -124,7 +64,7 @@ OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation)
 			else if (sscanf_s(ptr, "vt %f %f", &value.x, &value.y) == 2)
 				data->uvs.emplace_back(value.x, value.y);
 			else if (c == 'f') 
-				ReadFace(ptr, material, data);
+				ReadFace(ptr, materialValue, data);
 			else if (c == 'm' && line.substr(0, 6).compare("mtllib") == 0)
 			{
 				std::string spath = location + line.substr(7);
@@ -134,11 +74,13 @@ OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation)
 			}
 			else if (c =='u' && line.substr(0, 6).compare("usemtl") == 0)
 			{
-				char* mat = new char[line.substr(7).size() + 1]();
-				strcpy_s(mat, line.substr(7).size() + 1, line.substr(7).c_str());
-				material = mat;
+				materialValue++;
+				data->indicesVertices.push_back(std::vector<unsigned short>());
+				data->indicesNormals.push_back(std::vector<unsigned short>());
+				data->indicesUvs.push_back(std::vector<unsigned short>());
 			}
 		}
+		data->materialCount = materialValue;
 	}
 	catch (std::exception e)
 	{
@@ -150,91 +92,22 @@ OBJFileReader::Obj* OBJFileReader::LoadObj(const char* fileLocation)
 	return data;
 }
 
-OBJFileReader::Mtl* OBJFileReader::LoadMtl(const char* fileLocation)
-{
-	std::ifstream stream; //Opens file in to a stream
-	stream.open(fileLocation, std::ios_base::in); 
-	if (!stream.good())
-		return nullptr;
-	Mtl* data(nullptr);
-	try //Encase any errors happen while reading the file, it can safely close it.
-	{
-		data = new Mtl();
-		std::string line;
-		const char* material(nullptr);
-		Float3 value;
-		while (getline(stream, line))
-		{
-			if (line.empty())
-				continue;
-			const char c = line[0];
-			if (c == '#' || c == '\n' || c == ' ')
-				continue;
-			const char* ptr = line.c_str();
-			if (sscanf_s(ptr, "Kd %f %f %f", &value.x, &value.y, &value.z) == 3)
-				data->materials[material].diffuse = value;
-			else if (sscanf_s(ptr, "Ka %f %f %f", &value.x, &value.y, &value.z) == 3)
-				data->materials[material].ambient = value;
-			else if (sscanf_s(ptr, "Ks %f %f %f", &value.x, &value.y, &value.z) == 3)
-				data->materials[material].specular = value;
-			else if (sscanf_s(ptr, "Ns %f", &value.x) == 1)
-				data->materials[material].specularPower = value.x;
-			else if (sscanf_s(ptr, "d %f", &value.x) == 1)
-				data->materials[material].transparency = value.x;
-			else if (c == 'n' && line.substr(0, 6).compare("newmtl") == 0) //The first compare is to decrease the amount of substrings needed
-			{
-				char* mat = new char[line.substr(7).size() + 1]();
-				strcpy_s(mat, line.substr(7).size() + 1, line.substr(7).c_str());
-				material = mat;
-			}
-			else if (c == 'm')
-			{
-				if (line.substr(0, 6).compare("map_Kd") == 0)
-				{
-					char* path = new char[line.substr(8).size() + 1]();
-					strcpy_s(path, line.substr(8).size() + 1, line.substr(8).c_str());
-					data->materials[material].fileLocationDiffuse = static_cast<void *>(path);
-				}
-				else if (line.substr(0, 6).compare("map_Ks") == 0)
-				{
-					char* path = new char[line.substr(8).size() + 1]();
-					strcpy_s(path, line.substr(8).size() + 1, line.substr(8).c_str());
-					data->materials[material].fileLocationSpecular = static_cast<void *>(path);
-				}
-				else if (line.substr(0, 8).compare("map_bump") == 0)
-				{
-					char* path = new char[line.substr(10).size() + 1]();
-					strcpy_s(path, line.substr(10).size() + 1, line.substr(10).c_str());
-					data->materials[material].fileLocationNormal = static_cast<void *>(path);
-					data->isNormalMap = true;
-				}
-			}
-		}
-	}
-	catch (std::exception e)
-	{
-		delete data; //clean up
-		stream.close();
-		throw;
-	}
-	stream.close();
-	return data;
-}
-
-void OBJFileReader::PackData(Obj* obj, std::vector<ObjectVertex>& outVertex, std::map<unsigned short, std::vector<unsigned short>>& outIndices, std::vector<const char*>& outMaterial)
+void OBJFileReader::PackData(Obj* obj, std::vector<ObjectVertex>& outVertex, std::vector<std::vector<unsigned short>>& outIndices)
 {
 	//Filling out the data set, so we don't happen to access memory that we don't use
 	FillData(obj);
 	//Sorting all in to one
 	std::map<Packed, unsigned short> map; //First map is for materials, second is for the vertices and their indice
-	for (auto i : obj->indicesVertices)
+
+	outIndices.resize(obj->indicesVertices.size());
+	for(size_t i = 0; i < obj->indicesVertices.size(); i++)
 	{
-		outMaterial.push_back(i.first);
-		for (size_t j = 0; j < obj->indicesVertices[i.first].size(); j++)
+		outIndices[i] = std::vector<unsigned short>();
+		for (size_t j = 0; j < obj->indicesVertices[i].size(); j++)
 		{
-			Packed data = Packed(obj->vertices[obj->indicesVertices[i.first][j]],
-									obj->normals[obj->indicesNormals[i.first][j]],
-									obj->uvs[obj->indicesUvs[i.first][j]]);
+			Packed data = Packed(obj->vertices[obj->indicesVertices[i][j]],
+									obj->normals[obj->indicesNormals[i][j]],
+									obj->uvs[obj->indicesUvs[i][j]]);
 			unsigned short index;
 			if (!FindSameData(map, data, index))
 			{
@@ -242,15 +115,15 @@ void OBJFileReader::PackData(Obj* obj, std::vector<ObjectVertex>& outVertex, std
 				index = static_cast<unsigned short>(outVertex.size()) - 1;
 				map[data] = index;
 			}
-			outIndices[static_cast<unsigned short>(outMaterial.size()) - 1u].push_back(index);
+			outIndices[i].push_back(index);
 		}
 	}
 }
 
-void OBJFileReader::CalculateTangents(std::vector<ObjectVertex>& vertex, std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<const char*>& materials)
+void OBJFileReader::CalculateTangents(std::vector<ObjectVertex>& vertex, std::vector<std::vector<unsigned short>>& indices, const size_t materialCount)
 {
 	//// http://www.terathon.com/code/tangent.html was used as a base for this piece of code
-	for (unsigned short i = 0; i < materials.size(); i++)
+	for (size_t i = 0; i < materialCount; i++)
 	{
 		Float3* tan1 = new Float3[indices[i].size() * 2]{ Float3() }; //Just request memory twice the size so we can get a pointer half way
 		Float3* tan2 = tan1 + indices[i].size();
@@ -309,15 +182,8 @@ void OBJFileReader::CalculateTangents(std::vector<ObjectVertex>& vertex, std::ma
 	}
 }
 
-//Used to load in all the Mtl files
-void OBJFileReader::LoadMtlFiles(std::vector<const char*>& paths, std::vector<Mtl*> & mtls)
-{
-	for (size_t i = 0; i < paths.size(); i++) //Load all MTL files
-		mtls.push_back(LoadMtl(paths[i]));
-}
-
 //As OBJ files have different face formattings, this function was taken out to make the code more clean, we can also extend it to different faces, so we could support polygons than just triangles
-void OBJFileReader::ReadFace(const char* line, const char* material, Obj*& data)
+void OBJFileReader::ReadFace(const char* line, const int materialValue, Obj*& data)
 {
 	UShort3 vertex;
 	UShort3 uv;
@@ -325,39 +191,39 @@ void OBJFileReader::ReadFace(const char* line, const char* material, Obj*& data)
 	//We subtract 1 so we can used the value to access an array element, as OBJ files indexing start at 1 not 0
 	if (sscanf_s(line, "f %hu/%hu/%hu %hu/%hu/%hu %hu/%hu/%hu", &vertex.x, &uv.x, &normal.x, &vertex.y, &uv.y, &normal.y, &vertex.z, &uv.z, &normal.z) == 9)
 	{
-		data->indicesVertices[material].push_back(vertex.x - 1);
-		data->indicesVertices[material].push_back(vertex.y - 1);
-		data->indicesVertices[material].push_back(vertex.z - 1);
-		data->indicesUvs[material].push_back(uv.x - 1);
-		data->indicesUvs[material].push_back(uv.y - 1);
-		data->indicesUvs[material].push_back(uv.z - 1);
-		data->indicesNormals[material].push_back(normal.x - 1);
-		data->indicesNormals[material].push_back(normal.y - 1);
-		data->indicesNormals[material].push_back(normal.z - 1);
+		data->indicesVertices[materialValue].push_back(vertex.x - 1);
+		data->indicesVertices[materialValue].push_back(vertex.y - 1);
+		data->indicesVertices[materialValue].push_back(vertex.z - 1);
+		data->indicesUvs[materialValue].push_back(uv.x - 1);
+		data->indicesUvs[materialValue].push_back(uv.y - 1);
+		data->indicesUvs[materialValue].push_back(uv.z - 1);
+		data->indicesNormals[materialValue].push_back(normal.x - 1);
+		data->indicesNormals[materialValue].push_back(normal.y - 1);
+		data->indicesNormals[materialValue].push_back(normal.z - 1);
 	}
 	else if (sscanf_s(line, "f %hu/%hu %hu/%hu %hu/%hu", &vertex.x, &uv.x, &vertex.y, &uv.y, &vertex.z, &uv.z) == 6)
 	{
-		data->indicesVertices[material].push_back(vertex.x - 1);
-		data->indicesVertices[material].push_back(vertex.y - 1);
-		data->indicesVertices[material].push_back(vertex.z - 1);
-		data->indicesUvs[material].push_back(uv.x - 1);
-		data->indicesUvs[material].push_back(uv.y - 1);
-		data->indicesUvs[material].push_back(uv.z - 1);
+		data->indicesVertices[materialValue].push_back(vertex.x - 1);
+		data->indicesVertices[materialValue].push_back(vertex.y - 1);
+		data->indicesVertices[materialValue].push_back(vertex.z - 1);
+		data->indicesUvs[materialValue].push_back(uv.x - 1);
+		data->indicesUvs[materialValue].push_back(uv.y - 1);
+		data->indicesUvs[materialValue].push_back(uv.z - 1);
 	}
 	else if (sscanf_s(line, "f %hu//%hu %hu//%hu %hu//%hu", &vertex.x, &normal.x, &vertex.y, &normal.y, &vertex.z, &normal.z) == 6)
 	{
-		data->indicesVertices[material].push_back(vertex.x - 1);
-		data->indicesVertices[material].push_back(vertex.y - 1);
-		data->indicesVertices[material].push_back(vertex.z - 1);
-		data->indicesNormals[material].push_back(normal.x - 1);
-		data->indicesNormals[material].push_back(normal.y - 1);
-		data->indicesNormals[material].push_back(normal.z - 1);
+		data->indicesVertices[materialValue].push_back(vertex.x - 1);
+		data->indicesVertices[materialValue].push_back(vertex.y - 1);
+		data->indicesVertices[materialValue].push_back(vertex.z - 1);
+		data->indicesNormals[materialValue].push_back(normal.x - 1);
+		data->indicesNormals[materialValue].push_back(normal.y - 1);
+		data->indicesNormals[materialValue].push_back(normal.z - 1);
 	}
 	else if (sscanf_s(line, "f %hu %hu %hu", &vertex.x, &vertex.y, &vertex.z) == 3)
 	{
-		data->indicesVertices[material].push_back(vertex.x - 1); 
-		data->indicesVertices[material].push_back(vertex.y - 1);
-		data->indicesVertices[material].push_back(vertex.z - 1);
+		data->indicesVertices[materialValue].push_back(vertex.x - 1); 
+		data->indicesVertices[materialValue].push_back(vertex.y - 1);
+		data->indicesVertices[materialValue].push_back(vertex.z - 1);
 	}
 }
 
@@ -367,14 +233,14 @@ void OBJFileReader::FillData(Obj*& obj)
 		obj->uvs.emplace_back(0.0f, 0.0f);
 	if (obj->normals.empty())
 		obj->normals.emplace_back(0.0f, 0.0f, 0.0f);
-	for (auto i : obj->indicesVertices)
+	for (auto i = 0; i < obj->indicesVertices.size(); i++)
 	{
 		//UV
-		for (auto j = obj->indicesUvs[i.first].size(); j != i.second.size(); j++)
-			obj->indicesUvs[i.first].push_back(0u);
+		for (auto j = obj->indicesUvs[i].size(); j != obj->indicesVertices[i].size(); j++)
+			obj->indicesUvs[i].push_back(0u);
 		//Normals
-		for (auto j = obj->indicesNormals[i.first].size(); j != i.second.size(); j++)
-			obj->indicesNormals[i.first].push_back(0u);
+		for (auto j = obj->indicesNormals[i].size(); j != obj->indicesVertices[i].size(); j++)
+			obj->indicesNormals[i].push_back(0u);
 	}
 }
 

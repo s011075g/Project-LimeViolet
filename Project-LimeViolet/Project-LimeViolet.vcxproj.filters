@@ -93,6 +93,12 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scr\IO\Model\MTLFileReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\jsoncpp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\GameObject\GameObject.h">
@@ -185,13 +191,19 @@
     <ClInclude Include="scr\Components\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Components\Material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scr\Common\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Common\Color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Components\MeshRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Common\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\IO\Model\MTLFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

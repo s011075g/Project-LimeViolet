@@ -20,11 +20,13 @@ void Utilities::Write(const char* ptr)
 }
 #if defined(DEBUG) || defined(_DEBUG)
 //Stream for the console
-FILE* stream;
+FILE* stream = nullptr;
 #endif
 void Utilities::CreateConsole()
 {
 #if defined(DEBUG) || defined(_DEBUG)
+	if (stream)
+		return;
 	AllocConsole();
 	freopen_s(&stream, "CONOUT$", "w", stdout);
 #endif
@@ -33,6 +35,8 @@ void Utilities::CreateConsole()
 void Utilities::CloseConsole()
 {
 #if defined(DEBUG) || defined(_DEBUG)
+	if (!stream)
+		return;
 	fclose(stream);
 #endif
 }

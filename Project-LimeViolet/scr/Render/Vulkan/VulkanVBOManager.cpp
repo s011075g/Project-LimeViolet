@@ -59,7 +59,7 @@ Geometry* VulkanVBOManager::VBOGeometry(RawGeometry* geometry)
 	_vertexBufferMemory[vb] = new VkDeviceMemory(bufferMemory);
 	void* vertex = static_cast<void*>(&vb);
 
-	return new Geometry(vertex, indices, geometry->materials); //TODO FINISH UP 
+	return new Geometry(vertex, indices); //TODO FINISH UP 
 }
 
 void VulkanVBOManager::DeleteVBO(Geometry*& geometry)

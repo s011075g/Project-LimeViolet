@@ -19,9 +19,9 @@ struct RawMaterial //Holds raw values for a material
 struct RawGeometry
 {
 	std::vector<ObjectVertex> vertex;
-	std::map<unsigned short, std::vector<unsigned short>> indices;
-	std::vector<RawMaterial*> materials; //TODO make a material manager to hold all the materials so that if objects use the same material, it can be reused to save memory
+	std::vector<std::vector<unsigned short>> indices;
+	//std::vector<RawMaterial*> materials; //TODO make a material manager to hold all the materials so that if objects use the same material, it can be reused to save memory
 
-	RawGeometry(std::vector<ObjectVertex>& vertex, std::map<unsigned short, std::vector<unsigned short>>& indices, std::vector<RawMaterial*>& materials);
+	RawGeometry(std::vector<ObjectVertex>& vertex, std::vector<std::vector<unsigned short>>& indices);
 	~RawGeometry() = default;
 };

@@ -695,9 +695,8 @@ HRESULT VulkanRender::CreateCommandBuffers()
 	vertex[1] = ObjectVertex({Float3( 0.5f,  0.5f, 0.0f),Float2(0,0), Float3(0,1,0), Float4(0,0,0,0)});
 	vertex[2] = ObjectVertex({Float3(-0.5f,  0.5f, 0.0f),Float2(0,0), Float3(0,0,1), Float4(0,0,0,0)});
 
-	auto indices = std::map<unsigned short, std::vector<unsigned short>>();
-	auto materials = std::vector<RawMaterial*>();
-	RawGeometry* geometry = new RawGeometry(vertex, indices, materials);
+	auto indices = std::vector<std::vector<unsigned short>>();
+	RawGeometry* geometry = new RawGeometry(vertex, indices);
 
 	_triangle = _vboManager->VBOGeometry(geometry);
 	delete geometry;

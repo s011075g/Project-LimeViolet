@@ -1,14 +1,11 @@
 #include "Geometry.h"
 
-Geometry::Geometry(void*& vertex, std::vector<void*>& indices, std::vector<RawMaterial*>& materials)
-	: _vertexBuffer(vertex), _indexBuffer(indices), _materials(materials)
+Geometry::Geometry(void*& vertex, std::vector<void*>& indices)
+	: _vertexBuffer(vertex), _indexBuffer(indices)
 { }
 
 Geometry::~Geometry()  //Cleans up materials
-{
-	for(RawMaterial* m : _materials)
-		delete m;
-}
+{}
 
 void* Geometry::GetVertexBuffer() const
 {
@@ -18,9 +15,4 @@ void* Geometry::GetVertexBuffer() const
 const std::vector<void*>& Geometry::GetIndexBuffer() const
 {
 	return _indexBuffer;
-}
-
-const std::vector<RawMaterial*> Geometry::GetMaterials() const
-{
-	return _materials;
 }
