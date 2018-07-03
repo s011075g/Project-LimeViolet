@@ -8,9 +8,10 @@
 #include "GameObject/GameObject.h"
 #include <string>
 #include "Render/DX11/DX11VBOManager.h"
+#include "IO/World/ConfigFileReader.h"
 //#include "Render/Vulkan/VulkanRender.h"
 
-#define MODEL_TESTING
+//#define MODEL_TESTING
 
 int main()
 {
@@ -24,9 +25,10 @@ int main()
 	Utilities::Write("Running...");
 
 	IRender* render = new DX11Render();
-	RECT rc = { 0, 0, 1280, 720 };
-	const char* title = "Game Window";
-	if (FAILED(render->InitWindow(rc, title)))
+	Config config = ConfigFileReader::ReadFile("jsons/Config.json");
+	RECT rc = { 0, 0, config.windowSize.x, config.windowSize.y };
+	const char* windowTitle = config.windowTitle.c_str();
+	if (FAILED(render->InitWindow(rc, windowTitle)))
 	{
 		Utilities::Write("FAILED: Created Window", Utilities::LEVEL::EXTREME_LEVEL);
 		delete render;

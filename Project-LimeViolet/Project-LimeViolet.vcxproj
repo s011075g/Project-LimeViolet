@@ -182,6 +182,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\IO\JsonFileReader.cpp" />
+    <ClCompile Include="scr\IO\World\ConfigFileReader.cpp" />
     <ClCompile Include="include\jsoncpp.cpp" />
     <ClCompile Include="scr\IO\Model\MTLFileReader.cpp" />
     <ClCompile Include="scr\ECS\ECS.cpp" />
@@ -212,6 +214,8 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\IO\JsonFileReader.h" />
+    <ClInclude Include="scr\IO\World\ConfigFileReader.h" />
     <ClInclude Include="scr\IO\Model\MTLFileReader.h" />
     <ClInclude Include="scr\Common\Texture.h" />
     <ClInclude Include="scr\Common\Material.h" />
@@ -249,6 +253,7 @@
     <ClInclude Include="scr\Render\Vulkan\VulkanVBOManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="jsons\Config.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
