@@ -221,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="jsons\Config.json" />
+    <None Include="resources\Config.json" />
+    <None Include="resources\World.json" />
   </ItemGroup>
 </Project>

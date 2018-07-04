@@ -25,7 +25,7 @@ int main()
 	Utilities::Write("Running...");
 
 	IRender* render = new DX11Render();
-	Config config = ConfigFileReader::ReadFile("jsons/Config.json");
+	Config config = ConfigFileReader::ReadFile("resources/Config.json");
 	RECT rc = { 0, 0, config.windowSize.x, config.windowSize.y };
 	const char* windowTitle = config.windowTitle.c_str();
 	if (FAILED(render->InitWindow(rc, windowTitle)))
@@ -51,11 +51,11 @@ int main()
 #ifdef MODEL_TESTING
 	Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
 
-	std::chrono::time_point<std::chrono::system_clock> tMid; //When filling tMid, it won't have to request memory
+	std::chrono::time_point<std::chrono::system_clock> tMid;
 	auto tStart = std::chrono::system_clock::now();
 
 	//READ OBJ
-	RawGeometry* ptr = OBJFileReader::ReadFile("earth.obj", true);
+	RawGeometry* ptr = OBJFileReader::ReadFile("resources/earth.obj", true);
 
 	tMid = std::chrono::system_clock::now();
 

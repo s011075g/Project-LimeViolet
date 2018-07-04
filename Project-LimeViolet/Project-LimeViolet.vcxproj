@@ -253,8 +253,9 @@
     <ClInclude Include="scr\Render\Vulkan\VulkanVBOManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="jsons\Config.json" />
+    <None Include="resources\Config.json" />
     <None Include="packages.config" />
+    <None Include="resources\World.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
