@@ -105,6 +105,9 @@
     <ClCompile Include="scr\IO\JsonFileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scr\IO\ModelFileReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\GameObject\GameObject.h">
@@ -218,10 +221,15 @@
     <ClInclude Include="scr\IO\JsonFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="scr\IO\ModelFileReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="resources\Config.json" />
     <None Include="resources\World.json" />
+    <None Include="resources\Panel_0.json" />
+    <None Include="resources\Model.json" />
   </ItemGroup>
 </Project>

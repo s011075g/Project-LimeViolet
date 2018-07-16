@@ -1,0 +1,7 @@
+{
+  "Model": {
+    "Name":  "cube", 
+    "Location": "resources/cube.obj",
+    "Materials": [ "earth.mtl" ]
+  } 
+}

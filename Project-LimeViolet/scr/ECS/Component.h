@@ -23,7 +23,7 @@ public:
 	static size_t GetTypeSize(const uint32_t id);
 	static bool IsTypeValid(uint32_t id);
 private:
-	static std::vector<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>> _componentTypes;
+	static std::vector<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>* _componentTypes;
 };
 
 template<typename T>
