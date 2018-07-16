@@ -5,7 +5,8 @@
 struct ModelJson
 {
 	std::string modelLocation;
-	std::vector<std::string> materials; 
+	std::vector<std::string> materialLocations;
+	std::vector<std::string> materialNames;
 };
 
 class ModelFileReader

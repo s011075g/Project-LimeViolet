@@ -1,7 +1,9 @@
 {
   "Model": {
-    "Name":  "cube", 
     "Location": "resources/cube.obj",
-    "Materials": [ "earth.mtl" ]
+    "Materials": {
+      "Location": [ "earth.mtl" ],
+      "Names": [ "02___Default" ] 
+    }
   } 
 }

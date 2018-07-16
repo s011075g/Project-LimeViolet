@@ -12,12 +12,17 @@ struct Color4
 	};
 	Color4() = default;
 	Color4(const float& r, const float& g, const float& b, const float& a);
+	Color4(const Float4& color);
 	Color4(const Float3& color, const float& transparency);
 };
 
 inline Color4::Color4(const float& r, const float& g, const float& b, const float& a)
 	: r(r), g(g), b(b), a(a)
 { }
+
+inline Color4::Color4(const Float4& color)
+	: r(color.x), g(color.y), b(color.z), a(color.w)
+{}
 
 inline Color4::Color4(const Float3& color, const float& transparency)
 	: r(color.x), g(color.y), b(color.z), a(transparency)

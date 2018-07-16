@@ -57,7 +57,8 @@ std::vector<std::pair<const char*, Material*>>* MTLFileReader::ReadFile(const ch
 
 char* MTLFileReader::ExtractString(std::string string, const int start)
 {
-	char* path = new char[string.substr(start).size() + 1]();
-	strcpy_s(path, string.substr(start).size() + 1, string.substr(start).c_str());
-	return path;
+	std::string value = string.substr(start);
+	char* result = new char[value.size() + 1]();
+	strcpy_s(result, value.size() + 1, value.c_str());
+	return result;
 }

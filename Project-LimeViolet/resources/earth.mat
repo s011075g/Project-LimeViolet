@@ -1,0 +1,15 @@
+{
+   "Count": 1,
+   "Materials":{  
+      "1":{  
+         "Name":"02___Default",
+         "DiffuseTexture":"Textures/earth.bmp",
+         "DiffuseColor":[ 0.6,  0.6, 0.6, 1 ],
+         "SpecularTexture":"Textures/earth_specular.jpg",
+         "SpecularColor":[ 0.8,  0.8,  0.8 ],
+         "SpecularPower":12,
+         "NormalTexture":"Textures/earth_normals.jpg",
+         "OcclusionTexture":""
+      }
+   }
+}
