@@ -105,10 +105,16 @@
     <ClCompile Include="scr\IO\JsonFileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scr\IO\ModelFileReader.cpp">
+    <ClCompile Include="scr\IO\Model\MATFileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scr\IO\Model\MATFileReader.cpp">
+    <ClCompile Include="scr\IO\World\ModelFileReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Render\DX11\DX11ShaderManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Render\DX11\DX11Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -224,10 +230,16 @@
     <ClInclude Include="scr\IO\JsonFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scr\IO\ModelFileReader.h">
+    <ClInclude Include="scr\IO\Model\MATFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scr\IO\Model\MATFileReader.h">
+    <ClInclude Include="scr\IO\World\ModelFileReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render\DX11\DX11ShaderManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render\DX11\DX11Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -238,5 +250,8 @@
     <None Include="resources\Panel_0.json" />
     <None Include="resources\Model.json" />
     <None Include="resources\earth.mat" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\DX11\Basic.fx" />
   </ItemGroup>
 </Project>

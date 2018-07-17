@@ -182,8 +182,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Render\DX11\DX11Shader.cpp" />
+    <ClCompile Include="scr\Render\DX11\DX11ShaderManager.cpp" />
     <ClCompile Include="scr\IO\Model\MATFileReader.cpp" />
-    <ClCompile Include="scr\IO\ModelFileReader.cpp" />
+    <ClCompile Include="scr\IO\World\ModelFileReader.cpp" />
     <ClCompile Include="scr\IO\JsonFileReader.cpp" />
     <ClCompile Include="scr\IO\World\ConfigFileReader.cpp" />
     <ClCompile Include="include\jsoncpp.cpp" />
@@ -216,8 +218,10 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Render\DX11\DX11Shader.h" />
+    <ClInclude Include="scr\Render\DX11\DX11ShaderManager.h" />
     <ClInclude Include="scr\IO\Model\MATFileReader.h" />
-    <ClInclude Include="scr\IO\ModelFileReader.h" />
+    <ClInclude Include="scr\IO\World\ModelFileReader.h" />
     <ClInclude Include="scr\IO\JsonFileReader.h" />
     <ClInclude Include="scr\IO\World\ConfigFileReader.h" />
     <ClInclude Include="scr\IO\Model\MTLFileReader.h" />
@@ -263,6 +267,18 @@
     <None Include="resources\Model.json" />
     <None Include="resources\Panel_0.json" />
     <None Include="resources\World.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\DX11\Basic.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">main</EntryPointName>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

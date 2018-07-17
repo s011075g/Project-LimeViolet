@@ -9,7 +9,7 @@ void Utilities::Write(const char* ptr, const LEVEL level)
 	if (level == LEVEL::EXTREME_LEVEL)
 	{
 		ShowConsole();
-		MessageBox(nullptr, L"Error - Check console", L"Error", 0u);
+		MessageBox(nullptr, L"Error - Check console", L"Error", MB_OK);
 	}
 }
 

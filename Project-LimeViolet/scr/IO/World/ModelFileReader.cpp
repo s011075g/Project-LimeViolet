@@ -1,5 +1,5 @@
 #include "ModelFileReader.h"
-#include "JsonFileReader.h"
+#include "../JsonFileReader.h"
 
 ModelJson ModelFileReader::ReadFile(const char* fileLocation)
 {

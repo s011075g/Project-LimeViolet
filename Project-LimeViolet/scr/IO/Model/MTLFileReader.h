@@ -9,4 +9,3 @@ public:
 private:
 	static char* ExtractString(std::string string, const int start);
 };
-

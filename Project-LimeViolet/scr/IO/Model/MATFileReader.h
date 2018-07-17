@@ -2,7 +2,6 @@
 #include "../../Common/Material.h"
 #include <vector>
 #include <json/json.h>
-
 class MATFileReader
 {
 public:
@@ -10,4 +9,3 @@ public:
 private:
 	static std::pair<const char*, Material*> ReadMaterial(Json::Value value);
 };
-

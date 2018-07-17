@@ -8,7 +8,7 @@ struct Transform : Component<Transform>
 	Float4x4 rotationMatrix; //Rotation Matrix
 	Float4x4 scaleMatrix; //Scale matrix
 
-	Float4x4 worldMatrix; //todo possibly make it the only matrix. Would have to recalculate matrices we may not need to though - testing required
+	Float4x4 worldMatrix; //todo possibly make it the only matrix. Would have to recalculate matrices we may not need to though - testing required - would save memory
 
 	Quaternion rotation;
 	Float3 position;

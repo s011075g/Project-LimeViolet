@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "../ECS/Component.h"
 #include "../Maths/MathStructs.h"
-#include "../Common/Color4.h"
+#include "../Common/Color.h"
 
 struct Camera : Component<Camera>
 {
