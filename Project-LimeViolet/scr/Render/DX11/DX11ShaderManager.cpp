@@ -55,6 +55,35 @@ HRESULT DX11ShaderManager::CreatePixelShader(const wchar_t* fileLocation, ID3D11
 	return hr;
 }
 
+HRESULT DX11ShaderManager::CreateConstantBuffer(unsigned& size, ID3D11Buffer*& outBuffer) const
+{
+	D3D11_BUFFER_DESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.ByteWidth = size;
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	desc.CPUAccessFlags = 0;
+	return _device->CreateBuffer(&desc, nullptr, &outBuffer);
+}
+
+HRESULT DX11ShaderManager::CreateInputLayout(ID3DBlob*& vertexBlob, ID3D11InputLayout*& outLayout) const
+{
+	if (!vertexBlob) 
+		return S_FALSE;
+
+	D3D11_INPUT_ELEMENT_DESC arr[]
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA , 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA , 0 }
+	};
+
+	HRESULT hr = _device->CreateInputLayout(arr, ARRAYSIZE(arr), vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), &outLayout);
+	vertexBlob->Release();
+	return hr;
+}
+
 HRESULT DX11ShaderManager::CreateShader(const wchar_t* fileLocation, const SHADER& shader, const LPCSTR& entryPoint, const LPCSTR& shaderModel, ID3DBlob*& outBlob, void*& outShader) const
 {
 	HRESULT hr = CompileShaderFromFile(fileLocation, entryPoint, shaderModel, outBlob);
