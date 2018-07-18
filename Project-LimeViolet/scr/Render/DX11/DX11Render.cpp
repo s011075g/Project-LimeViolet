@@ -230,7 +230,9 @@ void DX11Render::Draw()
 	_context->ClearRenderTargetView(_renderTargetView, _activeCamera->GetClearColor().rgba);
 	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	_swapChain->Present(1, 0); //1 = vsync
+	//Draw here
+
+	_swapChain->Present(1, 0); //(1,0) = vsync
 }
 
 bool DX11Render::ShouldExit()

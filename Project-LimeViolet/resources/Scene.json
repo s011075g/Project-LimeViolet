@@ -1,0 +1,10 @@
+{
+  "Entity": {
+    "Transform": {
+      "Position": [ 0, 0, 0 ],
+      "Rotation": [0,0,0,0],
+      "Scale": [0,0,0] 
+    },
+    "Model": "Model.json"
+  } 
+}

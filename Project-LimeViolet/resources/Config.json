@@ -1,6 +1,9 @@
 {
   "Window": {
     "Size": [ 1280, 720 ],
-    "Title": "Game Window" 
+    "Title": "Game Window"
+  },
+  "Game": {
+    "Scene": "Scene.json" 
   } 
 }

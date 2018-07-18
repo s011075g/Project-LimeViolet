@@ -55,7 +55,7 @@ HRESULT DX11ShaderManager::CreatePixelShader(const wchar_t* fileLocation, ID3D11
 	return hr;
 }
 
-HRESULT DX11ShaderManager::CreateConstantBuffer(unsigned& size, ID3D11Buffer*& outBuffer) const
+HRESULT DX11ShaderManager::CreateConstantBuffer(unsigned int& size, ID3D11Buffer*& outBuffer) const
 {
 	D3D11_BUFFER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));

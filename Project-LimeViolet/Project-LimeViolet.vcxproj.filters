@@ -117,6 +117,9 @@
     <ClCompile Include="scr\Render\DX11\DX11Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scr\IO\EntityReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\GameObject\GameObject.h">
@@ -242,6 +245,9 @@
     <ClInclude Include="scr\Render\DX11\DX11Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="scr\IO\EntityReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -250,8 +256,9 @@
     <None Include="resources\Panel_0.json" />
     <None Include="resources\Model.json" />
     <None Include="resources\earth.mat" />
+    <None Include="resources\Scene.json" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shaders\DX11\Basic.fx" />
+    <FxCompile Include="resources\shaders\DX11\Basic.fx" />
   </ItemGroup>
 </Project>

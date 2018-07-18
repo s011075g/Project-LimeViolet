@@ -182,6 +182,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\IO\EntityReader.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11Shader.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11ShaderManager.cpp" />
     <ClCompile Include="scr\IO\Model\MATFileReader.cpp" />
@@ -218,6 +219,7 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\IO\EntityReader.h" />
     <ClInclude Include="scr\Render\DX11\DX11Shader.h" />
     <ClInclude Include="scr\Render\DX11\DX11ShaderManager.h" />
     <ClInclude Include="scr\IO\Model\MATFileReader.h" />
@@ -266,10 +268,11 @@
     <None Include="resources\earth.mat" />
     <None Include="resources\Model.json" />
     <None Include="resources\Panel_0.json" />
+    <None Include="resources\Scene.json" />
     <None Include="resources\World.json" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shaders\DX11\Basic.fx">
+    <FxCompile Include="resources\shaders\DX11\Basic.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

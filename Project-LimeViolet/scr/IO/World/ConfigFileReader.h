@@ -6,6 +6,8 @@ struct Config
 {
 	Int2 windowSize;
 	std::string windowTitle;
+
+	std::string gameScene;
 };
 
 class ConfigFileReader

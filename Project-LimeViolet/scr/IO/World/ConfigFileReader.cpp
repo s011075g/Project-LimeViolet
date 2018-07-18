@@ -6,5 +6,6 @@ Config ConfigFileReader::ReadFile(const char* fileLocation)
 	Config configuration;
 	configuration.windowSize = JsonFileReader::ReadInt2(root["Window"]["Size"]);
 	configuration.windowTitle = root["Window"]["Title"].asString();
+	configuration.gameScene = root["Game"]["Scene"].asString();
 	return configuration;
 }

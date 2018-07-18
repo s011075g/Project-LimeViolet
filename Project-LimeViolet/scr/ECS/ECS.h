@@ -49,6 +49,7 @@ private:
 	void operator=(const ECS& other) const;
 };
 
+//Untested
 template <class ... Component>
 EntityHandle ECS::MakeEntity(Component&... component)
 {
@@ -83,7 +84,7 @@ void ECS::AddComponent(EntityHandle entity, Component* component)
 }
 
 template <class Component>
-bool ECS::RemoveComponent(EntityHandle entity)
+bool ECS::RemoveComponent(const EntityHandle entity)
 {
 	return RemoveComponentInternal(entity, Component::ID);
 }
