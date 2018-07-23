@@ -5,6 +5,19 @@
       "Rotation": [0,0,0,0],
       "Scale": [0,0,0] 
     },
-    "Model": "Model.json"
+    "Model": {
+      "File": "Model.json",
+      "Shader": {
+        "DX11": "shaders/DX11/basic.fx",
+        "Vulkan": ""
+      }
+    },
+    "Camera": {
+      "Up": [ 0, 1, 0 ],
+      "Color": [ 1, 1, 1, 1 ],
+      "FOV": 70.0,
+      "Near": 0.1,
+      "Far":  100 
+    } 
   } 
 }

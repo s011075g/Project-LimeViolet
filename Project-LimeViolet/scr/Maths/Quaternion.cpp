@@ -7,6 +7,10 @@ Quaternion::Quaternion()
 	: _r(1), _i(0), _j(0), _k(0)
 { }
 
+Quaternion::Quaternion(const Float4& rijk)
+	: _r(rijk.x), _i(rijk.y), _j(rijk.z), _k(rijk.w)
+{ }
+
 Quaternion::Quaternion(const float& r, const float& i, const float& j, const float& k)
 	: _r(r), _i(i), _j(j), _k(k)
 { }

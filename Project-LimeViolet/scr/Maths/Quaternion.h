@@ -8,6 +8,7 @@ private:
 	float _i, _j, _k; //Complex
 public:
 	Quaternion();
+	explicit Quaternion(const Float4& rijk);
 	Quaternion(const float& r, const float& i, const float& j, const float& k);
 	Quaternion(const float& yaw, const float& pitch, const float& roll);
 	

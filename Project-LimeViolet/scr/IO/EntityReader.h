@@ -4,7 +4,5 @@
 class EntityReader
 {
 public:
-	static EntityHandle ReadEntity(Json::Value value);
-private:
-	//
+	static EntityHandle ReadEntity(Json::Value value, ECS* ecs);
 };
