@@ -120,6 +120,9 @@
     <ClCompile Include="scr\IO\EntityReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scr\Systems\RenderMeshSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\GameObject\GameObject.h">
@@ -203,22 +206,10 @@
     <ClInclude Include="scr\Render\Vulkan\VulkanVBOManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Components\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Components\RenderModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Components\Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scr\Common\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Common\Color.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Components\MeshRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\Common\Material.h">
@@ -246,6 +237,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scr\IO\EntityReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Systems\RenderMeshSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Components\TransformComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Components\RenderableMeshComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Components\MeshRenderComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Components\CameraComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,9 +1,9 @@
 #include "EntityReader.h"
 #include "JsonFileReader.h"
-#include "../Components/Transform.h"
-#include "../Components/Camera.h"
-static Transform* CreateTransform(Json::Value value);
-static Camera* CreateCamera(Json::Value value);
+#include "../Components/TransformComponent.h"
+#include "../Components/CameraComponent.h"
+static TransformComponent* CreateTransformComponent(Json::Value value);
+static CameraComponent* CreateCameraComponent(Json::Value value);
 
 EntityHandle EntityReader::ReadEntity(Json::Value value, ECS* ecs)
 {
@@ -11,7 +11,7 @@ EntityHandle EntityReader::ReadEntity(Json::Value value, ECS* ecs)
 	std::vector<uint32_t> componentIDs;
 	if (!value["Transform"].empty())//Transform
 	{
-		Transform* transform = CreateTransform(value);
+		TransformComponent* transform = CreateTransformComponent(value);
 		components.push_back(transform);
 		componentIDs.push_back(transform->ID);
 	}
@@ -23,7 +23,7 @@ EntityHandle EntityReader::ReadEntity(Json::Value value, ECS* ecs)
 	}
 	if(!value["Camera"].empty())//Camera
 	{
-		Camera* camera = CreateCamera(value);
+		CameraComponent* camera = CreateCameraComponent(value);
 		components.push_back(camera);
 		componentIDs.push_back(camera->ID);
 	}
@@ -32,18 +32,18 @@ EntityHandle EntityReader::ReadEntity(Json::Value value, ECS* ecs)
 	return ecs->MakeEntity(&components[0], ids, components.size());
 }
 
-Transform* CreateTransform(Json::Value value)
+TransformComponent* CreateTransformComponent(Json::Value value)
 {
-	Transform* transform = new Transform();
+	TransformComponent* transform = new TransformComponent();
 	transform->position = JsonFileReader::ReadFloat3(value["Transform"]["Position"]);
 	transform->rotation = Quaternion(JsonFileReader::ReadFloat4(value["Transform"]["Rotation"]));
 	transform->scale = JsonFileReader::ReadFloat3(value["Transform"]["Scale"]);
 	return transform;
 }
 
-Camera* CreateCamera(Json::Value value)
+CameraComponent* CreateCameraComponent(Json::Value value)
 {
-	Camera* camera = new Camera();
+	CameraComponent* camera = new CameraComponent();
 	camera->up = JsonFileReader::ReadFloat4(value["Camera"]["Up"]);
 	camera->clearColor = JsonFileReader::ReadFloat4(value["Camera"]["Color"]);
 	camera->fieldOfView = value["Camera"]["FOV"].asFloat();

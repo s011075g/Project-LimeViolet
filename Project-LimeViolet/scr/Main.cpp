@@ -71,20 +71,20 @@ int main()
 #endif
 
 	//Test Camera
-	GameObject* camera = new GameObject();
-	camera->AddComponent<Camera>();
-	Camera* cam = camera->GetComponent<Camera>();
+	CameraComponent* camera = new CameraComponent();
+	camera->up = Float4(0, 1, 0, 0);
 	const Color4 color(0.0f, 1.0f, 0.42f, 0.25f);
-	cam->SetClearColor(color);
-	cam->SetUp(Float3(0, 1, 0));
+	camera->clearColor = color;
 
-	render->SetActiveCamera(cam);
+	render->SetActiveCamera(camera);
 
 	while (render->ShouldExit())
 	{
 		render->Update();
 
-		render->Draw();
+		render->DrawStart();
+
+		render->DrawEnd();
 	}
 
 	delete camera;

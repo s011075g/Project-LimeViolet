@@ -2,7 +2,7 @@
 #include "../ECS/Component.h"
 #include "../Maths/Quaternion.h"
 
-struct Transform : Component<Transform>
+struct TransformComponent : Component<TransformComponent>
 {
 	Float4x4 positionMatrix; //Position Matrix (Could possibly replaced in the future)
 	Float4x4 rotationMatrix; //Rotation Matrix

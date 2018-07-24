@@ -11,7 +11,7 @@ IRender::~IRender()
 	if (_textureManager) delete _textureManager;
 }
 
-void IRender::SetActiveCamera(Camera* camera)
+void IRender::SetActiveCamera(CameraComponent* camera)
 {
 	_activeCamera = camera;
 }
@@ -61,5 +61,7 @@ void IRender::UpdateScreenSize(const int windowWidth, const int windowHeight)
 void IRender::UpdateProjectionMatrix()
 {
 	//Default lefthanded
-	_projection = Float4x4::ProjectionMatrix(_activeCamera->GetFOV(), static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight),_activeCamera->GetNear(), _activeCamera->GetFar());
+#undef far
+#undef near
+	_projection = Float4x4::ProjectionMatrix(_activeCamera->fieldOfView, static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight),_activeCamera->near, _activeCamera->far);
 }

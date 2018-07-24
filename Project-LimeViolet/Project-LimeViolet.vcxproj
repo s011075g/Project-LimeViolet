@@ -182,6 +182,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Systems\RenderMeshSystem.cpp" />
     <ClCompile Include="scr\IO\EntityReader.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11Shader.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11ShaderManager.cpp" />
@@ -219,6 +220,7 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Systems\RenderMeshSystem.h" />
     <ClInclude Include="scr\IO\EntityReader.h" />
     <ClInclude Include="scr\Render\DX11\DX11Shader.h" />
     <ClInclude Include="scr\Render\DX11\DX11ShaderManager.h" />
@@ -229,7 +231,7 @@
     <ClInclude Include="scr\IO\Model\MTLFileReader.h" />
     <ClInclude Include="scr\Common\Texture.h" />
     <ClInclude Include="scr\Common\Material.h" />
-    <ClInclude Include="scr\Components\MeshRender.h" />
+    <ClInclude Include="scr\Components\MeshRenderComponent.h" />
     <ClInclude Include="scr\ECS\ECS.h" />
     <ClInclude Include="scr\Render\DX11\DX11TextureManager.h" />
     <ClInclude Include="scr\Render\DX11\DX11VBOManager.h" />
@@ -239,12 +241,12 @@
     <ClInclude Include="scr\Render\IShaderManager.h" />
     <ClInclude Include="scr\Common\resource.h" />
     <ClInclude Include="scr\Render\DX11\DX11Render.h" />
-    <ClInclude Include="scr\Components\Camera.h" />
-    <ClInclude Include="scr\Components\RenderModel.h" />
+    <ClInclude Include="scr\Components\CameraComponent.h" />
+    <ClInclude Include="scr\Components\RenderableMeshComponent.h" />
     <ClInclude Include="scr\ECS\Component.h" />
     <ClInclude Include="scr\Render\Geometry.h" />
     <ClInclude Include="scr\Common\ObjectVertex.h" />
-    <ClInclude Include="scr\Components\Transform.h" />
+    <ClInclude Include="scr\Components\TransformComponent.h" />
     <ClInclude Include="scr\IO\Model\OBJFileReader.h" />
     <ClInclude Include="scr\Render\IRender.h" />
     <ClInclude Include="scr\Common\Color.h" />

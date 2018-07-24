@@ -222,16 +222,23 @@ void DX11Render::Update()
 	}
 }
 
-void DX11Render::Draw()
+void DX11Render::DrawStart()
 {
 	ID3D11ShaderResourceView* null = nullptr;
 	_context->PSSetShaderResources(0, 1, &null);
 	_context->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
-	_context->ClearRenderTargetView(_renderTargetView, _activeCamera->GetClearColor().rgba);
+	_context->ClearRenderTargetView(_renderTargetView, _activeCamera->clearColor.rgba);
 	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+}
 
-	//Draw here
+void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials)
+{
+	//Sets shaders and resources
+	//Draw object
+}
 
+void DX11Render::DrawEnd()
+{
 	_swapChain->Present(1, 0); //(1,0) = vsync
 }
 
@@ -266,9 +273,9 @@ void DX11Render::CleanUp()
 
 void DX11Render::UpdateViewMatrix()
 {
-	DirectX::XMFLOAT3 eye(_activeCamera->GetEye().x, _activeCamera->GetEye().y, _activeCamera->GetEye().z);
-	DirectX::XMFLOAT3 at(_activeCamera->GetAt().x, _activeCamera->GetAt().y, _activeCamera->GetAt().z);
-	DirectX::XMFLOAT3 up(_activeCamera->GetUp().x, _activeCamera->GetUp().y, _activeCamera->GetUp().z);
+	DirectX::XMFLOAT3 eye(_activeCamera->eye.x, _activeCamera->eye.y, _activeCamera->eye.z);
+	DirectX::XMFLOAT3 at(_activeCamera->at.x, _activeCamera->at.y, _activeCamera->at.z);
+	DirectX::XMFLOAT3 up(_activeCamera->up.x, _activeCamera->up.y, _activeCamera->up.z);
 	DirectX::XMFLOAT4X4 m;
 	DirectX::XMStoreFloat4x4(&m, DirectX::XMMatrixLookAtLH(DirectX::XMLoadFloat3(&eye), DirectX::XMLoadFloat3(&at), DirectX::XMLoadFloat3(&up)));
 	for(int x = 0; x != 4; x++)
@@ -278,5 +285,7 @@ void DX11Render::UpdateViewMatrix()
 
 void DX11Render::UpdateProjectionMatrix()
 {
-	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_projection.m), DirectX::XMMatrixPerspectiveFovLH(_activeCamera->GetFOV(), static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight), _activeCamera->GetNear(), _activeCamera->GetFar()));
+#undef far //undefined from minwindef as they are macros
+#undef near
+	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_projection.m), DirectX::XMMatrixPerspectiveFovLH(_activeCamera->fieldOfView, static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight), _activeCamera->near, _activeCamera->far));
 }

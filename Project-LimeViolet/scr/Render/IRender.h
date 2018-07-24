@@ -1,8 +1,11 @@
 #pragma once
-#include "../GameObject/Component/Camera.h"
 #include <windows.h>
 #include "IVBOManager.h"
 #include "ITextureManager.h"
+#include "../Components/CameraComponent.h"
+#include "../Components/TransformComponent.h"
+#include "../Components/RenderableMeshComponent.h"
+#include "../Components/MeshRenderComponent.h"
 
 class IRender
 {
@@ -13,7 +16,7 @@ protected:
 	//Screen size
 	int _windowWidth, _windowHeight;
 	//To hold the currently active Camera
-	Camera * _activeCamera; //todo update for new component system
+	CameraComponent * _activeCamera; //todo update for new component system
 
 	IVBOManager* _vboManager;
 	ITextureManager* _textureManager;
@@ -24,13 +27,17 @@ public:
 	virtual HRESULT InitWindow(RECT& rc, const char*& windowTitle) = 0;
 	virtual HRESULT InitRenderer() = 0;
 
-	void SetActiveCamera(Camera* camera);
+	void SetActiveCamera(CameraComponent* camera);
 	Int2 GetWindowSize() const;
 	int GetWindowWidth() const;
 	int GetWindowHeight() const;
 
 	virtual void Update();
-	virtual void Draw() = 0; //todo replace as this is for testing
+
+	virtual void DrawStart() = 0;
+	virtual void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) = 0;
+	virtual void DrawEnd() = 0;
+
 	virtual bool ShouldExit() = 0;
 
 	virtual Geometry* LoadRawGeometry(RawGeometry*& geometry);

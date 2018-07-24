@@ -15,7 +15,7 @@ public:
 	const std::vector<uint32_t>& GetComponentFlags() const;
 	bool IsValid() const;
 protected:
-	void AddComponentType(uint32_t componentType, uint32_t componentFlag);
+	void AddComponentType(uint32_t componentType, uint32_t componentFlag = 0);
 private:
 	std::vector<uint32_t> _componentTypes;
 	std::vector<uint32_t> _componentFlags;

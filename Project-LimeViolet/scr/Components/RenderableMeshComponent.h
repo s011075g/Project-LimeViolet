@@ -2,7 +2,7 @@
 #include "../ECS/Component.h"
 #include "../Render/Geometry.h"
 
-struct RenderModel : Component<RenderModel>
+struct RenderableMeshComponent : Component<RenderableMeshComponent>
 {
 	//todo plan what the rendermodel needs to render
 	Geometry* geometry;
