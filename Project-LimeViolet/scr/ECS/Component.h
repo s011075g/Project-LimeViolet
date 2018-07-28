@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-//#include <tuple> //Included in <vector>
 
 //Means the Component doesn't have to know anything about the entity
 typedef void* EntityHandle;

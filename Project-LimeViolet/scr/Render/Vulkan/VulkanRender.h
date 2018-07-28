@@ -51,7 +51,6 @@ public:
 	HRESULT InitRenderer() override;
 
 	void Update() override;
-	void Draw() override;
 	bool ShouldExit() override;
 protected:
 	void CleanUp() override;

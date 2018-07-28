@@ -60,8 +60,5 @@ void IRender::UpdateScreenSize(const int windowWidth, const int windowHeight)
 
 void IRender::UpdateProjectionMatrix()
 {
-	//Default lefthanded
-#undef far
-#undef near
-	_projection = Float4x4::ProjectionMatrix(_activeCamera->fieldOfView, static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight),_activeCamera->near, _activeCamera->far);
+	_projection = Float4x4::ProjectionMatrix(_activeCamera->fieldOfView, static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight),_activeCamera->nearPlane, _activeCamera->farPlane);
 }

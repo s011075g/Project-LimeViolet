@@ -47,7 +47,7 @@ CameraComponent* CreateCameraComponent(Json::Value value)
 	camera->up = JsonFileReader::ReadFloat4(value["Camera"]["Up"]);
 	camera->clearColor = JsonFileReader::ReadFloat4(value["Camera"]["Color"]);
 	camera->fieldOfView = value["Camera"]["FOV"].asFloat();
-	camera->near = value["Camera"]["Near"].asFloat();
-	camera->far = value["Camera"]["Far"].asFloat();
+	camera->nearPlane = value["Camera"]["Near"].asFloat();
+	camera->farPlane = value["Camera"]["Far"].asFloat();
 	return camera;
 }

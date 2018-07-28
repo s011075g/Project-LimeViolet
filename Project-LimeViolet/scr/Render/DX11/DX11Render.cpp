@@ -285,7 +285,5 @@ void DX11Render::UpdateViewMatrix()
 
 void DX11Render::UpdateProjectionMatrix()
 {
-#undef far //undefined from minwindef as they are macros
-#undef near
-	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_projection.m), DirectX::XMMatrixPerspectiveFovLH(_activeCamera->fieldOfView, static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight), _activeCamera->near, _activeCamera->far));
+	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_projection.m), DirectX::XMMatrixPerspectiveFovLH(_activeCamera->fieldOfView, static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight), _activeCamera->nearPlane, _activeCamera->farPlane));
 }

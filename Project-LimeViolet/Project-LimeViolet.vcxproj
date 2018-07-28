@@ -182,6 +182,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Source.cpp" />
     <ClCompile Include="scr\Systems\RenderMeshSystem.cpp" />
     <ClCompile Include="scr\IO\EntityReader.cpp" />
     <ClCompile Include="scr\Render\DX11\DX11Shader.cpp" />

@@ -1,5 +1,4 @@
 #include "Common/Utilities.h"
-#include <windows.h>
 #include <chrono>
 #include <iostream>
 #include "IO/Model/OBJFileReader.h"
