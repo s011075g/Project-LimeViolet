@@ -16,5 +16,5 @@ RenderMeshSystem::~RenderMeshSystem()
 
 void RenderMeshSystem::UpdateComponents(const float delta, BaseComponent** components)
 {
-
+	//Call Render draw
 }

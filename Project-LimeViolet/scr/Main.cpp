@@ -2,14 +2,15 @@
 #include <iostream>
 #include "Render/IRender.h"
 #include "Render/DX11/DX11Render.h"
-#include "Render/DX11/DX11VBOManager.h"
-#include "IO/World/ConfigFileReader.h"
 //#include "Render/Vulkan/VulkanRender.h"
+#include "IO/World/ConfigFileReader.h"
+#include "ECS/ECS.h"
 
 //#define MODEL_TESTING
 
 #ifdef MODEL_TESTING
 #include "IO/Model/OBJFileReader.h"
+#include "Render/DX11/DX11VBOManager.h"
 #include <chrono>
 #endif
 
@@ -69,25 +70,37 @@ int main()
 	elapsedTime = tEnd - tStart;
 	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
 #endif
+///ECS 
+	ECS ecs;
+	//Create Components
+	TransformComponent transformComponent = {};
+	transformComponent.position = Float3(0, 0, 0);
+
+	CameraComponent cameraComponent = {};
+	cameraComponent.up = Float4(0, 1, 0, 0);
+	cameraComponent.eye = Float3(0, 0, 1);
+	const Color4 color(0.0f, 1.0f, 0.42f, 0.25f);
+	cameraComponent.clearColor = color;
+	cameraComponent.farPlane = 100.0f;
+	cameraComponent.nearPlane = 0.1f;
+	//Create Entity
+	EntityHandle entity = ecs.MakeEntity(transformComponent, cameraComponent);
+	//Create Systems
 
 	//Test Camera
-	CameraComponent* camera = new CameraComponent();
-	camera->up = Float4(0, 1, 0, 0);
-	const Color4 color(0.0f, 1.0f, 0.42f, 0.25f);
-	camera->clearColor = color;
-
-	render->SetActiveCamera(camera);
+	render->SetActiveCamera(ecs.GetComponent<CameraComponent>(entity));
 
 	while (render->ShouldExit())
 	{
+		//System update
 		render->Update();
-
+		
 		render->DrawStart();
-
+		//System draw
 		render->DrawEnd();
 	}
 
-	delete camera;
+	ecs.RemoveEntity(entity);
 	delete render;
 	Utilities::CloseConsole();
 	return 0;
