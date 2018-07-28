@@ -1,16 +1,17 @@
 #include "Common/Utilities.h"
-#include <chrono>
 #include <iostream>
-#include "IO/Model/OBJFileReader.h"
 #include "Render/IRender.h"
 #include "Render/DX11/DX11Render.h"
-#include "GameObject/GameObject.h"
-#include <string>
 #include "Render/DX11/DX11VBOManager.h"
 #include "IO/World/ConfigFileReader.h"
 //#include "Render/Vulkan/VulkanRender.h"
 
 //#define MODEL_TESTING
+
+#ifdef MODEL_TESTING
+#include "IO/Model/OBJFileReader.h"
+#include <chrono>
+#endif
 
 int main()
 {
