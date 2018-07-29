@@ -94,6 +94,3 @@ private:
 	//Added to stop clashing with max() macro
 	static constexpr uint32_t Max_uint32_t();
 };
-
-
-

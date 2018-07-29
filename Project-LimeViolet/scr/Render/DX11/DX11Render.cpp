@@ -222,7 +222,7 @@ void DX11Render::Update()
 	}
 }
 
-void DX11Render::DrawStart()
+void DX11Render::DrawStart() const
 {
 	ID3D11ShaderResourceView* null = nullptr;
 	_context->PSSetShaderResources(0, 1, &null);
@@ -231,13 +231,15 @@ void DX11Render::DrawStart()
 	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
-void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials)
+void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) const
 {
 	//Sets shaders and resources
+
 	//Draw object
+
 }
 
-void DX11Render::DrawEnd()
+void DX11Render::DrawEnd() const
 {
 	_swapChain->Present(1, 0); //(1,0) = vsync
 }

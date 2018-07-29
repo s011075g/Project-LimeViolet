@@ -34,9 +34,9 @@ public:
 
 	virtual void Update();
 
-	virtual void DrawStart() = 0;
-	virtual void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) = 0;
-	virtual void DrawEnd() = 0;
+	virtual void DrawStart() const = 0;
+	virtual void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) const = 0;
+	virtual void DrawEnd() const = 0;
 
 	virtual bool ShouldExit() = 0;
 

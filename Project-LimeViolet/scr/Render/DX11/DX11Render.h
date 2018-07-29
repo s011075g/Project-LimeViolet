@@ -30,9 +30,9 @@ public:
 	HRESULT InitRenderer() override;
 
 	void Update() override;
-	void DrawStart() override;
-	void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) override;
-	void DrawEnd() override;
+	void DrawStart() const override;
+	void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) const override;
+	void DrawEnd() const override;
 	bool ShouldExit() override;
 protected:
 	void CleanUp() override;

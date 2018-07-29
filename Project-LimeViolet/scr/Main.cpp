@@ -6,6 +6,8 @@
 #include "IO/World/ConfigFileReader.h"
 #include "ECS/ECS.h"
 
+#include "Systems/RenderMeshSystem.h"
+
 //#define MODEL_TESTING
 
 #ifdef MODEL_TESTING
@@ -86,6 +88,9 @@ int main()
 	//Create Entity
 	EntityHandle entity = ecs.MakeEntity(transformComponent, cameraComponent);
 	//Create Systems
+	RenderMeshSystem renderSystem = RenderMeshSystem();
+	SystemList renderList = SystemList();
+	renderList.AddSystem(renderSystem);
 
 	//Test Camera
 	render->SetActiveCamera(ecs.GetComponent<CameraComponent>(entity));
@@ -96,7 +101,7 @@ int main()
 		render->Update();
 		
 		render->DrawStart();
-		//System draw
+		ecs.UpdateSystems(renderList, 0.1f);
 		render->DrawEnd();
 	}
 
