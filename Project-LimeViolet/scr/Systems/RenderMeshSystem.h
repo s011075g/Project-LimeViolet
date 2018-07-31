@@ -1,6 +1,7 @@
 #pragma once
 #include "../ECS/System.h"
 #include "../Render/IRender.h"
+
 class RenderMeshSystem : public BaseSystem
 {
 public:
@@ -10,4 +11,3 @@ public:
 private:
 	const IRender * & _render;
 };
-

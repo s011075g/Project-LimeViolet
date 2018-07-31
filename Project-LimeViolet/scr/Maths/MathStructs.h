@@ -37,7 +37,9 @@ struct Float2
 
 	void Normalize();
 
+	//Returns the length of the vector
 	float Magnitude() const;
+	//Returns the length of the vector squared
 	float MagnitudeSq() const;
 
 	float Dot(const Float2& right) const;
@@ -79,7 +81,9 @@ struct Float3
 
 	void Normalize();
 
+	//Returns the length of the vector
 	float Magnitude() const;
+	//Returns the length of the vector squared
 	float MagnitudeSq() const;
 
 	float Dot(const Float3& right) const;
@@ -124,7 +128,9 @@ struct Float4
 
 	void Normalize();
 
+	//Returns the length of the vector
 	float Magnitude() const;
+	//Returns the length of the vector squared
 	float MagnitudeSq() const;
 
 	float Dot(const Float4& right) const;
