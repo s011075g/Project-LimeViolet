@@ -304,10 +304,13 @@ float Float4::MagnitudeSq() const
 {
 	return x * x + y * y + z * z + w * w;
 }
+#define tolerance 0.0001f
 
 void Float2::Normalize()
 {
 	const float mag = Magnitude();
+	if (abs(mag) < tolerance)
+		throw;
 	x /= mag;
 	y /= mag;
 }
@@ -315,6 +318,8 @@ void Float2::Normalize()
 void Float3::Normalize()
 {
 	const float mag = Magnitude();
+	if (abs(mag) < tolerance)
+		throw;
 	x /= mag;
 	y /= mag;
 	z /= mag;
@@ -323,6 +328,8 @@ void Float3::Normalize()
 void Float4::Normalize()
 {
 	const float mag = Magnitude();
+	if (abs(mag) < tolerance)
+		throw;
 	x /= mag;
 	y /= mag;
 	z /= mag;
