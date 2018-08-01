@@ -6,7 +6,7 @@ public:
 	DX11Shader(ID3D11InputLayout *& layout, ID3D11VertexShader*& vertex, ID3D11HullShader* hull, ID3D11DomainShader* domain, ID3D11GeometryShader* geometry, ID3D11PixelShader*& pixel, ID3D11Buffer*& perDraw, ID3D11Buffer*& perObject);
 	~DX11Shader();
 
-	void SetShader(ID3D11DeviceContext*& context) const;
+	void SetShader(ID3D11DeviceContext*const& context) const;
 	//PerDraw is registered to b0
 	void SetPerDrawBuffer(ID3D11DeviceContext*& context, void*& data) const;
 	//PerObject is registered to b1

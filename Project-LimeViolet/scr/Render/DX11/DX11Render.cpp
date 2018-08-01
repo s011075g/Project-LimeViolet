@@ -2,6 +2,7 @@
 #include "../../Common/resource.h"
 #include "DX11VBOManager.h"
 #include "DX11TextureManager.h"
+#include "DX11Shader.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -233,17 +234,16 @@ void DX11Render::DrawStart() const
 
 void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) const
 {
-	return;
 	static const unsigned int stride = sizeof(ObjectVertex);
 	static const unsigned int offset = 0;
 
 	ID3D11Buffer* vertex = static_cast<ID3D11Buffer*>(mesh->geometry->GetVertexBuffer());
 	_context->IASetVertexBuffers(0, 1, &vertex, &stride, &offset);
-
+	static_cast<DX11Shader*>(materials->shader)->SetShader(_context);
 	for (int i = 0; i < materials->materials.size(); i++)
 	{
 		//Sets shaders and resources
-
+		
 		//Draw object
 		_context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(mesh->geometry->GetIndexBuffer()[i].first), DXGI_FORMAT_R16_UINT, 0);
 		_context->DrawIndexed(mesh->geometry->GetIndexBuffer()[i].second, 0, 0);

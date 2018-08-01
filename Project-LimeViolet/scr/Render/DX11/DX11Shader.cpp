@@ -24,7 +24,7 @@ DX11Shader::~DX11Shader()
 		_perObjectBuffer->Release();
 }
 
-void DX11Shader::SetShader(ID3D11DeviceContext*& context) const
+void DX11Shader::SetShader(ID3D11DeviceContext*const& context) const
 {
 	context->IASetInputLayout(_inputLayout);
 	context->VSSetShader(_vertexShader, nullptr, 0);
