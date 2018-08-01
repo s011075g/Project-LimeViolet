@@ -3,7 +3,7 @@
 #include "../Components/RenderableMeshComponent.h"
 #include "../Components/MeshRenderComponent.h"
 
-RenderMeshSystem::RenderMeshSystem(const IRender*& render)
+RenderMeshSystem::RenderMeshSystem(IRender*& render)
 	: BaseSystem(), _render(render)
 {
 	AddComponentType(TransformComponent::ID);
@@ -16,5 +16,5 @@ RenderMeshSystem::~RenderMeshSystem()
 
 void RenderMeshSystem::UpdateComponents(const float delta, BaseComponent** components)
 {
-	_render->DrawObject((TransformComponent*)components[0], (RenderableMeshComponent*)components[1], (MeshRenderComponent*)components[2]);
+	_render->DrawObject(static_cast<TransformComponent*>(components[0]), static_cast<RenderableMeshComponent*>(components[1]), static_cast<MeshRenderComponent*>(components[2]));
 }

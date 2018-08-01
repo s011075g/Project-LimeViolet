@@ -17,13 +17,13 @@ std::pair<const char*, Material*> MATFileReader::ReadMaterial(Json::Value value)
 	std::pair<const char*, Material*> result = std::pair<const char*, Material*>();
 	result.first = value["Name"].asString().c_str();
 	result.second = new Material();
-	result.second->diffuseTexture = (texture)value["DiffuseTexture"].asString().c_str();
+	result.second->diffuseTexture = (Texture)value["DiffuseTexture"].asString().c_str();
 	result.second->diffuseColor = Color4(JsonFileReader::ReadFloat4(value["DiffuseColor"]));
-	result.second->specularTexture = (texture)value["SpecularTexture"].asString().c_str();
+	result.second->specularTexture = (Texture)value["SpecularTexture"].asString().c_str();
 	result.second->specularColor = Color3(JsonFileReader::ReadFloat3(value["SpecularColor"]));
 	result.second->specularPower = value["SpecularPower"].asFloat();
-	result.second->normalTexture = (texture)value["NormalTexture"].asString().c_str();
-	result.second->occlusionTexture = (texture)value["OcclusionTexture"].asString().c_str();
+	result.second->normalTexture = (Texture)value["NormalTexture"].asString().c_str();
+	result.second->occlusionTexture = (Texture)value["OcclusionTexture"].asString().c_str();
 
 	return result;
 }

@@ -13,9 +13,9 @@ DX11VBOManager::~DX11VBOManager()
 Geometry* DX11VBOManager::VBOGeometry(RawGeometry* geometry)
 {
 	void* vertex = static_cast<void*>(BufferData(geometry->vertex, D3D11_BIND_VERTEX_BUFFER));
-	std::vector<void*> index;
+	std::vector<std::pair<void*, int>> index;
 	for (auto i : geometry->indices)
-		index.push_back(static_cast<void*>(BufferData(i, D3D11_BIND_INDEX_BUFFER)));
+		index.push_back(std::make_pair(static_cast<void*>(BufferData(i, D3D11_BIND_INDEX_BUFFER)), i.size()));
 	return new Geometry(vertex, index);
 }
 
@@ -23,7 +23,7 @@ void DX11VBOManager::DeleteVBO(Geometry*& geometry)
 {
 	static_cast<ID3D11Buffer*>(geometry->GetVertexBuffer())->Release();
 	for (auto buffer : geometry->GetIndexBuffer())
-		static_cast<ID3D11Buffer*>(buffer)->Release();
+		static_cast<ID3D11Buffer*>(buffer.first)->Release();
 	delete geometry;
 	geometry = nullptr;
 }

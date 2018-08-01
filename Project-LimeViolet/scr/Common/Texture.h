@@ -1,3 +1,3 @@
 #pragma once
 
-typedef void* texture;
+typedef void* Texture;

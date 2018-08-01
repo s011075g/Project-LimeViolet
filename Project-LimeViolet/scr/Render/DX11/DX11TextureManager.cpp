@@ -12,12 +12,12 @@ DX11TextureManager::~DX11TextureManager()
 		if (i.second) static_cast<ID3D11ShaderResourceView*>(i.second)->Release();
 }
 
-texture DX11TextureManager::GetTexture(const char* fileLocation)
+Texture DX11TextureManager::GetTexture(const char* fileLocation)
 {
 	std::string path(fileLocation);
 	if (path.empty()) 
 		return nullptr;
-	texture result = _loadedImages[path];
+	Texture result = _loadedImages[path];
 	if (result)
 		return result;
 	return _loadedImages[path] = LoadTexture(path);
@@ -31,7 +31,7 @@ void DX11TextureManager::UnloadTexture(const char* fileLocation)
 	_loadedImages[path] = nullptr;
 }
 
-texture DX11TextureManager::LoadTexture(std::string fileLocation) const
+Texture DX11TextureManager::LoadTexture(std::string fileLocation) const
 {
 	ID3D11ShaderResourceView* result(nullptr);
 	std::wstring file(fileLocation.begin(), fileLocation.end());
@@ -43,5 +43,5 @@ texture DX11TextureManager::LoadTexture(std::string fileLocation) const
 		hr = DirectX::CreateWICTextureFromFile(_device, file.c_str(), nullptr, &result);
 	if FAILED(hr)
 		return nullptr;
-	return static_cast<texture>(result);
+	return static_cast<Texture>(result);
 }

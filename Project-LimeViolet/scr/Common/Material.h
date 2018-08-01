@@ -4,13 +4,13 @@
 
 struct Material
 {
-	texture diffuseTexture;
+	Texture diffuseTexture;
 	Color4 diffuseColor;
-	texture specularTexture;
+	Texture specularTexture;
 	Color3 specularColor;
 	float specularPower;
-	texture normalTexture;
-	texture occlusionTexture;
+	Texture normalTexture;
+	Texture occlusionTexture;
 	Material();
 };
 

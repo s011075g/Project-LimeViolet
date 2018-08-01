@@ -6,11 +6,11 @@ class Geometry //todo remove materials from geomtry
 {
 private:
 	void* _vertexBuffer;
-	std::vector<void*> _indexBuffer;
+	std::vector<std::pair<void*, int>> _indexBuffer;
 public:
-	Geometry(void*& vertex, std::vector<void*>& indices);
+	Geometry(void*& vertex, std::vector<std::pair<void*, int>>& indices);
 	~Geometry();
 
 	void* GetVertexBuffer() const;
-	const std::vector<void*>& GetIndexBuffer() const;
+	const std::vector<std::pair<void*, int>>& GetIndexBuffer() const;
 };

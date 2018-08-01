@@ -88,7 +88,7 @@ int main()
 	//Create Entity
 	EntityHandle entity = ecs.MakeEntity(transformComponent, cameraComponent);
 	//Create Systems
-	RenderMeshSystem renderSystem = RenderMeshSystem();
+	RenderMeshSystem renderSystem = RenderMeshSystem(render);
 	SystemList renderList = SystemList();
 	renderList.AddSystem(renderSystem);
 

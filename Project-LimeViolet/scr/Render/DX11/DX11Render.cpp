@@ -233,10 +233,21 @@ void DX11Render::DrawStart() const
 
 void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) const
 {
-	//Sets shaders and resources
+	return;
+	static const unsigned int stride = sizeof(ObjectVertex);
+	static const unsigned int offset = 0;
 
-	//Draw object
+	ID3D11Buffer* vertex = static_cast<ID3D11Buffer*>(mesh->geometry->GetVertexBuffer());
+	_context->IASetVertexBuffers(0, 1, &vertex, &stride, &offset);
 
+	for (int i = 0; i < materials->materials.size(); i++)
+	{
+		//Sets shaders and resources
+
+		//Draw object
+		_context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(mesh->geometry->GetIndexBuffer()[i].first), DXGI_FORMAT_R16_UINT, 0);
+		_context->DrawIndexed(mesh->geometry->GetIndexBuffer()[i].second, 0, 0);
+	}
 }
 
 void DX11Render::DrawEnd() const

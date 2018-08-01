@@ -1,6 +1,6 @@
 #include "Geometry.h"
 
-Geometry::Geometry(void*& vertex, std::vector<void*>& indices)
+Geometry::Geometry(void*& vertex, std::vector<std::pair<void*, int>>& indices)
 	: _vertexBuffer(vertex), _indexBuffer(indices)
 { }
 
@@ -12,7 +12,7 @@ void* Geometry::GetVertexBuffer() const
 	return _vertexBuffer;
 }
 
-const std::vector<void*>& Geometry::GetIndexBuffer() const
+const std::vector<std::pair<void*, int>>& Geometry::GetIndexBuffer() const
 {
 	return _indexBuffer;
 }

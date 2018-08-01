@@ -5,9 +5,9 @@
 class RenderMeshSystem : public BaseSystem
 {
 public:
-	RenderMeshSystem(const IRender*& render);
+	RenderMeshSystem(IRender*& render);
 	~RenderMeshSystem();
 	void UpdateComponents(const float delta, BaseComponent** components) override;
 private:
-	const IRender * & _render;
+	IRender * & _render;
 };
