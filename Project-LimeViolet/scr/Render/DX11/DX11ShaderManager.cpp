@@ -3,7 +3,8 @@
 #include "../../Common/Utilities.h"
 
 DX11ShaderManager::DX11ShaderManager(ID3D11Device* const& device)
-	: _device(device)
+	: _device(device), _diffuseTexture(nullptr), _specularTexture(nullptr), 
+		_normalTexture(nullptr), _occlusionTexture(nullptr)
 { }
 
 DX11ShaderManager::~DX11ShaderManager()
@@ -64,6 +65,38 @@ HRESULT DX11ShaderManager::CreateConstantBuffer(unsigned int& size, ID3D11Buffer
 	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	desc.CPUAccessFlags = 0;
 	return _device->CreateBuffer(&desc, nullptr, &outBuffer);
+}
+
+void DX11ShaderManager::SetTextureDiffuse(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView* ptr) const
+{
+	if(ptr == _diffuseTexture)
+		return;
+	context->PSSetShaderResources(0, 1, &ptr);
+	_diffuseTexture = ptr;
+}
+
+void DX11ShaderManager::SetTextureSpecular(ID3D11DeviceContext* const& context, ID3D11ShaderResourceView* ptr) const
+{
+	if (ptr == _specularTexture)
+		return;
+	context->PSSetShaderResources(1, 1, &ptr);
+	_specularTexture = ptr;
+}
+
+void DX11ShaderManager::SetTextureNormal(ID3D11DeviceContext* const& context, ID3D11ShaderResourceView* ptr) const
+{
+	if(ptr == _normalTexture)
+		return;
+	context->PSSetShaderResources(2, 1, &ptr);
+	_normalTexture = ptr;
+}
+
+void DX11ShaderManager::SetTextureOcclusion(ID3D11DeviceContext* const& context, ID3D11ShaderResourceView* ptr) const
+{
+	if(ptr == _occlusionTexture)
+		return;
+	context->PSSetShaderResources(3, 1, &ptr);
+	_occlusionTexture = ptr;
 }
 
 HRESULT DX11ShaderManager::CreateInputLayout(ID3DBlob*& vertexBlob, ID3D11InputLayout*& outLayout) const

@@ -34,27 +34,36 @@ void DX11Shader::SetShader(ID3D11DeviceContext*const& context) const
 	context->PSSetShader(_pixelShader, nullptr, 0);
 }
 
-void DX11Shader::SetPerDrawBuffer(ID3D11DeviceContext*& context, void*& data) const
+void DX11Shader::SetPerDrawBuffer(ID3D11DeviceContext*const& context, void* data) const
 {
-	context->VSSetConstantBuffers(0, 1, &_perDrawBuffer);
-	context->HSSetConstantBuffers(0, 1, &_perDrawBuffer);
-	context->DSSetConstantBuffers(0, 1, &_perDrawBuffer);
-	context->GSSetConstantBuffers(0, 1, &_perDrawBuffer);
-	context->PSSetConstantBuffers(0, 1, &_perDrawBuffer);
 	if (!_perDrawBuffer)
-		return; 
+		return;
+	if (_vertexShader)
+		context->VSSetConstantBuffers(0, 1, &_perDrawBuffer);
+	if (_hullShader)
+		context->HSSetConstantBuffers(0, 1, &_perDrawBuffer);
+	if (_domainShader)
+		context->DSSetConstantBuffers(0, 1, &_perDrawBuffer);
+	if (_geometryShader)
+		context->GSSetConstantBuffers(0, 1, &_perDrawBuffer);
+	if (_pixelShader)
+		context->PSSetConstantBuffers(0, 1, &_perDrawBuffer);
 	context->UpdateSubresource(_perDrawBuffer, 0, nullptr, data, 0, 0);
 }
 
-void DX11Shader::SetPerObjectBuffer(ID3D11DeviceContext*& context, void*& data) const
+void DX11Shader::SetPerObjectBuffer(ID3D11DeviceContext*const& context, void* data) const
 {
-	
-	context->VSSetConstantBuffers(1, 1, &_perObjectBuffer);
-	context->HSSetConstantBuffers(1, 1, &_perObjectBuffer);
-	context->DSSetConstantBuffers(1, 1, &_perObjectBuffer);
-	context->GSSetConstantBuffers(1, 1, &_perObjectBuffer);
-	context->PSSetConstantBuffers(1, 1, &_perObjectBuffer);
 	if (!_perObjectBuffer)
-		return; 
+		return;
+	if (_vertexShader)
+		context->VSSetConstantBuffers(1, 1, &_perObjectBuffer);
+	if (_hullShader)
+		context->HSSetConstantBuffers(1, 1, &_perObjectBuffer);
+	if (_domainShader)
+		context->DSSetConstantBuffers(1, 1, &_perObjectBuffer);
+	if (_geometryShader)
+		context->GSSetConstantBuffers(1, 1, &_perObjectBuffer);
+	if (_pixelShader)
+		context->PSSetConstantBuffers(1, 1, &_perObjectBuffer);
 	context->UpdateSubresource(_perObjectBuffer, 0, nullptr, data, 0, 0);
 }

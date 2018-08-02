@@ -58,6 +58,7 @@ struct Float3
 
 	Float3() = default;
 	Float3(float x, float y, float z);
+	explicit Float3(float xyz[3]);
 
 	Float3& operator= (const Float3& right);
 
@@ -105,6 +106,7 @@ struct Float4
 	Float4() = default;
 	Float4(float x, float y, float z, float w);
 	Float4(Float3 xyz, float w);
+	explicit Float4(float xyzw[4]);
 
 	Float4& operator= (const Float4& right);
 

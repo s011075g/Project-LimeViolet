@@ -216,6 +216,7 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Render\DX11\DX11ConstantBuffers.h" />
     <ClInclude Include="scr\Systems\RenderMeshSystem.h" />
     <ClInclude Include="scr\IO\EntityReader.h" />
     <ClInclude Include="scr\Render\DX11\DX11Shader.h" />

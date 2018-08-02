@@ -19,17 +19,22 @@ public:
 	HRESULT CreatePixelShader(const wchar_t* fileLocation, ID3D11PixelShader*& outShader) const;
 	
 	HRESULT CreateConstantBuffer(unsigned int& size, ID3D11Buffer*& outBuffer) const;
+
+	void SetTextureDiffuse(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
+	void SetTextureSpecular(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
+	void SetTextureNormal(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
+	void SetTextureOcclusion(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 private:
 	enum class SHADER
 	{
-		VERTEX,
-		HULL,
-		DOMAIN,
-		GEOMETRY,
-		PIXEL
+		VERTEX, HULL, DOMAIN, GEOMETRY, PIXEL
 	};
-
 
 	HRESULT CreateShader(const wchar_t* fileLocation, const SHADER& shader, const LPCSTR& entryPoint, const LPCSTR& shaderModel, ID3DBlob*& outBlob, void*& outShader) const;
 	static HRESULT CompileShaderFromFile(const WCHAR* fileName, const LPCSTR& entryPoint, const LPCSTR& shaderModel, ID3DBlob*& outBlob);
+
+	mutable ID3D11ShaderResourceView * _diffuseTexture;
+	mutable ID3D11ShaderResourceView * _specularTexture;
+	mutable ID3D11ShaderResourceView * _normalTexture;
+	mutable ID3D11ShaderResourceView * _occlusionTexture;
 };

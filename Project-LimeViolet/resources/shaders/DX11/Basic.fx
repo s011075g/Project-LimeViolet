@@ -19,7 +19,6 @@ struct VS_OUTPUT
 cbuffer PerDraw : register(b0)
 {
 	matrix gViewProjection;
-	float gEye;
 }
 
 cbuffer PerObject : register(b1)

@@ -1,6 +1,7 @@
 #pragma once
 #include "../IRender.h"
 #include <d3d11_1.h>
+#include "DX11ShaderManager.h"
 
 class DX11Render : public IRender
 {
@@ -20,6 +21,8 @@ private:
 
 	ID3D11RenderTargetView* _offScreenView;
 	ID3D11ShaderResourceView*_offScreen; //Used for Preprocessing
+
+	DX11ShaderManager* _shaderManager;
 
 	//Window handler - might not be needed anymoe
 	HWND _hWnd;

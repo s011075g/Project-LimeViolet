@@ -3,6 +3,7 @@
 #include "DX11VBOManager.h"
 #include "DX11TextureManager.h"
 #include "DX11Shader.h"
+#include "DX11ConstantBuffers.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -15,12 +16,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 DX11Render::DX11Render()
 	:_msg({nullptr}) ,_driverType(), _featureLevel(), _device(nullptr), _context(nullptr), _swapChain(nullptr), 
-	_renderTargetView(nullptr), _depthStencilView(nullptr), _offScreenView(nullptr), _offScreen(nullptr), _hWnd(nullptr)
+	_renderTargetView(nullptr), _depthStencilView(nullptr), _offScreenView(nullptr), _offScreen(nullptr), _hWnd(nullptr),
+	_shaderManager(nullptr)
 { }
 
 DX11Render::~DX11Render()
 {
 	DX11Render::CleanUp();
+	if (_shaderManager) 
+		delete _shaderManager;
 }
 
 #define IDI_TUTORIAL1 109
@@ -209,6 +213,7 @@ HRESULT DX11Render::InitRenderer()
 
 	_vboManager = new DX11VBOManager(_device);
 	_textureManager = new DX11TextureManager(_device);
+	_shaderManager = new DX11ShaderManager(_device);
 
 	return hr;
 }
@@ -239,11 +244,13 @@ void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshCompone
 
 	ID3D11Buffer* vertex = static_cast<ID3D11Buffer*>(mesh->geometry->GetVertexBuffer());
 	_context->IASetVertexBuffers(0, 1, &vertex, &stride, &offset);
-	static_cast<DX11Shader*>(materials->shader)->SetShader(_context);
+	DX11Shader* shader = static_cast<DX11Shader*>(materials->shader);
+	shader->SetShader(_context);
 	for (int i = 0; i < materials->materials.size(); i++)
 	{
 		//Sets shaders and resources
-		
+		PerObjectBuffer buffer = {transform->worldMatrix, Float4(materials->materials[i].diffuseColor.rgba), Float3(materials->materials[i].specularColor.rgb), materials->materials[i].specularPower};
+		shader->SetPerObjectBuffer(_context, static_cast<void*>(&buffer));
 		//Draw object
 		_context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(mesh->geometry->GetIndexBuffer()[i].first), DXGI_FORMAT_R16_UINT, 0);
 		_context->DrawIndexed(mesh->geometry->GetIndexBuffer()[i].second, 0, 0);

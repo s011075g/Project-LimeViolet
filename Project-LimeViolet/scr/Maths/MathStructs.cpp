@@ -9,12 +9,20 @@ Float3::Float3(const float x, const float y, const float z)
 	: x(x), y(y), z(z)
 { }
 
+Float3::Float3(float xyz[3])
+	: x(xyz[0]), y(xyz[1]), z(xyz[2])
+{ }
+
 Float4::Float4(const float x, const float y, const float z, const float w)
 	: x(x), y(y), z(z), w(w)
 { }
 
-Float4::Float4(Float3 xyz, float w)
+Float4::Float4(const Float3 xyz, const float w)
 	: x(xyz.x), y(xyz.y), z(xyz.z), w(w)
+{ }
+
+Float4::Float4(float xyzw[4])
+	: x(xyzw[0]), y(xyzw[1]), z(xyzw[2]), w(xyzw[3])
 { }
 
 Float2& Float2::operator=(const Float2& r)

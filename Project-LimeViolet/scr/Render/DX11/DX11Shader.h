@@ -8,9 +8,9 @@ public:
 
 	void SetShader(ID3D11DeviceContext*const& context) const;
 	//PerDraw is registered to b0
-	void SetPerDrawBuffer(ID3D11DeviceContext*& context, void*& data) const;
+	void SetPerDrawBuffer(ID3D11DeviceContext*const& context, void* data) const;
 	//PerObject is registered to b1
-	void SetPerObjectBuffer(ID3D11DeviceContext*& context, void*& data) const;
+	void SetPerObjectBuffer(ID3D11DeviceContext*const& context, void* data) const;
 private:
 	ID3D11InputLayout * _inputLayout;
 
