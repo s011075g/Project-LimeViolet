@@ -50,7 +50,7 @@ Json::Value JsonFileReader::WriteFloat4(const Float4& value)
 Json::Value JsonFileReader::ReadStringArray(std::vector<std::string>& value)
 {
 	Json::Value result(Json::arrayValue);
-	for (int i = 0; i < value.size(); i++)
+	for (size_t i = 0; i < value.size(); i++)
 		result.append(value[i]);
 	return result;
 }

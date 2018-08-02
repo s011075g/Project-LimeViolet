@@ -4,8 +4,12 @@
 
 class DX11ShaderManager : public IShaderManager
 {
-private:
-		ID3D11Device* const & _device;
+	ID3D11Device* const & _device;
+
+	mutable ID3D11ShaderResourceView * _diffuseTexture;
+	mutable ID3D11ShaderResourceView * _specularTexture;
+	mutable ID3D11ShaderResourceView * _normalTexture;
+	mutable ID3D11ShaderResourceView * _occlusionTexture;
 public:
 	DX11ShaderManager(ID3D11Device* const& device);
 	~DX11ShaderManager();
@@ -25,6 +29,7 @@ public:
 	void SetTextureNormal(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 	void SetTextureOcclusion(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 private:
+#undef DOMAIN
 	enum class SHADER
 	{
 		VERTEX, HULL, DOMAIN, GEOMETRY, PIXEL
@@ -32,9 +37,4 @@ private:
 
 	HRESULT CreateShader(const wchar_t* fileLocation, const SHADER& shader, const LPCSTR& entryPoint, const LPCSTR& shaderModel, ID3DBlob*& outBlob, void*& outShader) const;
 	static HRESULT CompileShaderFromFile(const WCHAR* fileName, const LPCSTR& entryPoint, const LPCSTR& shaderModel, ID3DBlob*& outBlob);
-
-	mutable ID3D11ShaderResourceView * _diffuseTexture;
-	mutable ID3D11ShaderResourceView * _specularTexture;
-	mutable ID3D11ShaderResourceView * _normalTexture;
-	mutable ID3D11ShaderResourceView * _occlusionTexture;
 };

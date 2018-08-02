@@ -233,7 +233,7 @@ void OBJFileReader::FillData(Obj*& obj)
 		obj->uvs.emplace_back(0.0f, 0.0f);
 	if (obj->normals.empty())
 		obj->normals.emplace_back(0.0f, 0.0f, 0.0f);
-	for (auto i = 0; i < obj->indicesVertices.size(); i++)
+	for (size_t i = 0; i < obj->indicesVertices.size(); i++)
 	{
 		//UV
 		for (auto j = obj->indicesUvs[i].size(); j != obj->indicesVertices[i].size(); j++)

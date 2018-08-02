@@ -53,7 +53,7 @@ Geometry* VulkanVBOManager::VBOGeometry(RawGeometry* geometry)
 	memcpy(data, geometry->vertex.data(), static_cast<size_t>(bufferInfo.size));
 	vkUnmapMemory(_device, bufferMemory);
 
-	std::vector<void*> indices {};
+	std::vector<std::pair<void*, int>> indices {};
 
 	VkBuffer* vb = new VkBuffer(vertexBuffer);
 	_vertexBufferMemory[vb] = new VkDeviceMemory(bufferMemory);

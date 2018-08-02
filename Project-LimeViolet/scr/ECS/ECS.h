@@ -93,6 +93,21 @@ Component* ECS::GetComponent(const EntityHandle entity)
 	return static_cast<Component*>(GetComponentInternal(HandleToEntity(entity), _components[Component::ID], Component::ID));
 }
 
+inline std::pair<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>* ECS::HandleToRawType(const EntityHandle handle)
+{
+	return static_cast<std::pair<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>*>(handle);
+}
+
+inline uint32_t ECS::HandleToEntityIndex(const EntityHandle handle)
+{
+	return HandleToRawType(handle)->first;
+}
+
+inline std::vector<std::pair<uint32_t, uint32_t>>& ECS::HandleToEntity(const EntityHandle handle)
+{
+	return HandleToRawType(handle)->second;
+}
+
 inline void ECS::AddComponentInternal(const EntityHandle handle, std::vector<std::pair<uint32_t, uint32_t>>& entity, const uint32_t componentId, BaseComponent* component)
 {
 	ComponentCreateFunction create = BaseComponent::GetTypeCreateFunction(componentId);

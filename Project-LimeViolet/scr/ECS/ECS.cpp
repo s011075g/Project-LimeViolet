@@ -70,21 +70,6 @@ void ECS::UpdateSystems(SystemList& systems, const float delta)
 	}
 }
 
-std::pair<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>* ECS::HandleToRawType(const EntityHandle handle)
-{
-	return static_cast<std::pair<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>*>(handle);
-}
-
-uint32_t ECS::HandleToEntityIndex(const EntityHandle handle)
-{
-	return HandleToRawType(handle)->first;
-}
-
-std::vector<std::pair<uint32_t, uint32_t>>& ECS::HandleToEntity(const EntityHandle handle)
-{
-	return HandleToRawType(handle)->second;
-}
-
 void ECS::DeleteComponent(const uint32_t componentId, const uint32_t index)
 {
 	std::vector<uint8_t>& array = _components[componentId];

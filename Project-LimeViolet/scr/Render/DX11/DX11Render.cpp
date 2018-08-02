@@ -246,11 +246,16 @@ void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshCompone
 	_context->IASetVertexBuffers(0, 1, &vertex, &stride, &offset);
 	DX11Shader* shader = static_cast<DX11Shader*>(materials->shader);
 	shader->SetShader(_context);
-	for (int i = 0; i < materials->materials.size(); i++)
+	for (size_t i = 0; i < materials->materials.size(); i++)
 	{
 		//Sets shaders and resources
 		PerObjectBuffer buffer = {transform->worldMatrix, Float4(materials->materials[i].diffuseColor.rgba), Float3(materials->materials[i].specularColor.rgb), materials->materials[i].specularPower};
 		shader->SetPerObjectBuffer(_context, static_cast<void*>(&buffer));
+			//Set textures
+		_shaderManager->SetTextureDiffuse(_context, static_cast<ID3D11ShaderResourceView*>(materials->materials[i].diffuseTexture));
+		_shaderManager->SetTextureSpecular(_context, static_cast<ID3D11ShaderResourceView*>(materials->materials[i].specularTexture));
+		_shaderManager->SetTextureNormal(_context, static_cast<ID3D11ShaderResourceView*>(materials->materials[i].normalTexture));
+		_shaderManager->SetTextureOcclusion(_context, static_cast<ID3D11ShaderResourceView*>(materials->materials[i].occlusionTexture));
 		//Draw object
 		_context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(mesh->geometry->GetIndexBuffer()[i].first), DXGI_FORMAT_R16_UINT, 0);
 		_context->DrawIndexed(mesh->geometry->GetIndexBuffer()[i].second, 0, 0);
