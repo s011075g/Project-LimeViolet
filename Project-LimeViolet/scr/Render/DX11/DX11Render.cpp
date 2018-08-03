@@ -242,7 +242,7 @@ void DX11Render::DrawStart() const
 	_shaderManager->SetPerDrawBuffer(buffer);
 }
 
-void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) const
+void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MaterialComponent* materials) const
 {
 	static const unsigned int stride = sizeof(ObjectVertex);
 	static const unsigned int offset = 0;

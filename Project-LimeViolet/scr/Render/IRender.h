@@ -5,7 +5,7 @@
 #include "../Components/CameraComponent.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/RenderableMeshComponent.h"
-#include "../Components/MeshRenderComponent.h"
+#include "../Components/MaterialComponent.h"
 
 class IRender
 {
@@ -36,7 +36,7 @@ public:
 	virtual void Update() = 0;
 
 	virtual void DrawStart() const = 0;
-	virtual void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) const = 0;
+	virtual void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MaterialComponent* materials) const = 0;
 	virtual void DrawEnd() const = 0;
 
 	virtual bool ShouldExit() = 0;

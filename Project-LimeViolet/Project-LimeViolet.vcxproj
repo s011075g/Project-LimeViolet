@@ -228,7 +228,7 @@
     <ClInclude Include="scr\IO\Model\MTLFileReader.h" />
     <ClInclude Include="scr\Common\Texture.h" />
     <ClInclude Include="scr\Common\Material.h" />
-    <ClInclude Include="scr\Components\MeshRenderComponent.h" />
+    <ClInclude Include="scr\Components\MaterialComponent.h" />
     <ClInclude Include="scr\ECS\ECS.h" />
     <ClInclude Include="scr\Render\DX11\DX11TextureManager.h" />
     <ClInclude Include="scr\Render\DX11\DX11VBOManager.h" />

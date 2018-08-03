@@ -34,7 +34,7 @@ public:
 
 	void Update() override;
 	void DrawStart() const override;
-	void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) const override;
+	void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MaterialComponent* materials) const override;
 	void DrawEnd() const override;
 	bool ShouldExit() override;
 protected:

@@ -101,7 +101,7 @@ int main()
 
 		render->Update();
 		render->DrawStart();
-		ecs.UpdateSystems(renderList, 0.1f);
+		ecs.UpdateSystems(renderList, 0);
 		render->DrawEnd();
 	}
 
