@@ -187,10 +187,10 @@ void VulkanRender::CleanUp()
 	glfwTerminate();
 }
 
-void VulkanRender::UpdateViewMatrix()
+void VulkanRender::UpdateViewMatrix() const
 { }
 
-void VulkanRender::UpdateProjectionMatrix()
+void VulkanRender::UpdateProjectionMatrix() const
 { }
 
 HRESULT VulkanRender::InitInstance()

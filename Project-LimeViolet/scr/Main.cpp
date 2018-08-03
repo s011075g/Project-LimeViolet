@@ -89,20 +89,53 @@ int main()
 	EntityHandle entity = ecs.MakeEntity(transformComponent, cameraComponent);
 	//Create Systems
 	RenderMeshSystem renderSystem = RenderMeshSystem(render);
-	SystemList renderList = SystemList();
-	renderList.AddSystem(renderSystem);
+	SystemList mainSystems = SystemList();
+	SystemList renderPipeline = SystemList();
+	renderPipeline.AddSystem(renderSystem);
 
 	//Test Camera
 	render->SetActiveCamera(ecs.GetComponent<CameraComponent>(entity));
 
+	uint32_t fps = 0;
+	double fpsTimeCounter = 0.0;
+	double updateTimer = 1.0;
+	unsigned long lastTime = GetTickCount();
+	const float frameTime = 1.0 / 60.0;
 	while (render->ShouldExit())
 	{
-		//System update
+		unsigned long currentTime = GetTickCount();
+		unsigned long passedTime = currentTime - lastTime;
+		lastTime = currentTime;
 
-		render->Update();
-		render->DrawStart();
-		ecs.UpdateSystems(renderList, 0);
-		render->DrawEnd();
+		fpsTimeCounter += passedTime;
+		updateTimer += passedTime;
+
+		if (fpsTimeCounter >= 1.0)
+		{
+			double msPerFrame = 1000.0 / static_cast<double>(fps);
+			Utilities::Write(std::string(std::to_string(msPerFrame) + " fps").c_str());
+			fpsTimeCounter = 0;
+			fps = 0;
+		}
+
+		bool shouldRender = false;
+		while (updateTimer >= frameTime)
+		{
+			render->Update();
+			ecs.UpdateSystems(mainSystems, frameTime);
+			updateTimer -= frameTime;
+			shouldRender = true;
+		}
+		if (shouldRender) 
+		{
+			render->DrawStart();
+			ecs.UpdateSystems(renderPipeline, frameTime);
+			render->DrawEnd();
+		}
+		else
+		{
+			Sleep(1);
+		}
 	}
 
 	ecs.RemoveEntity(entity);

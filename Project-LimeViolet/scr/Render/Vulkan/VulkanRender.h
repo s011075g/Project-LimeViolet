@@ -54,8 +54,8 @@ public:
 	bool ShouldExit() override;
 protected:
 	void CleanUp() override;
-	void UpdateViewMatrix() override;
-	void UpdateProjectionMatrix() override;
+	void UpdateViewMatrix() const override;
+	void UpdateProjectionMatrix() const override;
 private:
 	HRESULT InitInstance();
 	HRESULT CreateSurface();

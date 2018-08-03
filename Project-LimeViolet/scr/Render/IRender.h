@@ -11,8 +11,8 @@ class IRender
 {
 protected:
 	//Current matrices
-	Float4x4 _view;
-	Float4x4 _projection;
+	mutable Float4x4 _view;
+	mutable Float4x4 _projection;
 	//Screen size
 	int _windowWidth, _windowHeight;
 	//To hold the currently active Camera
@@ -32,7 +32,7 @@ public:
 	int GetWindowWidth() const;
 	int GetWindowHeight() const;
 
-	//Updates the window and the view projection matrix
+	//Updates the window messages
 	virtual void Update() = 0;
 
 	virtual void DrawStart() const = 0;
@@ -48,6 +48,6 @@ public:
 protected:
 	virtual void CleanUp() = 0;
 
-	virtual void UpdateViewMatrix() = 0;
-	virtual void UpdateProjectionMatrix();
+	virtual void UpdateViewMatrix() const = 0;
+	virtual void UpdateProjectionMatrix() const;
 };

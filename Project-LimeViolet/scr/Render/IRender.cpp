@@ -53,7 +53,7 @@ void IRender::UpdateScreenSize(const int windowWidth, const int windowHeight)
 	UpdateProjectionMatrix();
 }
 
-void IRender::UpdateProjectionMatrix()
+void IRender::UpdateProjectionMatrix() const
 {
 	_projection = Float4x4::ProjectionMatrix(_activeCamera->fieldOfView, static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight),_activeCamera->nearPlane, _activeCamera->farPlane);
 }

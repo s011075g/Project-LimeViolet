@@ -220,7 +220,6 @@ HRESULT DX11Render::InitRenderer()
 
 void DX11Render::Update()
 {
-	UpdateViewMatrix();
 	if (PeekMessage(&_msg, nullptr, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&_msg);
@@ -230,6 +229,8 @@ void DX11Render::Update()
 
 void DX11Render::DrawStart() const
 {
+	UpdateViewMatrix();
+	UpdateProjectionMatrix();
 	ID3D11ShaderResourceView* null = nullptr;
 	_context->PSSetShaderResources(0, 1, &null);
 	_context->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
@@ -237,7 +238,7 @@ void DX11Render::DrawStart() const
 	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	PerDrawBuffer* buffer = new PerDrawBuffer();
-	buffer->viewProjection = _projection;
+	buffer->viewProjection = _view * _projection;
 
 	_shaderManager->SetPerDrawBuffer(buffer);
 }
@@ -303,7 +304,7 @@ void DX11Render::CleanUp()
 
 #include <directxmath.h>
 
-void DX11Render::UpdateViewMatrix()
+void DX11Render::UpdateViewMatrix() const
 {
 	DirectX::XMFLOAT3 eye(_activeCamera->eye.x, _activeCamera->eye.y, _activeCamera->eye.z);
 	DirectX::XMFLOAT3 at(_activeCamera->at.x, _activeCamera->at.y, _activeCamera->at.z);
@@ -315,7 +316,7 @@ void DX11Render::UpdateViewMatrix()
 			_view.m[x][y] = m.m[x][y];
 }
 
-void DX11Render::UpdateProjectionMatrix()
+void DX11Render::UpdateProjectionMatrix() const
 {
 	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_projection.m), DirectX::XMMatrixPerspectiveFovLH(_activeCamera->fieldOfView, static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight), _activeCamera->nearPlane, _activeCamera->farPlane));
 }
