@@ -1,15 +1,19 @@
 #pragma once
 #include "../IShaderManager.h"
 #include <d3d11.h>
+#include "DX11Shader.h"
+#include "DX11ConstantBuffers.h"
 
 class DX11ShaderManager : public IShaderManager
 {
 	ID3D11Device* const & _device;
-
+	//Current set data on the GPU so data doesn't have to transfer unless needed
 	mutable ID3D11ShaderResourceView * _diffuseTexture;
 	mutable ID3D11ShaderResourceView * _specularTexture;
 	mutable ID3D11ShaderResourceView * _normalTexture;
 	mutable ID3D11ShaderResourceView * _occlusionTexture;
+	mutable DX11Shader* _currentShader;
+	mutable PerDrawBuffer* _currentPerDrawBuffer;
 public:
 	DX11ShaderManager(ID3D11Device* const& device);
 	~DX11ShaderManager();
@@ -28,6 +32,11 @@ public:
 	void SetTextureSpecular(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 	void SetTextureNormal(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 	void SetTextureOcclusion(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
+
+	void SetShader(ID3D11DeviceContext*const& context, DX11Shader* shader)const;
+	void SetPerDrawBuffer(PerDrawBuffer* data) const;
+	//Updates the values needed ready for the next frame 
+	void EndFrame() const;
 private:
 #undef DOMAIN
 	enum class SHADER

@@ -4,7 +4,8 @@
 
 DX11ShaderManager::DX11ShaderManager(ID3D11Device* const& device)
 	: _device(device), _diffuseTexture(nullptr), _specularTexture(nullptr), 
-		_normalTexture(nullptr), _occlusionTexture(nullptr)
+		_normalTexture(nullptr), _occlusionTexture(nullptr), _currentShader(nullptr),
+		_currentPerDrawBuffer(nullptr)
 { }
 
 DX11ShaderManager::~DX11ShaderManager()
@@ -97,6 +98,29 @@ void DX11ShaderManager::SetTextureOcclusion(ID3D11DeviceContext* const& context,
 		return;
 	context->PSSetShaderResources(3, 1, &ptr);
 	_occlusionTexture = ptr;
+}
+
+void DX11ShaderManager::SetShader(ID3D11DeviceContext* const& context, DX11Shader* shader) const
+{
+	if(_currentShader != shader)
+	{
+		_currentShader = shader;
+		shader->SetShader(context);
+		if(_currentPerDrawBuffer)
+			shader->SetPerDrawBuffer(context, _currentPerDrawBuffer);
+	}
+}
+
+void DX11ShaderManager::SetPerDrawBuffer(PerDrawBuffer* data) const
+{
+	if (_currentPerDrawBuffer)
+		delete _currentPerDrawBuffer;
+	_currentPerDrawBuffer = data;
+}
+
+void DX11ShaderManager::EndFrame() const
+{
+	_currentShader = nullptr;
 }
 
 HRESULT DX11ShaderManager::CreateInputLayout(ID3DBlob*& vertexBlob, ID3D11InputLayout*& outLayout) const

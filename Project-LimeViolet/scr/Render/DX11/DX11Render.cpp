@@ -235,6 +235,11 @@ void DX11Render::DrawStart() const
 	_context->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
 	_context->ClearRenderTargetView(_renderTargetView, _activeCamera->clearColor.rgba);
 	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	PerDrawBuffer* buffer = new PerDrawBuffer();
+	buffer->viewProjection = _projection;
+
+	_shaderManager->SetPerDrawBuffer(buffer);
 }
 
 void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) const
@@ -245,7 +250,7 @@ void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshCompone
 	ID3D11Buffer* vertex = static_cast<ID3D11Buffer*>(mesh->geometry->GetVertexBuffer());
 	_context->IASetVertexBuffers(0, 1, &vertex, &stride, &offset);
 	DX11Shader* shader = static_cast<DX11Shader*>(materials->shader);
-	shader->SetShader(_context);
+	_shaderManager->SetShader(_context, shader);
 	for (size_t i = 0; i < materials->materials.size(); i++)
 	{
 		//Sets shaders and resources
@@ -265,6 +270,8 @@ void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshCompone
 void DX11Render::DrawEnd() const
 {
 	_swapChain->Present(1, 0); //(1,0) = vsync
+
+	_shaderManager->EndFrame();
 }
 
 bool DX11Render::ShouldExit()
