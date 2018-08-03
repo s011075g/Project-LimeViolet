@@ -80,8 +80,10 @@ int main()
 
 	CameraComponent cameraComponent = {};
 	cameraComponent.up = Float4(0, 1, 0, 0);
+	cameraComponent.at = Float3(0, 0, 0);
 	cameraComponent.eye = Float3(0, 0, 1);
 	const Color4 color(0.0f, 1.0f, 0.42f, 0.25f);
+	cameraComponent.fieldOfView = 70.0f;
 	cameraComponent.clearColor = color;
 	cameraComponent.farPlane = 100.0f;
 	cameraComponent.nearPlane = 0.1f;
@@ -99,12 +101,12 @@ int main()
 	uint32_t fps = 0;
 	double fpsTimeCounter = 0.0;
 	double updateTimer = 1.0;
-	unsigned long lastTime = GetTickCount();
-	const float frameTime = 1.0 / 60.0;
+	double lastTime = GetTickCount() / 1000.0; //Converts the given milliseconds to seconds
+	const double frameTime = 1.0 / 60.0;
 	while (render->ShouldExit())
 	{
-		unsigned long currentTime = GetTickCount();
-		unsigned long passedTime = currentTime - lastTime;
+		double currentTime = GetTickCount() / 1000.0;
+		double passedTime = currentTime - lastTime;
 		lastTime = currentTime;
 
 		fpsTimeCounter += passedTime;
@@ -113,7 +115,9 @@ int main()
 		if (fpsTimeCounter >= 1.0)
 		{
 			double msPerFrame = 1000.0 / static_cast<double>(fps);
-			Utilities::Write(std::string(std::to_string(msPerFrame) + " fps").c_str());
+			if (msPerFrame != msPerFrame)
+				msPerFrame = 0;
+			Utilities::Write(std::string(std::to_string(msPerFrame) + " ms (" +std::to_string(fps) +" fps)").c_str());
 			fpsTimeCounter = 0;
 			fps = 0;
 		}
@@ -131,11 +135,10 @@ int main()
 			render->DrawStart();
 			ecs.UpdateSystems(renderPipeline, frameTime);
 			render->DrawEnd();
+			fps++;
 		}
 		else
-		{
 			Sleep(1);
-		}
 	}
 
 	ecs.RemoveEntity(entity);

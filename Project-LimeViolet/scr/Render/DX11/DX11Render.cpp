@@ -270,7 +270,7 @@ void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshCompone
 
 void DX11Render::DrawEnd() const
 {
-	_swapChain->Present(1, 0); //(1,0) = vsync
+	_swapChain->Present(0, 0); //(1,0) = vsync
 
 	_shaderManager->EndFrame();
 }
