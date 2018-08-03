@@ -88,7 +88,6 @@ HRESULT VulkanRender::InitRenderer()
 
 void VulkanRender::Update()
 {
-	IRender::Update();
 	glfwPollEvents();
 }
 

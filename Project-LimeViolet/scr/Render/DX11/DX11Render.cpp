@@ -220,7 +220,7 @@ HRESULT DX11Render::InitRenderer()
 
 void DX11Render::Update()
 {
-	IRender::Update();
+	UpdateViewMatrix();
 	if (PeekMessage(&_msg, nullptr, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&_msg);

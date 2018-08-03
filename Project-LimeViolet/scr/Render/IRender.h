@@ -32,7 +32,8 @@ public:
 	int GetWindowWidth() const;
 	int GetWindowHeight() const;
 
-	virtual void Update();
+	//Updates the window and the view projection matrix
+	virtual void Update() = 0;
 
 	virtual void DrawStart() const = 0;
 	virtual void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MeshRenderComponent* materials) const = 0;

@@ -98,8 +98,8 @@ int main()
 	while (render->ShouldExit())
 	{
 		//System update
+
 		render->Update();
-		
 		render->DrawStart();
 		ecs.UpdateSystems(renderList, 0.1f);
 		render->DrawEnd();

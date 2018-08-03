@@ -31,11 +31,6 @@ int IRender::GetWindowHeight() const
 	return _windowHeight;
 }
 
-void IRender::Update()
-{
-	UpdateViewMatrix();
-}
-
 Geometry* IRender::LoadRawGeometry(RawGeometry*& geometry)
 {
 	if (!_vboManager) 
