@@ -13,11 +13,11 @@ public:
 	void DeleteVBO(Geometry*& geometry) override;
 private:
 	template<class T>
-	ID3D11Buffer* BufferData(std::vector<T> data, const UINT bindFlag);
+	inline ID3D11Buffer* BufferData(std::vector<T> data, const UINT bindFlag);
 };
 
 template <class T>
-ID3D11Buffer* DX11VBOManager::BufferData(std::vector<T> data, const UINT bindFlag)
+inline ID3D11Buffer* DX11VBOManager::BufferData(std::vector<T> data, const UINT bindFlag)
 {
 	D3D11_BUFFER_DESC buffer_desc;
 	ZeroMemory(&buffer_desc, sizeof(buffer_desc));

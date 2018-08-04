@@ -10,14 +10,14 @@ Transform::Transform(const Float3 position, const Float3 scale, const Quaternion
 
 Float4x4 Transform::ToMatrix() const
 {
-	Float4x4 positionMatrix = Float4x4(0.0f);
+	Float4x4 positionMatrix = Float4x4::Identity();
 	positionMatrix.m41 = _position.x;
 	positionMatrix.m42 = _position.y;
 	positionMatrix.m43 = _position.z;
 	positionMatrix.m44 = 1.0f;
 	Float4x4 rotationMatrix = Float4x4(_rotation.GetRotationMatrix());
 	rotationMatrix.m44 = 1.0f;
-	Float4x4 scaleMatrix = Float4x4(0.0f);
+	Float4x4 scaleMatrix = Float4x4::Identity();
 	scaleMatrix.m11 = _scale.x;
 	scaleMatrix.m22 = _scale.y;
 	scaleMatrix.m33 = _scale.z;

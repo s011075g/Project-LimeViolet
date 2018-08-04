@@ -448,7 +448,7 @@ Float4x4 Float4x4::ProjectionMatrix(const float fov, const float aspect, const f
 
 Float4x4 Float4x4::Identity()
 {
-	Float4x4 result;
+	Float4x4 result = Float4x4(0.0f);
 	result.m11 = 1.0f;
 	result.m22 = 1.0f;
 	result.m33 = 1.0f;

@@ -2,7 +2,7 @@
 #include "../IVBOManager.h"
 #include <array>
 #include <vulkan/vulkan_core.h>
-
+#include <map>
 class VulkanVBOManager : public IVBOManager
 {
 private:

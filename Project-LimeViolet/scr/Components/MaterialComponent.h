@@ -6,6 +6,6 @@ typedef void* Shader;
 
 struct MaterialComponent : Component<MaterialComponent>
 {
-	std::vector<Material> materials;
+	std::vector<Material*> materials;
 	Shader shader;
 };

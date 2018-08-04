@@ -52,12 +52,12 @@ HRESULT DX11ShaderManager::CreatePixelShader(const wchar_t* fileLocation, ID3D11
 {
 	void* outPtr;
 	ID3DBlob* blob;
-	HRESULT hr = CreateShader(fileLocation, SHADER::GEOMETRY, "PS", "ps_4_0", blob, outPtr);
+	HRESULT hr = CreateShader(fileLocation, SHADER::PIXEL, "PS", "ps_4_0", blob, outPtr);
 	outShader = static_cast<ID3D11PixelShader*>(outPtr);
 	return hr;
 }
 
-HRESULT DX11ShaderManager::CreateConstantBuffer(unsigned int& size, ID3D11Buffer*& outBuffer) const
+HRESULT DX11ShaderManager::CreateConstantBuffer(size_t size, ID3D11Buffer*& outBuffer) const
 {
 	D3D11_BUFFER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
@@ -100,7 +100,7 @@ void DX11ShaderManager::SetTextureOcclusion(ID3D11DeviceContext* const& context,
 	_occlusionTexture = ptr;
 }
 
-void DX11ShaderManager::SetShader(ID3D11DeviceContext* const& context, const DX11Shader* shader) const
+void DX11ShaderManager::SetShader(ID3D11DeviceContext* const& context, DX11Shader* shader) const
 {
 	if(_currentShader != shader)
 	{

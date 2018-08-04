@@ -7,12 +7,12 @@
 #include "ECS/ECS.h"
 
 #include "Systems/RenderMeshSystem.h"
+#include "IO/Model/MTLFileReader.h"
 
 #define MODEL_TESTING
 
 #ifdef MODEL_TESTING
 #include "IO/Model/OBJFileReader.h"
-#include "Render/DX11/DX11VBOManager.h"
 #include <chrono>
 #endif
 
@@ -77,18 +77,32 @@ int main()
 	cameraComponent.up = Float4(0, 1, 0, 0);
 	cameraComponent.at = Float3(0, 0, 0);
 	cameraComponent.eye = Float3(0, 0, 1);
-	const Color4 color(0.0f, 1.0f, 0.42f, 0.25f);
+	const Color4 color(0.0f, 0.0f, 0.0f, 1.0f); //0,1,0.42
 	cameraComponent.fieldOfView = 70.0f;
 	cameraComponent.clearColor = color;
 	cameraComponent.farPlane = 100.0f;
 	cameraComponent.nearPlane = 0.1f;
 
 	TransformComponent transformComponent = {};
-	transformComponent.position = Float3(0, 0, 20);
+	transformComponent.transform = Transform(Float3(0, 0, 20));
 
+	RenderableMeshComponent renderableComponent = RenderableMeshComponent();
+	renderableComponent.geometry = geometry;
+
+	std::vector<std::pair<const char*, Material*>>* mat = MTLFileReader::ReadFile("resources/earth.mtl");
+	std::vector<std::pair<const char*, Material*>> ma = *mat;
+	std::vector<Material*> materials;
+	materials.push_back(ma[0].second);
+	delete ma[0].first;
+	delete mat;
+	MaterialComponent materialComponent = MaterialComponent();
+	materialComponent.materials = materials;
+	materialComponent.shader = dynamic_cast<DX11Render*>(render)->CreateShader("resources/shaders/DX11/Basic.fx", VERTEX | PIXEL);
 
 	//Create Entity
-	EntityHandle entity = ecs.MakeEntity(cameraComponent);
+	EntityHandle camera = ecs.MakeEntity(cameraComponent);
+	EntityHandle entity = ecs.MakeEntity(transformComponent, renderableComponent, materialComponent);
+
 	//Create Systems
 	RenderMeshSystem renderSystem = RenderMeshSystem(render);
 	SystemList mainSystems = SystemList();
@@ -96,13 +110,13 @@ int main()
 	renderPipeline.AddSystem(renderSystem);
 
 	//Test Camera
-	render->SetActiveCamera(ecs.GetComponent<CameraComponent>(entity));
+	render->SetActiveCamera(ecs.GetComponent<CameraComponent>(camera));
 
 	uint32_t fps = 0;
 	double fpsTimeCounter = 0.0;
 	double updateTimer = 1.0;
 	double lastTime = GetTickCount() / 1000.0; //Converts the given milliseconds to seconds
-	const double frameTime = 1.0 / 60.0;
+	const float frameTime = 1.0 / 60.0;
 	while (render->ShouldExit())
 	{
 		double currentTime = GetTickCount() / 1000.0;
@@ -142,8 +156,10 @@ int main()
 	}
 #ifdef MODEL_TESTING
 	render->FreeGeometry(geometry);
+	delete materials[0];
 #endif
-	ecs.RemoveEntity(entity);
+	delete static_cast<DX11Shader*>(ecs.GetComponent<MaterialComponent>(entity)->shader);
+	ecs.RemoveEntity(camera);
 	delete render;
 	Utilities::CloseConsole();
 	return 0;

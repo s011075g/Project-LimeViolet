@@ -2,6 +2,7 @@
 #include "../IRender.h"
 #include <d3d11_1.h>
 #include "DX11ShaderManager.h"
+#include "DX11Shader.h"
 
 class DX11Render : public IRender
 {
@@ -32,9 +33,10 @@ public:
 	HRESULT InitWindow(RECT& rc, const char*& windowTitle) override;
 	HRESULT InitRenderer() override;
 
+	DX11Shader* CreateShader(const char* fileLocation, int shaders) const;
+
 	void Update() override;
 	void DrawStart() const override;
-	void SetTextures(MaterialComponent* materials, size_t i) const;
 	void DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MaterialComponent* materials) const override;
 	void DrawEnd() const override;
 	bool ShouldExit() override;
@@ -43,4 +45,6 @@ protected:
 
 	void UpdateViewMatrix() const override;
 	void UpdateProjectionMatrix() const override;
+private:
+	void SetTextures(Material* material) const;
 };

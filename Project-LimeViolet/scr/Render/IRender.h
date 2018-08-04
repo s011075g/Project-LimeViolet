@@ -6,6 +6,7 @@
 #include "../Components/TransformComponent.h"
 #include "../Components/RenderableMeshComponent.h"
 #include "../Components/MaterialComponent.h"
+#include "IShaderManager.h"
 
 class IRender
 {
@@ -19,6 +20,7 @@ protected:
 	CameraComponent * _activeCamera; //todo update for new component system
 
 	IVBOManager* _vboManager;
+	//IShaderManager* _shaderManager;
 	ITextureManager* _textureManager;
 public:
 	IRender();
@@ -40,10 +42,12 @@ public:
 	virtual void DrawEnd() const = 0;
 
 	virtual bool ShouldExit() = 0;
-
+	//Takes in a raw geometry, and will clean up the rawgeometry at the end
 	virtual Geometry* LoadRawGeometry(RawGeometry*& geometry);
 	virtual void FreeGeometry(Geometry*& geometry);
 
+	virtual Texture LoadTexture(const char* location) const;
+	virtual void UnloadTexture(const char* location) const;
 	virtual void UpdateScreenSize(const int windowWidth, const int windowHeight);
 protected:
 	virtual void CleanUp() = 0;

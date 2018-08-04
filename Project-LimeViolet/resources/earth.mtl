@@ -8,6 +8,6 @@ Ni 1.000000
 d 1.000000
 illum 2
 
-map_Kd Textures/earth.bmp
+map_K Textures/earth.bmp
 map_Ks Textures/earth_specular.jpg
 map_bump Textures/earth_normals.jpg

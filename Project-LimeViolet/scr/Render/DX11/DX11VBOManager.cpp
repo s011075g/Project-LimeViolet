@@ -4,7 +4,6 @@ DX11VBOManager::DX11VBOManager(ID3D11Device* device)
 	: _device(device)
 { }
 
-
 DX11VBOManager::~DX11VBOManager()
 {
 	_device = nullptr;
@@ -14,8 +13,8 @@ Geometry* DX11VBOManager::VBOGeometry(RawGeometry* geometry)
 {
 	void* vertex = static_cast<void*>(BufferData(geometry->vertex, D3D11_BIND_VERTEX_BUFFER));
 	std::vector<std::pair<void*, int>> index;
-	for (auto i : geometry->indices)
-		index.push_back(std::make_pair(static_cast<void*>(BufferData(i, D3D11_BIND_INDEX_BUFFER)), i.size()));
+	for (const auto& i : geometry->indices)
+		index.emplace_back(static_cast<void*>(BufferData(i, D3D11_BIND_INDEX_BUFFER)), i.size());
 	return new Geometry(vertex, index);
 }
 

@@ -23,8 +23,7 @@ DX11Render::DX11Render()
 DX11Render::~DX11Render()
 {
 	DX11Render::CleanUp();
-	if (_shaderManager) 
-		delete _shaderManager;
+	delete _shaderManager;
 }
 
 #define IDI_TUTORIAL1 109
@@ -218,6 +217,73 @@ HRESULT DX11Render::InitRenderer()
 	return hr;
 }
 
+DX11Shader* DX11Render::CreateShader(const char* fileLocation, int shaders) const
+{
+	if (!_shaderManager)
+		return nullptr;
+	std::string location(fileLocation);
+	std::wstring file = std::wstring(location.begin(), location.end());
+	ID3D11InputLayout* layout(nullptr);
+	ID3D11VertexShader* vertex(nullptr);
+	ID3D11HullShader* hull(nullptr);
+	ID3D11DomainShader* domain(nullptr);
+	ID3D11GeometryShader* geometry(nullptr);
+	ID3D11PixelShader* pixel(nullptr);
+	ID3D11Buffer* perDraw(nullptr),* perObject(nullptr);
+	bool error = false;
+	if(shaders & SHADER::VERTEX)
+	{
+		ID3DBlob* vertexBlob(nullptr);
+		if (!FAILED(_shaderManager->CreateVertexShader(file.c_str(), vertexBlob, vertex)))
+		{
+			if (FAILED(_shaderManager->CreateInputLayout(vertexBlob, layout)))
+				error = true;
+		}
+		else
+			error = true;
+	}
+	if(shaders & SHADER::HULL)
+		if (FAILED(_shaderManager->CreateHullShader(file.c_str(), hull)))
+			error = true;
+	if(shaders & SHADER::DOMAIN)
+		if (FAILED(_shaderManager->CreateDomainShader(file.c_str(), domain)))
+			error = true;
+	if(shaders & SHADER::GEOMETRY)
+		if (FAILED(_shaderManager->CreateGeometryShader(file.c_str(), geometry)))
+			error = true;
+	if (shaders & SHADER::PIXEL)
+		if (FAILED(_shaderManager->CreatePixelShader(file.c_str(), pixel)))
+			error = true;
+	HRESULT hr = _shaderManager->CreateConstantBuffer(sizeof(PerDrawBuffer), perDraw);
+	if (FAILED(hr))
+		error = true;
+	hr = _shaderManager->CreateConstantBuffer(sizeof(PerObjectBuffer), perObject);
+	if (FAILED(hr))
+		error = true;
+	if(error)
+	{
+		if (layout)
+			layout->Release();
+		if (vertex)
+			vertex->Release();
+		if (hull)
+			hull->Release();
+		if (domain)
+			domain->Release();
+		if (geometry)
+			geometry->Release();
+		if (pixel)
+			pixel->Release();
+		if (perDraw)
+			perDraw->Release();
+		if (perObject)
+			perObject->Release();
+		return nullptr;
+	}
+	DX11Shader* result = new DX11Shader(layout, vertex, hull, domain, geometry, pixel, perDraw, perObject);
+	return result;
+}
+
 void DX11Render::Update()
 {
 	if (PeekMessage(&_msg, nullptr, 0, 0, PM_REMOVE))
@@ -243,12 +309,12 @@ void DX11Render::DrawStart() const
 	_shaderManager->SetPerDrawBuffer(buffer);
 }
 
-void DX11Render::SetTextures(MaterialComponent* materials, const size_t i) const
+void DX11Render::SetTextures(Material* material) const
 {
-	_shaderManager->SetTextureDiffuse(_context, static_cast<ID3D11ShaderResourceView*>(materials->materials[i].diffuseTexture));
-	_shaderManager->SetTextureSpecular(_context, static_cast<ID3D11ShaderResourceView*>(materials->materials[i].specularTexture));
-	_shaderManager->SetTextureNormal(_context, static_cast<ID3D11ShaderResourceView*>(materials->materials[i].normalTexture));
-	_shaderManager->SetTextureOcclusion(_context, static_cast<ID3D11ShaderResourceView*>(materials->materials[i].occlusionTexture));
+	_shaderManager->SetTextureDiffuse(_context, static_cast<ID3D11ShaderResourceView*>(material->diffuseTexture));
+	_shaderManager->SetTextureSpecular(_context, static_cast<ID3D11ShaderResourceView*>(material->specularTexture));
+	_shaderManager->SetTextureNormal(_context, static_cast<ID3D11ShaderResourceView*>(material->normalTexture));
+	_shaderManager->SetTextureOcclusion(_context, static_cast<ID3D11ShaderResourceView*>(material->occlusionTexture));
 }
 
 void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshComponent* mesh, MaterialComponent* materials) const
@@ -258,15 +324,18 @@ void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshCompone
 
 	ID3D11Buffer* vertex = static_cast<ID3D11Buffer*>(mesh->geometry->GetVertexBuffer());
 	_context->IASetVertexBuffers(0, 1, &vertex, &stride, &offset);
-	const DX11Shader* shader = static_cast<DX11Shader*>(materials->shader);
+	DX11Shader* shader = static_cast<DX11Shader*>(materials->shader);
 	_shaderManager->SetShader(_context, shader);
 	for (size_t i = 0; i < materials->materials.size(); i++)
 	{
 		//Sets shaders and resources
-		PerObjectBuffer buffer = {transform->transform.ToMatrix(), Float4(materials->materials[i].diffuseColor.rgba), Float3(materials->materials[i].specularColor.rgb), materials->materials[i].specularPower};
+		PerObjectBuffer buffer = {
+			transform->transform.ToMatrix(), Float4(materials->materials[i]->diffuseColor.rgba),
+			Float3(materials->materials[i]->specularColor.rgb), materials->materials[i]->specularPower
+		};
 		shader->SetPerObjectBuffer(_context, static_cast<void*>(&buffer));
 
-		SetTextures(materials, i);
+		//SetTextures(materials->materials[i]);
 		//Draw object
 		_context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(mesh->geometry->GetIndexBuffer()[i].first), DXGI_FORMAT_R16_UINT, 0);
 		_context->DrawIndexed(mesh->geometry->GetIndexBuffer()[i].second, 0, 0);

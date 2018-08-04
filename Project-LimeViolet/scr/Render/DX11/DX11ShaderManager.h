@@ -3,6 +3,11 @@
 #include <d3d11.h>
 #include "DX11Shader.h"
 #include "DX11ConstantBuffers.h"
+#undef DOMAIN
+enum SHADER : int
+{
+	VERTEX = 1, HULL = 2, DOMAIN = 4, GEOMETRY = 8, PIXEL = 16
+};
 
 class DX11ShaderManager : public IShaderManager
 {
@@ -26,23 +31,19 @@ public:
 	HRESULT CreateGeometryShader(const wchar_t* fileLocation, ID3D11GeometryShader*& outShader) const;
 	HRESULT CreatePixelShader(const wchar_t* fileLocation, ID3D11PixelShader*& outShader) const;
 	
-	HRESULT CreateConstantBuffer(unsigned int& size, ID3D11Buffer*& outBuffer) const;
+	HRESULT CreateConstantBuffer(size_t size, ID3D11Buffer*& outBuffer) const;
 
 	void SetTextureDiffuse(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 	void SetTextureSpecular(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 	void SetTextureNormal(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 	void SetTextureOcclusion(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 
-	void SetShader(ID3D11DeviceContext*const& context, const DX11Shader* shader)const;
+	void SetShader(ID3D11DeviceContext*const& context, DX11Shader* shader)const;
 	void SetPerDrawBuffer(PerDrawBuffer* data) const;
 	//Updates the values needed ready for the next frame 
 	void EndFrame() const;
 private:
-#undef DOMAIN
-	enum class SHADER
-	{
-		VERTEX, HULL, DOMAIN, GEOMETRY, PIXEL
-	};
+
 
 	HRESULT CreateShader(const wchar_t* fileLocation, const SHADER& shader, const LPCSTR& entryPoint, const LPCSTR& shaderModel, ID3DBlob*& outBlob, void*& outShader) const;
 	static HRESULT CompileShaderFromFile(const WCHAR* fileName, const LPCSTR& entryPoint, const LPCSTR& shaderModel, ID3DBlob*& outBlob);

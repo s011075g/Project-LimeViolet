@@ -13,7 +13,7 @@ EntityHandle EntityReader::ReadEntity(Json::Value value, ECS* ecs)
 	{
 		TransformComponent* transform = CreateTransformComponent(value);
 		components.push_back(transform);
-		componentIDs.push_back(transform->ID);
+		componentIDs.push_back(TransformComponent::ID);
 	}
 	if(!value["Model"].empty())//Model
 	{
@@ -25,7 +25,7 @@ EntityHandle EntityReader::ReadEntity(Json::Value value, ECS* ecs)
 	{
 		CameraComponent* camera = CreateCameraComponent(value);
 		components.push_back(camera);
-		componentIDs.push_back(camera->ID);
+		componentIDs.push_back(CameraComponent::ID);
 	}
 
 	const uint32_t* ids = &componentIDs[0];
@@ -35,9 +35,10 @@ EntityHandle EntityReader::ReadEntity(Json::Value value, ECS* ecs)
 TransformComponent* CreateTransformComponent(Json::Value value)
 {
 	TransformComponent* transform = new TransformComponent();
-	transform->position = JsonFileReader::ReadFloat3(value["Transform"]["Position"]);
-	transform->rotation = Quaternion(JsonFileReader::ReadFloat4(value["Transform"]["Rotation"]));
-	transform->scale = JsonFileReader::ReadFloat3(value["Transform"]["Scale"]);
+	Float3 position = JsonFileReader::ReadFloat3(value["Transform"]["Position"]);
+	Quaternion rotation = Quaternion(JsonFileReader::ReadFloat4(value["Transform"]["Rotation"]));
+	Float3 scale = JsonFileReader::ReadFloat3(value["Transform"]["Scale"]);
+	transform->transform = Transform(position, scale, rotation);
 	return transform;
 }
 

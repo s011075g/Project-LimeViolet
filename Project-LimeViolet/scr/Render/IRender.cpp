@@ -7,8 +7,10 @@ IRender::IRender()
 
 IRender::~IRender()
 {
-	if (_vboManager) delete _vboManager;
-	if (_textureManager) delete _textureManager;
+	if (_vboManager) 
+		delete _vboManager;
+	if (_textureManager) 
+		delete _textureManager;
 }
 
 void IRender::SetActiveCamera(CameraComponent* camera)
@@ -44,6 +46,18 @@ Geometry* IRender::LoadRawGeometry(RawGeometry*& geometry)
 void IRender::FreeGeometry(Geometry*& geometry)
 {
 	_vboManager->DeleteVBO(geometry);
+}
+
+Texture IRender::LoadTexture(const char* location) const
+{
+	if (!_textureManager) return nullptr;
+	return _textureManager->GetTexture(location);
+}
+
+void IRender::UnloadTexture(const char* location) const
+{
+	if (!_textureManager) return;
+	_textureManager->UnloadTexture(location);
 }
 
 void IRender::UpdateScreenSize(const int windowWidth, const int windowHeight)
