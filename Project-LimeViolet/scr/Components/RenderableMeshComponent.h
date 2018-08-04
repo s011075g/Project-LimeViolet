@@ -4,6 +4,5 @@
 
 struct RenderableMeshComponent : Component<RenderableMeshComponent>
 {
-	//todo plan what the rendermodel needs to render
 	Geometry* geometry;
 };

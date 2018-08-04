@@ -49,7 +49,6 @@ private:
 	void operator=(const ECS& other) const;
 };
 
-//Untested
 template <class ... Component>
 EntityHandle ECS::MakeEntity(Component&... component)
 {
@@ -68,7 +67,7 @@ EntityHandle ECS::MakeEntity(Component&... component)
 		delete newEntity;
 		return;
 	}
-	AddComponentInternal(handle, newEntity->second, Component::ID, comp);*/
+	AddComponentInternal(handle, newEntity->second, Component::ID, static_cast<BaseComponent*>(&component));*/
 
 	newEntity->first = static_cast<uint32_t>(_entities.size());
 	_entities.push_back(newEntity);

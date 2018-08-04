@@ -100,7 +100,7 @@ void DX11ShaderManager::SetTextureOcclusion(ID3D11DeviceContext* const& context,
 	_occlusionTexture = ptr;
 }
 
-void DX11ShaderManager::SetShader(ID3D11DeviceContext* const& context, DX11Shader* shader) const
+void DX11ShaderManager::SetShader(ID3D11DeviceContext* const& context, const DX11Shader* shader) const
 {
 	if(_currentShader != shader)
 	{

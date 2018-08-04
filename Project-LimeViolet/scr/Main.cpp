@@ -8,7 +8,7 @@
 
 #include "Systems/RenderMeshSystem.h"
 
-//#define MODEL_TESTING
+#define MODEL_TESTING
 
 #ifdef MODEL_TESTING
 #include "IO/Model/OBJFileReader.h"
@@ -54,16 +54,14 @@ int main()
 #ifdef MODEL_TESTING
 	Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
 
-	std::chrono::time_point<std::chrono::system_clock> tMid;
 	auto tStart = std::chrono::system_clock::now();
 
 	//READ OBJ
 	RawGeometry* ptr = OBJFileReader::ReadFile("resources/earth.obj", true);
 
-	tMid = std::chrono::system_clock::now();
+	std::chrono::time_point<std::chrono::system_clock> tMid = std::chrono::system_clock::now();
 
 	Geometry* geometry = render->LoadRawGeometry(ptr);
-	render->FreeGeometry(geometry);
 
 	auto tEnd = std::chrono::system_clock::now();
 
@@ -75,9 +73,6 @@ int main()
 ///ECS 
 	ECS ecs;
 	//Create Components
-	TransformComponent transformComponent = {};
-	transformComponent.position = Float3(0, 0, 0);
-
 	CameraComponent cameraComponent = {};
 	cameraComponent.up = Float4(0, 1, 0, 0);
 	cameraComponent.at = Float3(0, 0, 0);
@@ -87,8 +82,13 @@ int main()
 	cameraComponent.clearColor = color;
 	cameraComponent.farPlane = 100.0f;
 	cameraComponent.nearPlane = 0.1f;
+
+	TransformComponent transformComponent = {};
+	transformComponent.position = Float3(0, 0, 20);
+
+
 	//Create Entity
-	EntityHandle entity = ecs.MakeEntity(transformComponent, cameraComponent);
+	EntityHandle entity = ecs.MakeEntity(cameraComponent);
 	//Create Systems
 	RenderMeshSystem renderSystem = RenderMeshSystem(render);
 	SystemList mainSystems = SystemList();
@@ -140,7 +140,9 @@ int main()
 		else
 			Sleep(1);
 	}
-
+#ifdef MODEL_TESTING
+	render->FreeGeometry(geometry);
+#endif
 	ecs.RemoveEntity(entity);
 	delete render;
 	Utilities::CloseConsole();

@@ -385,12 +385,16 @@ float& Float3x3::operator()(const size_t row, const size_t column)
 	return m[row][column];
 }
 
+Float4x4::Float4x4(float value)
+	: m11(value), m12(value), m13(value), m14(value), m21(value), m22(value), m23(value), m24(value), m31(value), m32(value), m33(value), m34(value), m41(value), m42(value), m43(value), m44(value)
+{ }
+
 Float4x4::Float4x4(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24, float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
 	: m11(m11), m12(m12), m13(m13), m14(m14), m21(m21), m22(m22), m23(m23), m24(m24), m31(m31), m32(m32), m33(m33), m34(m34), m41(m41), m42(m42), m43(m43), m44(m44)
 { }
 
 Float4x4::Float4x4(const Float3x3 m)
-	: m11(m.m11), m12(m.m12), m13(m.m13), m14(0.0f), m21(m.m21), m22(m.m22), m23(m.m23), m24(0.0f), m31(m.m31), m32(m.m32), m33(m.m33), m34(0.0f), m41(0.0f), m42(0.0f), m43(0.0f), m44(1.0f)
+	: m11(m.m11), m12(m.m12), m13(m.m13), m14(0.0f), m21(m.m21), m22(m.m22), m23(m.m23), m24(0.0f), m31(m.m31), m32(m.m32), m33(m.m33), m34(0.0f), m41(0.0f), m42(0.0f), m43(0.0f), m44(0.0f)
 { }
 
 float Float4x4::operator()(const size_t row, const size_t column) const

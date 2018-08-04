@@ -33,7 +33,7 @@ public:
 	void SetTextureNormal(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 	void SetTextureOcclusion(ID3D11DeviceContext*const& context, ID3D11ShaderResourceView * ptr) const;
 
-	void SetShader(ID3D11DeviceContext*const& context, DX11Shader* shader)const;
+	void SetShader(ID3D11DeviceContext*const& context, const DX11Shader* shader)const;
 	void SetPerDrawBuffer(PerDrawBuffer* data) const;
 	//Updates the values needed ready for the next frame 
 	void EndFrame() const;
