@@ -156,44 +156,6 @@ HRESULT DX11Render::InitRenderer()
 	if (FAILED(hr))
 		return hr;
 
-	//Create a offscreen render target view
-	/*D3D11_TEXTURE2D_DESC offScreenDesc;
-	offScreenDesc.Width = _windowWidth;
-	offScreenDesc.Height = _windowHeight;
-	offScreenDesc.MipLevels = 1;
-	offScreenDesc.ArraySize = 1;
-	offScreenDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	offScreenDesc.SampleDesc.Count = 1;
-	offScreenDesc.SampleDesc.Quality = 0;
-	offScreenDesc.Usage = D3D11_USAGE_DEFAULT;
-	offScreenDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
-	offScreenDesc.CPUAccessFlags = 0;
-	offScreenDesc.MiscFlags = 0;
-
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	srvDesc.Format = offScreenDesc.Format;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = offScreenDesc.MipLevels;
-	srvDesc.Texture2D.MostDetailedMip = offScreenDesc.MipLevels - 1;
-
-	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
-	rtvDesc.Format = srvDesc.Format;
-	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-	rtvDesc.Texture2D.MipSlice = 0;
-
-	//OffScreen
-	ID3D11Texture2D* pOffScreen(nullptr);
-	hr = _device->CreateTexture2D(&offScreenDesc, nullptr, &pOffScreen);
-	if (FAILED(hr))
-		return hr;
-	hr = _device->CreateRenderTargetView(pOffScreen, &rtvDesc, &_offScreenView);
-	if (FAILED(hr))
-		return hr;
-	hr = _device->CreateShaderResourceView(pOffScreen, &srvDesc, &_offScreen);
-	if (FAILED(hr))
-		return hr;
-	pOffScreen->Release();*/
-
 	_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	_context->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
 
@@ -379,10 +341,6 @@ void DX11Render::CleanUp()
 		_renderTargetView->Release();
 	if (_depthStencilView)
 		_depthStencilView->Release();
-	/*if (_offScreenView)
-		_offScreenView->Release();
-	if (_offScreen)
-		_offScreen->Release();*/
 }
 
 #include <directxmath.h>

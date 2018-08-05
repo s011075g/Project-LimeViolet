@@ -20,9 +20,6 @@ private:
 	ID3D11RenderTargetView* _renderTargetView;
 	ID3D11DepthStencilView* _depthStencilView;
 
-	//ID3D11RenderTargetView* _offScreenView;
-	//ID3D11ShaderResourceView*_offScreen; //Used for Preprocessing
-
 	DX11ShaderManager* _shaderManager;
 
 	//Window handler
