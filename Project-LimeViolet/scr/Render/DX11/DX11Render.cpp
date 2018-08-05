@@ -16,8 +16,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 DX11Render::DX11Render()
 	:_msg({nullptr}) ,_driverType(), _featureLevel(), _device(nullptr), _context(nullptr), _swapChain(nullptr), 
-	_renderTargetView(nullptr), _depthStencilView(nullptr), _offScreenView(nullptr), _offScreen(nullptr), _hWnd(nullptr),
-	_shaderManager(nullptr)
+	_renderTargetView(nullptr), _depthStencilView(nullptr), _shaderManager(nullptr), _hWnd(nullptr)
 { }
 
 DX11Render::~DX11Render()
@@ -95,7 +94,7 @@ HRESULT DX11Render::InitRenderer()
 	};
 
 	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-
+	//Swap chain
 	DXGI_SWAP_CHAIN_DESC sd;
 	ZeroMemory(&sd, sizeof(sd));
 	sd.BufferCount = 1;
@@ -110,13 +109,13 @@ HRESULT DX11Render::InitRenderer()
 	sd.SampleDesc.Quality = 0;
 	sd.Windowed = TRUE;
 
-	HRESULT hr;
+	HRESULT hr = S_OK;
 
 	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
 	{
 		_driverType = driverTypes[driverTypeIndex];
 		hr = D3D11CreateDeviceAndSwapChain(nullptr, _driverType, nullptr, deviceFlags, featureLevels, numFeatureLevels,
-			D3D11_SDK_VERSION, &sd, &_swapChain, &_device, &_featureLevel, &_context);
+											D3D11_SDK_VERSION, &sd, &_swapChain, &_device, &_featureLevel, &_context);
 		if (SUCCEEDED(hr))
 			break;
 	}
@@ -124,7 +123,7 @@ HRESULT DX11Render::InitRenderer()
 	if (FAILED(hr))
 		return hr;
 	
-	//Back buffer
+	//Depth Buffer
 	D3D11_TEXTURE2D_DESC depthDesc;
 	depthDesc.Width = _windowWidth;
 	depthDesc.Height = _windowHeight;
@@ -137,7 +136,7 @@ HRESULT DX11Render::InitRenderer()
 	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthDesc.CPUAccessFlags = 0;
 	depthDesc.MiscFlags = 0;
-
+	
 	ID3D11Texture2D* pDepthStencilBuffer(nullptr);
 	hr = _device->CreateTexture2D(&depthDesc, nullptr, &pDepthStencilBuffer);
 	if (FAILED(hr))
@@ -149,7 +148,7 @@ HRESULT DX11Render::InitRenderer()
 
 	// Create a render target view
 	ID3D11Texture2D* pBackBuffer = nullptr;
-	hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+	hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(&pBackBuffer));
 	if (FAILED(hr))
 		return hr;
 	hr = _device->CreateRenderTargetView(pBackBuffer, nullptr, &_renderTargetView);
@@ -158,7 +157,7 @@ HRESULT DX11Render::InitRenderer()
 		return hr;
 
 	//Create a offscreen render target view
-	D3D11_TEXTURE2D_DESC offScreenDesc;
+	/*D3D11_TEXTURE2D_DESC offScreenDesc;
 	offScreenDesc.Width = _windowWidth;
 	offScreenDesc.Height = _windowHeight;
 	offScreenDesc.MipLevels = 1;
@@ -193,7 +192,10 @@ HRESULT DX11Render::InitRenderer()
 	hr = _device->CreateShaderResourceView(pOffScreen, &srvDesc, &_offScreen);
 	if (FAILED(hr))
 		return hr;
-	pOffScreen->Release();
+	pOffScreen->Release();*/
+
+	_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	_context->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
 
 	// Setup the viewport
 	D3D11_VIEWPORT vp;
@@ -205,14 +207,22 @@ HRESULT DX11Render::InitRenderer()
 	vp.TopLeftY = 0;
 	_context->RSSetViewports(1, &vp);
 
-	//InitShaderManager();
-
 	if (FAILED(hr))
 		return hr;
 
 	_vboManager = new DX11VBOManager(_device);
 	_textureManager = new DX11TextureManager(_device);
 	_shaderManager = new DX11ShaderManager(_device);
+
+	//TESTing
+	D3D11_RASTERIZER_DESC wfdesc;
+	ZeroMemory(&wfdesc, sizeof(D3D11_RASTERIZER_DESC));
+	wfdesc.FillMode = D3D11_FILL_SOLID; //Solid objects
+	wfdesc.CullMode = D3D11_CULL_NONE; //Culls the back away
+	ID3D11RasterizerState* state;
+	hr = _device->CreateRasterizerState(&wfdesc, &state);
+	_context->RSSetState(state);
+	state->Release();
 
 	return hr;
 }
@@ -369,10 +379,10 @@ void DX11Render::CleanUp()
 		_renderTargetView->Release();
 	if (_depthStencilView)
 		_depthStencilView->Release();
-	if (_offScreenView)
+	/*if (_offScreenView)
 		_offScreenView->Release();
 	if (_offScreen)
-		_offScreen->Release();
+		_offScreen->Release();*/
 }
 
 #include <directxmath.h>
@@ -382,11 +392,8 @@ void DX11Render::UpdateViewMatrix() const
 	DirectX::XMFLOAT3 eye(_activeCamera->eye.x, _activeCamera->eye.y, _activeCamera->eye.z);
 	DirectX::XMFLOAT3 at(_activeCamera->at.x, _activeCamera->at.y, _activeCamera->at.z);
 	DirectX::XMFLOAT3 up(_activeCamera->up.x, _activeCamera->up.y, _activeCamera->up.z);
-	DirectX::XMFLOAT4X4 m;
-	DirectX::XMStoreFloat4x4(&m, DirectX::XMMatrixLookAtLH(DirectX::XMLoadFloat3(&eye), DirectX::XMLoadFloat3(&at), DirectX::XMLoadFloat3(&up)));
-	for(int x = 0; x != 4; x++)
-		for(int y = 0; y != 4; y++)
-			_view.m[x][y] = m.m[x][y];
+
+	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_view.m), DirectX::XMMatrixLookAtLH(DirectX::XMLoadFloat3(&eye), DirectX::XMLoadFloat3(&at), DirectX::XMLoadFloat3(&up)));
 }
 
 void DX11Render::UpdateProjectionMatrix() const

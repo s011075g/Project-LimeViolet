@@ -14,15 +14,14 @@ Float4x4 Transform::ToMatrix() const
 	positionMatrix.m41 = _position.x;
 	positionMatrix.m42 = _position.y;
 	positionMatrix.m43 = _position.z;
-	positionMatrix.m44 = 1.0f;
 	Float4x4 rotationMatrix = Float4x4(_rotation.GetRotationMatrix());
 	rotationMatrix.m44 = 1.0f;
 	Float4x4 scaleMatrix = Float4x4::Identity();
 	scaleMatrix.m11 = _scale.x;
 	scaleMatrix.m22 = _scale.y;
 	scaleMatrix.m33 = _scale.z;
-	scaleMatrix.m44 = 1.0f;
-	return Float4x4::Identity() * scaleMatrix * rotationMatrix * positionMatrix;
+	return positionMatrix * rotationMatrix * scaleMatrix * Float4x4::Identity();
+	//return Float4x4::Identity() * scaleMatrix * rotationMatrix * positionMatrix;
 }
 
 void Transform::SetPosition(Float3& position)

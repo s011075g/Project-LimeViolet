@@ -16,8 +16,8 @@ protected:
 	mutable Float4x4 _projection;
 	//Screen size
 	int _windowWidth, _windowHeight;
-	//To hold the currently active Camera
-	CameraComponent * _activeCamera; //todo update for new component system
+	
+	CameraComponent * _activeCamera;
 
 	IVBOManager* _vboManager;
 	//IShaderManager* _shaderManager;
@@ -34,7 +34,7 @@ public:
 	int GetWindowWidth() const;
 	int GetWindowHeight() const;
 
-	//Updates the window messages
+	//Updates the Window
 	virtual void Update() = 0;
 
 	virtual void DrawStart() const = 0;

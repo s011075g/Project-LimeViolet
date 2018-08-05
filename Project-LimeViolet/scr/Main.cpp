@@ -2,7 +2,6 @@
 #include <iostream>
 #include "Render/IRender.h"
 #include "Render/DX11/DX11Render.h"
-//#include "Render/Vulkan/VulkanRender.h"
 #include "IO/World/ConfigFileReader.h"
 #include "ECS/ECS.h"
 
@@ -54,16 +53,15 @@ int main()
 #ifdef MODEL_TESTING
 	Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
 
-	auto tStart = std::chrono::system_clock::now();
+	const auto tStart = std::chrono::system_clock::now();
 
-	//READ OBJ
-	RawGeometry* ptr = OBJFileReader::ReadFile("resources/earth.obj", true);
+	RawGeometry* ptr = OBJFileReader::ReadFile("resources/cube.obj", true);
 
-	std::chrono::time_point<std::chrono::system_clock> tMid = std::chrono::system_clock::now();
+	const auto tMid = std::chrono::system_clock::now();
 
 	Geometry* geometry = render->LoadRawGeometry(ptr);
 
-	auto tEnd = std::chrono::system_clock::now();
+	const auto tEnd = std::chrono::system_clock::now();
 
 	std::chrono::duration<double> elapsedTime = tMid - tStart;
 	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
@@ -84,13 +82,13 @@ int main()
 	cameraComponent.nearPlane = 0.1f;
 
 	TransformComponent transformComponent = {};
-	transformComponent.transform = Transform(Float3(0, 0, 20));
+	transformComponent.transform = Transform(Float3(0, 0, 20.0f));
 
 	RenderableMeshComponent renderableComponent = RenderableMeshComponent();
 	renderableComponent.geometry = geometry;
 
 	std::vector<std::pair<const char*, Material*>>* mat = MTLFileReader::ReadFile("resources/earth.mtl");
-	std::vector<std::pair<const char*, Material*>> ma = *mat;
+	std::vector<std::pair<const char*, Material*>>& ma = *mat;
 	std::vector<Material*> materials;
 	materials.push_back(ma[0].second);
 	delete ma[0].first;
@@ -116,7 +114,7 @@ int main()
 	double fpsTimeCounter = 0.0;
 	double updateTimer = 1.0;
 	double lastTime = GetTickCount() / 1000.0; //Converts the given milliseconds to seconds
-	const float frameTime = 1.0 / 60.0;
+	const float frameTime = 1.0f / 60.0f;
 	while (render->ShouldExit())
 	{
 		double currentTime = GetTickCount() / 1000.0;
@@ -129,8 +127,8 @@ int main()
 		if (fpsTimeCounter >= 1.0)
 		{
 			double msPerFrame = 1000.0 / static_cast<double>(fps);
-			if (msPerFrame != msPerFrame)
-				msPerFrame = 0;
+			if (!std::isfinite(msPerFrame))
+				msPerFrame = -1;
 			Utilities::Write(std::string(std::to_string(msPerFrame) + " ms (" +std::to_string(fps) +" fps)").c_str());
 			fpsTimeCounter = 0;
 			fps = 0;
