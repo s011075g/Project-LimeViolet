@@ -211,6 +211,8 @@ struct Float4x4
 					  float m41, float m42, float m43, float m44);
 	explicit Float4x4(Float3x3 float3x3);
 
+	Float4x4& Transpose();
+
 	float operator() (const size_t row, const size_t column) const;
 	float& operator() (const size_t row, const size_t column);
 

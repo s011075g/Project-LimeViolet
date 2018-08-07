@@ -267,8 +267,6 @@ void DX11Render::Update()
 
 void DX11Render::DrawStart() const
 {
-	UpdateViewMatrix();
-	UpdateProjectionMatrix();
 	ID3D11ShaderResourceView* null = nullptr;
 	_context->PSSetShaderResources(0, 1, &null);
 	_context->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
@@ -276,7 +274,7 @@ void DX11Render::DrawStart() const
 	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	PerDrawBuffer* buffer = new PerDrawBuffer();
-	buffer->viewProjection = _view * _projection;
+	buffer->viewProjection = GetViewProjectionMatrix();
 
 	_shaderManager->SetPerDrawBuffer(buffer);
 }
@@ -302,7 +300,7 @@ void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshCompone
 	{
 		//Sets shaders and resources
 		PerObjectBuffer buffer = {
-			transform->transform.ToMatrix(), Float4(materials->materials[i]->diffuseColor.rgba),
+			transform->transform.ToMatrix().Transpose(), Float4(materials->materials[i]->diffuseColor.rgba),
 			Float3(materials->materials[i]->specularColor.rgb), materials->materials[i]->specularPower
 		};
 		shader->SetPerObjectBuffer(_context, static_cast<void*>(&buffer));
@@ -351,10 +349,17 @@ void DX11Render::UpdateViewMatrix() const
 	DirectX::XMFLOAT3 at(_activeCamera->at.x, _activeCamera->at.y, _activeCamera->at.z);
 	DirectX::XMFLOAT3 up(_activeCamera->up.x, _activeCamera->up.y, _activeCamera->up.z);
 
-	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_view.m), DirectX::XMMatrixLookAtLH(DirectX::XMLoadFloat3(&eye), DirectX::XMLoadFloat3(&at), DirectX::XMLoadFloat3(&up)));
+	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_view.m), DirectX::XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMLoadFloat3(&eye), DirectX::XMLoadFloat3(&at), DirectX::XMLoadFloat3(&up))));
 }
 
 void DX11Render::UpdateProjectionMatrix() const
 {
-	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_projection.m), DirectX::XMMatrixPerspectiveFovLH(_activeCamera->fieldOfView, static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight), _activeCamera->nearPlane, _activeCamera->farPlane));
+	DirectX::XMStoreFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&_projection.m), DirectX::XMMatrixTranspose(DirectX::XMMatrixPerspectiveFovLH(_activeCamera->fieldOfView, static_cast<float>(_windowWidth) / static_cast<float>(_windowHeight), _activeCamera->nearPlane, _activeCamera->farPlane)));
+}
+
+Float4x4 DX11Render::GetViewProjectionMatrix() const
+{
+	UpdateViewMatrix();
+	UpdateProjectionMatrix();
+	return _view * _projection;
 }

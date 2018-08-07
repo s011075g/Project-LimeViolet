@@ -72,9 +72,9 @@ int main()
 	ECS ecs;
 	//Create Components
 	CameraComponent cameraComponent = {};
-	cameraComponent.up = Float4(0, 1, 0, 0);
-	cameraComponent.at = Float3(0, 0, 0);
-	cameraComponent.eye = Float3(0, 0, 1);
+	cameraComponent.up = Float3(0, 1, 0);
+	cameraComponent.at = Float3(0, 0, 1);
+	cameraComponent.eye = Float3(0, 0, 0);
 	const Color4 color(0.0f, 0.0f, 0.0f, 1.0f); //0,1,0.42
 	cameraComponent.fieldOfView = 70.0f;
 	cameraComponent.clearColor = color;
@@ -82,7 +82,7 @@ int main()
 	cameraComponent.nearPlane = 0.1f;
 
 	TransformComponent transformComponent = {};
-	transformComponent.transform = Transform(Float3(0, 0, 20.0f));
+	transformComponent.transform = Transform(Float3(0, 0, 50.0f));
 
 	RenderableMeshComponent renderableComponent = RenderableMeshComponent();
 	renderableComponent.geometry = geometry;

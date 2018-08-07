@@ -5,10 +5,13 @@
 
 struct CameraComponent : Component<CameraComponent>
 {
-	Float4 up;
 	Color4 clearColor;
+	//Up vector
+	Float3 up;
+	//Position
 	Float3 eye;
 	float fieldOfView;
+	//Looking at
 	Float3 at;
 	float nearPlane, farPlane;
 };

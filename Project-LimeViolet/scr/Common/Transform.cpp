@@ -20,8 +20,8 @@ Float4x4 Transform::ToMatrix() const
 	scaleMatrix.m11 = _scale.x;
 	scaleMatrix.m22 = _scale.y;
 	scaleMatrix.m33 = _scale.z;
-	return positionMatrix * rotationMatrix * scaleMatrix * Float4x4::Identity();
-	//return Float4x4::Identity() * scaleMatrix * rotationMatrix * positionMatrix;
+	//return positionMatrix * rotationMatrix * scaleMatrix * Float4x4::Identity();
+	return Float4x4::Identity() * scaleMatrix * rotationMatrix * positionMatrix;
 }
 
 void Transform::SetPosition(Float3& position)

@@ -39,9 +39,10 @@ public:
 	bool ShouldExit() override;
 protected:
 	void CleanUp() override;
-
+	
 	void UpdateViewMatrix() const override;
 	void UpdateProjectionMatrix() const override;
 private:
+	Float4x4 GetViewProjectionMatrix() const;
 	void SetTextures(Material* material) const;
 };

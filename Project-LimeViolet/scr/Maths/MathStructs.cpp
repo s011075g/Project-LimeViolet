@@ -397,6 +397,29 @@ Float4x4::Float4x4(const Float3x3 m)
 	: m11(m.m11), m12(m.m12), m13(m.m13), m14(0.0f), m21(m.m21), m22(m.m22), m23(m.m23), m24(0.0f), m31(m.m31), m32(m.m32), m33(m.m33), m34(0.0f), m41(0.0f), m42(0.0f), m43(0.0f), m44(0.0f)
 { }
 
+Float4x4& Float4x4::Transpose()
+{
+	float hold = m12;
+	m12 = m21;
+	m21 = hold;
+	hold = m31;
+	m31 = m13;
+	m13 = hold;
+	hold = m32;
+	m32 = m23;
+	m23 = hold;
+	hold = m41;
+	m41 = m14;
+	m14 = hold;
+	hold = m42;
+	m42 = m24;
+	m24 = hold;
+	hold = m43;
+	m43 = m34;
+	m34 = hold;
+	return *this;
+}
+
 float Float4x4::operator()(const size_t row, const size_t column) const
 {
 	return m[row][column];
@@ -434,15 +457,15 @@ Float4x4 Float4x4::operator*(const Float4x4& r) const
 
 Float4x4 Float4x4::ProjectionMatrix(const float fov, const float aspect, const float near, const float far, const bool leftHanded)
 {
-	Float4x4 result = Float4x4(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	Float4x4 result = Float4x4(0.0f);
 
-	float oneOverDepth = 1 / (far - near);
+	const float oneOverDepth = 1.0f / (far - near);
 
-	result.m22 = 1 / tan(0.5f * fov);
-	result.m11 = (leftHanded ? 1 : -1) * result.m22 / aspect;
+	result.m22 = 1.0f / tan(0.5f * fov);
+	result.m11 = (leftHanded ? 1.0f : -1.0f) * result.m22 / aspect;
 	result.m33 = far * oneOverDepth;
 	result.m43 = (-far * near) * oneOverDepth;
-	result.m34 = 1;
+	result.m34 = 1.0f;
 	return result;
 }
 

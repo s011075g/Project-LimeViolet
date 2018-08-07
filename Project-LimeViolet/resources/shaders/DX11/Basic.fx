@@ -35,12 +35,11 @@ Texture2D TexOcclusion : register(t3);
 
 SamplerState textureSampler : register(s0);
 
-VS_OUTPUT VS(float4 PosL : POSITION, float2 Tex : TEXCOORD, float3 NormalL : NORMAL, float4 TangentL : TANGENT)
+VS_OUTPUT VS(float3 PosL : POSITION, float2 Tex : TEXCOORD, float3 NormalL : NORMAL, float4 TangentL : TANGENT)
 {
-	PosL.w = 1;
 	VS_OUTPUT result = (VS_OUTPUT)0;
 
-	result.PosW = mul(PosL, gWorld);
+	result.PosW = mul(float4(PosL,1), gWorld);
 	result.PosH = mul(result.PosW, gViewProjection);
 	result.NormalW = normalize(mul(float4(NormalL, 0), gWorld)).xyz;
 	result.TanW = float4(mul(float4(TangentL.xyz, 0), gWorld).xyz, TangentL.w);
@@ -51,6 +50,6 @@ VS_OUTPUT VS(float4 PosL : POSITION, float2 Tex : TEXCOORD, float3 NormalL : NOR
 
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-	return float4(input.NormalW,1);
+	return float4(input.PosW);
 	//return TexDiffuse.Sample(textureSampler, input.Tex);
 }

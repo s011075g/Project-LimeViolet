@@ -45,7 +45,7 @@ TransformComponent* CreateTransformComponent(Json::Value value)
 CameraComponent* CreateCameraComponent(Json::Value value)
 {
 	CameraComponent* camera = new CameraComponent();
-	camera->up = JsonFileReader::ReadFloat4(value["Camera"]["Up"]);
+	camera->up = JsonFileReader::ReadFloat3(value["Camera"]["Up"]);
 	camera->clearColor = JsonFileReader::ReadFloat4(value["Camera"]["Color"]);
 	camera->fieldOfView = value["Camera"]["FOV"].asFloat();
 	camera->nearPlane = value["Camera"]["Near"].asFloat();
