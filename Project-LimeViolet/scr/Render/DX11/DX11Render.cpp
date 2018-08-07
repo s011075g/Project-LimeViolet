@@ -273,10 +273,16 @@ void DX11Render::DrawStart() const
 	_context->ClearRenderTargetView(_renderTargetView, _activeCamera->clearColor.rgba);
 	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	PerDrawBuffer* buffer = new PerDrawBuffer();
-	buffer->viewProjection = GetViewProjectionMatrix();
-
-	_shaderManager->SetPerDrawBuffer(buffer);
+	if(auto buffer = _shaderManager->GetPerDrawBuffer())
+	{
+		buffer->viewProjection = GetViewProjectionMatrix();
+	}
+	else
+	{
+		buffer = new PerDrawBuffer();
+		buffer->viewProjection = GetViewProjectionMatrix();
+		_shaderManager->SetPerDrawBuffer(buffer);
+	}
 }
 
 void DX11Render::SetTextures(Material* material) const
@@ -360,6 +366,5 @@ void DX11Render::UpdateProjectionMatrix() const
 Float4x4 DX11Render::GetViewProjectionMatrix() const
 {
 	UpdateViewMatrix();
-	UpdateProjectionMatrix();
 	return _view * _projection;
 }

@@ -14,6 +14,7 @@ public:
 	Float4x4 ToMatrix() const;
 
 	void SetPosition(Float3& position);
+	void SetPosition(Float3 position);
 	void SetRotation(Quaternion& quaternion);
 	void SetScale(Float3& scale);
 

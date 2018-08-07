@@ -17,7 +17,7 @@ public:
 	void RemoveEntity(EntityHandle handle);
 	//Takes in a list of components to produce an entity
 	template<class... Component>
-	EntityHandle MakeEntity(Component&... component);
+	EntityHandle MakeEntity(Component... component);
 	//Component methods
 	template<class Component>
 	void AddComponent(EntityHandle entity, Component* component);
@@ -50,7 +50,7 @@ private:
 };
 
 template <class ... Component>
-EntityHandle ECS::MakeEntity(Component&... component)
+EntityHandle ECS::MakeEntity(Component... component)
 {
 	auto newEntity = new std::pair<uint32_t, std::vector<std::pair<uint32_t, uint32_t>>>();
 	EntityHandle handle = static_cast<EntityHandle>(newEntity);

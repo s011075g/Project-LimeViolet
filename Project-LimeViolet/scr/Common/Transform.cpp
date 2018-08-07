@@ -29,6 +29,11 @@ void Transform::SetPosition(Float3& position)
 	_position = position;
 }
 
+void Transform::SetPosition(const Float3 position)
+{
+	_position = position;
+}
+
 void Transform::SetRotation(Quaternion& quaternion)
 {
 	_rotation = quaternion;

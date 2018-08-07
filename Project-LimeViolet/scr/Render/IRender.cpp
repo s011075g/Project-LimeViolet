@@ -16,6 +16,7 @@ IRender::~IRender()
 void IRender::SetActiveCamera(CameraComponent* camera)
 {
 	_activeCamera = camera;
+	UpdateProjectionMatrix(); //Here we can just calculate the projection when we're given a new camera 
 }
 
 Int2 IRender::GetWindowSize() const

@@ -40,11 +40,10 @@ public:
 
 	void SetShader(ID3D11DeviceContext*const& context, DX11Shader* shader)const;
 	void SetPerDrawBuffer(PerDrawBuffer* data) const;
+	PerDrawBuffer* GetPerDrawBuffer() const;
 	//Updates the values needed ready for the next frame 
 	void EndFrame() const;
 private:
-
-
 	HRESULT CreateShader(const wchar_t* fileLocation, const SHADER& shader, const LPCSTR& entryPoint, const LPCSTR& shaderModel, ID3DBlob*& outBlob, void*& outShader) const;
 	static HRESULT CompileShaderFromFile(const WCHAR* fileName, const LPCSTR& entryPoint, const LPCSTR& shaderModel, ID3DBlob*& outBlob);
 };

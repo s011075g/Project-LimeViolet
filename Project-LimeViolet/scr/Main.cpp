@@ -100,7 +100,11 @@ int main()
 	//Create Entity
 	EntityHandle camera = ecs.MakeEntity(cameraComponent);
 	EntityHandle entity = ecs.MakeEntity(transformComponent, renderableComponent, materialComponent);
-
+	for(int i = 0; i < 1000; i++)
+	{
+		transformComponent.transform.SetPosition(Float3((float)(std::rand() % 1000 - 500) / 10.0f, (float)(std::rand() % 1000 - 500) / 10.0f, 50.0f));
+		ecs.MakeEntity(transformComponent, renderableComponent, materialComponent);
+	}
 	//Create Systems
 	RenderMeshSystem renderSystem = RenderMeshSystem(render);
 	SystemList mainSystems = SystemList();
