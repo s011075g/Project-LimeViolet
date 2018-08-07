@@ -1,5 +1,8 @@
 #include "DX11Shader.h"
 
+ID3D11Buffer* DX11Shader::_currentPerDrawBuffer = nullptr;
+ID3D11Buffer* DX11Shader::_currentPerObjectBuffer = nullptr;
+
 DX11Shader::DX11Shader(ID3D11InputLayout*& layout, ID3D11VertexShader*& vertex, ID3D11HullShader* hull, ID3D11DomainShader* domain, ID3D11GeometryShader* geometry, ID3D11PixelShader*& pixel, ID3D11Buffer*& perDraw, ID3D11Buffer*& perObject)
 	: _inputLayout(layout), _vertexShader(vertex), _hullShader(hull), _domainShader(domain), _geometryShader(geometry), _pixelShader(pixel), _perDrawBuffer(perDraw), _perObjectBuffer(perObject)
 { }
@@ -36,34 +39,42 @@ void DX11Shader::SetShader(ID3D11DeviceContext*const& context) const
 
 void DX11Shader::SetPerDrawBuffer(ID3D11DeviceContext*const& context, void* data) const
 {
-	if (!_perDrawBuffer)
-		return;
-	if (_vertexShader)
-		context->VSSetConstantBuffers(0, 1, &_perDrawBuffer);
-	if (_hullShader)
-		context->HSSetConstantBuffers(0, 1, &_perDrawBuffer);
-	if (_domainShader)
-		context->DSSetConstantBuffers(0, 1, &_perDrawBuffer);
-	if (_geometryShader)
-		context->GSSetConstantBuffers(0, 1, &_perDrawBuffer);
-	if (_pixelShader)
-		context->PSSetConstantBuffers(0, 1, &_perDrawBuffer);
+	if (_currentPerDrawBuffer != _perDrawBuffer)
+	{
+		_currentPerDrawBuffer = _perDrawBuffer;
+		if (!_perDrawBuffer)
+			return;
+		if (_vertexShader)
+			context->VSSetConstantBuffers(0, 1, &_perDrawBuffer);
+		if (_hullShader)
+			context->HSSetConstantBuffers(0, 1, &_perDrawBuffer);
+		if (_domainShader)
+			context->DSSetConstantBuffers(0, 1, &_perDrawBuffer);
+		if (_geometryShader)
+			context->GSSetConstantBuffers(0, 1, &_perDrawBuffer);
+		if (_pixelShader)
+			context->PSSetConstantBuffers(0, 1, &_perDrawBuffer);
+	}
 	context->UpdateSubresource(_perDrawBuffer, 0, nullptr, data, 0, 0);
 }
 
 void DX11Shader::SetPerObjectBuffer(ID3D11DeviceContext*const& context, void* data) const
 {
-	if (!_perObjectBuffer)
-		return;
-	if (_vertexShader)
-		context->VSSetConstantBuffers(1, 1, &_perObjectBuffer);
-	if (_hullShader)
-		context->HSSetConstantBuffers(1, 1, &_perObjectBuffer);
-	if (_domainShader)
-		context->DSSetConstantBuffers(1, 1, &_perObjectBuffer);
-	if (_geometryShader)
-		context->GSSetConstantBuffers(1, 1, &_perObjectBuffer);
-	if (_pixelShader)
-		context->PSSetConstantBuffers(1, 1, &_perObjectBuffer);
+	if (_currentPerObjectBuffer != _perObjectBuffer)
+	{
+		_currentPerObjectBuffer = _perObjectBuffer;
+		if (!_perObjectBuffer)
+			return;
+		if (_vertexShader)
+			context->VSSetConstantBuffers(1, 1, &_perObjectBuffer);
+		if (_hullShader)
+			context->HSSetConstantBuffers(1, 1, &_perObjectBuffer);
+		if (_domainShader)
+			context->DSSetConstantBuffers(1, 1, &_perObjectBuffer);
+		if (_geometryShader)
+			context->GSSetConstantBuffers(1, 1, &_perObjectBuffer);
+		if (_pixelShader)
+			context->PSSetConstantBuffers(1, 1, &_perObjectBuffer);
+	}
 	context->UpdateSubresource(_perObjectBuffer, 0, nullptr, data, 0, 0);
 }

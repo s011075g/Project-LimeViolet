@@ -25,5 +25,8 @@ private:
 
 	ID3D11Buffer* _perDrawBuffer;
 	ID3D11Buffer* _perObjectBuffer;
+
+	static ID3D11Buffer* _currentPerDrawBuffer;
+	static ID3D11Buffer* _currentPerObjectBuffer;
 };
 

@@ -100,7 +100,7 @@ int main()
 	//Create Entity
 	EntityHandle camera = ecs.MakeEntity(cameraComponent);
 	EntityHandle entity = ecs.MakeEntity(transformComponent, renderableComponent, materialComponent);
-	for(int i = 0; i < 1000; i++)
+	for(int i = 0; i < 690; i++)
 	{
 		transformComponent.transform.SetPosition(Float3((float)(std::rand() % 1000 - 500) / 10.0f, (float)(std::rand() % 1000 - 500) / 10.0f, 50.0f));
 		ecs.MakeEntity(transformComponent, renderableComponent, materialComponent);
@@ -133,6 +133,7 @@ int main()
 			double msPerFrame = 1000.0 / static_cast<double>(fps);
 			if (!std::isfinite(msPerFrame))
 				msPerFrame = -1;
+			//std::cout << msPerFrame << "ms (" << fps << " fps)" << std::endl;
 			Utilities::Write(std::string(std::to_string(msPerFrame) + " ms (" +std::to_string(fps) +" fps)").c_str());
 			fpsTimeCounter = 0;
 			fps = 0;

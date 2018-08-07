@@ -15,8 +15,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 DX11Render::DX11Render()
-	:_msg({nullptr}) ,_driverType(), _featureLevel(), _device(nullptr), _context(nullptr), _swapChain(nullptr), 
-	_renderTargetView(nullptr), _depthStencilView(nullptr), _shaderManager(nullptr), _hWnd(nullptr)
+	: _msg({nullptr}), _driverType(), _featureLevel(), _device(nullptr), _context(nullptr), _swapChain(nullptr),
+	  _renderTargetView(nullptr), _depthStencilView(nullptr), _shaderManager(nullptr), _hWnd(nullptr),
+	  _currentVertex(nullptr), _currentIndex(nullptr)
 { }
 
 DX11Render::~DX11Render()
@@ -267,8 +268,6 @@ void DX11Render::Update()
 
 void DX11Render::DrawStart() const
 {
-	ID3D11ShaderResourceView* null = nullptr;
-	_context->PSSetShaderResources(0, 1, &null);
 	_context->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
 	_context->ClearRenderTargetView(_renderTargetView, _activeCamera->clearColor.rgba);
 	_context->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -299,21 +298,31 @@ void DX11Render::DrawObject(TransformComponent* transform, RenderableMeshCompone
 	static const unsigned int offset = 0;
 
 	ID3D11Buffer* vertex = static_cast<ID3D11Buffer*>(mesh->geometry->GetVertexBuffer());
-	_context->IASetVertexBuffers(0, 1, &vertex, &stride, &offset);
+	if (_currentVertex != vertex)
+	{
+		_currentVertex = vertex;
+		_context->IASetVertexBuffers(0, 1, &vertex, &stride, &offset);
+	}
 	DX11Shader* shader = static_cast<DX11Shader*>(materials->shader);
 	_shaderManager->SetShader(_context, shader);
+	const Float4x4 transformMatrix = transform->transform.ToMatrix().Transpose();
 	for (size_t i = 0; i < materials->materials.size(); i++)
 	{
 		//Sets shaders and resources
 		PerObjectBuffer buffer = {
-			transform->transform.ToMatrix().Transpose(), Float4(materials->materials[i]->diffuseColor.rgba),
+			transformMatrix, Float4(materials->materials[i]->diffuseColor.rgba),
 			Float3(materials->materials[i]->specularColor.rgb), materials->materials[i]->specularPower
 		};
-		shader->SetPerObjectBuffer(_context, static_cast<void*>(&buffer));
+		shader->SetPerObjectBuffer(_context, &buffer);
 
 		//SetTextures(materials->materials[i]);
 		//Draw object
-		_context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(mesh->geometry->GetIndexBuffer()[i].first), DXGI_FORMAT_R16_UINT, 0);
+		auto index = static_cast<ID3D11Buffer*>(mesh->geometry->GetIndexBuffer()[i].first);
+		if (_currentIndex != index)
+		{
+			_currentIndex = index;
+			_context->IASetIndexBuffer(index, DXGI_FORMAT_R16_UINT, 0);
+		}
 		_context->DrawIndexed(mesh->geometry->GetIndexBuffer()[i].second, 0, 0);
 	}
 }

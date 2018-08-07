@@ -24,6 +24,10 @@ private:
 
 	//Window handler
 	HWND _hWnd;
+
+	//Current set variables
+	mutable ID3D11Buffer* _currentVertex;
+	mutable ID3D11Buffer* _currentIndex;
 public:
 	DX11Render();
 	~DX11Render();
