@@ -182,6 +182,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Application.cpp" />
     <ClCompile Include="scr\Common\Transform.cpp" />
     <ClCompile Include="scr\Systems\RenderMeshSystem.cpp" />
     <ClCompile Include="scr\IO\EntityReader.cpp" />
@@ -217,6 +218,7 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Application.h" />
     <ClInclude Include="scr\Common\Transform.h" />
     <ClInclude Include="scr\Render\DX11\DX11ConstantBuffers.h" />
     <ClInclude Include="scr\Systems\RenderMeshSystem.h" />
