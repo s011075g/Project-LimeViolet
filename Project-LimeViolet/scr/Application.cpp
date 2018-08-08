@@ -96,3 +96,8 @@ void Application::SetRenderPipeline(SystemList& systems)
 {
 	_renderPipeline = systems;
 }
+
+ECS& Application::GetECS()
+{
+	return _ecs;
+}

@@ -21,5 +21,7 @@ public:
 
 	void SetMainSystems(SystemList& systems);
 	void SetRenderPipeline(SystemList& systems);
+
+	ECS& GetECS();
 };
 

@@ -52,7 +52,7 @@ int main()
 	Utilities::Write(std::to_string(elapsedTime.count()).c_str());
 #endif
 ///ECS 
-	ECS ecs;
+	ECS& ecs = app->GetECS();
 	//Create Components
 	CameraComponent cameraComponent = {};
 	cameraComponent.up = Float3(0, 1, 0);
@@ -97,19 +97,18 @@ int main()
 	//Test Camera
 	render->SetActiveCamera(ecs.GetComponent<CameraComponent>(camera));
 
-
 	app->SetMainSystems(mainSystems);
 	app->SetRenderPipeline(renderPipeline);
 	//Gameloop
 	app->GameLoop();
-	delete app;
+	
 #ifdef MODEL_TESTING
 	render->FreeGeometry(geometry);
 	delete materials[0];
 #endif
 	delete static_cast<DX11Shader*>(ecs.GetComponent<MaterialComponent>(entity)->shader);
 	ecs.RemoveEntity(camera);
-	delete render;
+	delete app;
 	Utilities::CloseConsole();
 	return 0;
 }
