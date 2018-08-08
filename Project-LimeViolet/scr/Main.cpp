@@ -96,6 +96,7 @@ int main()
 	//Test Camera
 	render->SetActiveCamera(ecs.GetComponent<CameraComponent>(camera));
 
+	//Gameloop
 	uint32_t fps = 0;
 	double fpsTimeCounter = 0.0;
 	double updateTimer = 1.0;

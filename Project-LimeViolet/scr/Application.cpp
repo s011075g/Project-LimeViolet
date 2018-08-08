@@ -12,8 +12,8 @@ Application::~Application()
 
 int Application::Start()
 {
-	RECT rc = { 0, 0, _config->windowSize.x, _config->windowSize.y };
-	const char* windowTitle = _config->windowTitle.c_str();
+	RECT rc = { 0, 0, _config.windowSize.x, _config.windowSize.y };
+	const char* windowTitle = _config.windowTitle.c_str();
 	if (FAILED(_render->InitWindow(rc, windowTitle)))
 	{
 		Utilities::Write("FAILED: Created Window", Utilities::LEVEL::EXTREME_LEVEL);
