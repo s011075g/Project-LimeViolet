@@ -1,6 +1,26 @@
 #include "MathStructs.h"
 #include <complex>
 
+float Math::DegreeToRadians(const float degree)
+{
+	return (PIFloat/ 180.0f) * degree;
+}
+
+float Math::RadiansToDegrees(const float radians)
+{
+	return (180.0f / PIFloat) * radians;
+}
+
+double Math::DegreeToRadians(const double degree)
+{
+	return (PIDouble / 180.0) * degree;
+}
+
+double Math::RadiansToDegrees(const double radians)
+{
+	return (180.0 / PIDouble) * radians;
+}
+
 Float2::Float2(const float x, const float y)
 	: x(x), y(y)
 { }

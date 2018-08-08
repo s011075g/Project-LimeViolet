@@ -1,6 +1,18 @@
 #pragma once
 //Reference DirectXMath.h Copyright Microsoft Corporation
 
+namespace Math
+{
+#define pi 3.1415926535897932384
+	const float PIFloat = pi;
+	const double PIDouble = pi;
+#undef pi
+	float DegreeToRadians(float degree);
+	float RadiansToDegrees(float radians);
+	double DegreeToRadians(double degree);
+	double RadiansToDegrees(double radians);
+}
+
 struct Float2
 {
 	union
@@ -13,6 +25,7 @@ struct Float2
 	};
 
 	Float2() = default;
+	~Float2() = default;
 	Float2(float x, float y);
 
 	Float2& operator= (const Float2& right);
@@ -57,6 +70,7 @@ struct Float3
 	};
 
 	Float3() = default;
+	~Float3() = default;
 	Float3(float x, float y, float z);
 	explicit Float3(float xyz[3]);
 
@@ -104,6 +118,7 @@ struct Float4
 	};
 
 	Float4() = default;
+	~Float4() = default;
 	Float4(float x, float y, float z, float w);
 	Float4(Float3 xyz, float w);
 	explicit Float4(float xyzw[4]);

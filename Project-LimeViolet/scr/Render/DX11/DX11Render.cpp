@@ -181,7 +181,7 @@ HRESULT DX11Render::InitRenderer()
 	D3D11_RASTERIZER_DESC wfdesc;
 	ZeroMemory(&wfdesc, sizeof(D3D11_RASTERIZER_DESC));
 	wfdesc.FillMode = D3D11_FILL_SOLID; //Solid objects
-	wfdesc.CullMode = D3D11_CULL_NONE; //Culls the back away
+	wfdesc.CullMode = D3D11_CULL_BACK; //Culls the back away
 	ID3D11RasterizerState* state;
 	hr = _device->CreateRasterizerState(&wfdesc, &state);
 	_context->RSSetState(state);
@@ -259,7 +259,7 @@ DX11Shader* DX11Render::CreateShader(const char* fileLocation, int shaders) cons
 
 void DX11Render::Update()
 {
-	if (PeekMessage(&_msg, nullptr, 0, 0, PM_REMOVE))
+	if (PeekMessage(&_msg, _hWnd, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&_msg);
 		DispatchMessage(&_msg);

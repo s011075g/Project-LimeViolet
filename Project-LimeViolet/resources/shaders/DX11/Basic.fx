@@ -50,6 +50,6 @@ VS_OUTPUT VS(float3 PosL : POSITION, float2 Tex : TEXCOORD, float3 NormalL : NOR
 
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-	return input.PosW;
+	return float4(abs(input.NormalW),1);
 	//return TexDiffuse.Sample(textureSampler, input.Tex);
 }

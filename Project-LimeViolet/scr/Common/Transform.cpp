@@ -6,7 +6,9 @@ Transform::Transform()
 
 Transform::Transform(const Float3 position, const Float3 scale, const Quaternion& rotation)
 	: _rotation(rotation), _position(position), _scale(scale)
-{ }
+{
+	_rotation.Normalise();
+}
 
 Float4x4 Transform::ToMatrix() const
 {
@@ -37,6 +39,7 @@ void Transform::SetPosition(const Float3 position)
 void Transform::SetRotation(Quaternion& quaternion)
 {
 	_rotation = quaternion;
+	_rotation.Normalise();
 }
 void Transform::SetScale(Float3& scale)
 {

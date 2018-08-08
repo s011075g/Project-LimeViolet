@@ -65,7 +65,8 @@ int main()
 	cameraComponent.nearPlane = 0.1f;
 
 	TransformComponent transformComponent = {};
-	transformComponent.transform = Transform(Float3(0, 0, 50.0f));
+	Quaternion q = Quaternion(Math::DegreeToRadians(90.0f), 0, 0, 1);
+	transformComponent.transform = Transform(Float3(0, 0, 10.0f), Float3(1,1,1), q);
 
 	RenderableMeshComponent renderableComponent = RenderableMeshComponent();
 	renderableComponent.geometry = geometry;
@@ -83,11 +84,13 @@ int main()
 	//Create Entity
 	EntityHandle camera = ecs.MakeEntity(cameraComponent);
 	EntityHandle entity = ecs.MakeEntity(transformComponent, renderableComponent, materialComponent);
-	for(int i = 0; i < 690; i++)
+	/*for(int i = 0; i < 500; i++)
 	{
-		transformComponent.transform.SetPosition(Float3((float)(std::rand() % 1000 - 500) / 10.0f, (float)(std::rand() % 1000 - 500) / 10.0f, 50.0f));
+		transformComponent.transform.SetPosition(Float3((float)(std::rand() % 750 - 375) / 10.0f, (float)(std::rand() % 750 - 375) / 10.0f, 50.0f));
+		Quaternion q = Quaternion(std::rand() % 10 - 5.0f, std::rand() % 10 - 5.0f, std::rand() % 10 - 5.0f);
+		transformComponent.transform.SetRotation(q);
 		ecs.MakeEntity(transformComponent, renderableComponent, materialComponent);
-	}
+	}*/
 	//Create Systems
 	RenderMeshSystem renderSystem = RenderMeshSystem(render);
 	SystemList mainSystems = SystemList();
