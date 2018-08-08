@@ -1,16 +1,18 @@
 #pragma once
 #include "IO/World/ConfigFileReader.h"
+#include "Render/IRender.h"
 
 class Application
 {
 private:
-	Config *& _config;
+	Config & _config;
+	IRender*& _render;
 public:
-	Application(Config *& config);
+	Application(Config & config, IRender*& render);
 	~Application();
 
-	void Start();
-	void GameLoop();
+	int Start();
+	int GameLoop();
 	void CleanUp();
 };
 

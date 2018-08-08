@@ -1,12 +1,12 @@
 #include "Common/Utilities.h"
 #include <iostream>
-#include "Render/IRender.h"
 #include "Render/DX11/DX11Render.h"
 #include "IO/World/ConfigFileReader.h"
 #include "ECS/ECS.h"
 
 #include "Systems/RenderMeshSystem.h"
 #include "IO/Model/MTLFileReader.h"
+#include "Application.h"
 
 #define MODEL_TESTING
 
@@ -28,27 +28,9 @@ int main()
 
 	IRender* render = new DX11Render();
 	Config config = ConfigFileReader::ReadFile("resources/Config.json");
-	RECT rc = { 0, 0, config.windowSize.x, config.windowSize.y };
-	const char* windowTitle = config.windowTitle.c_str();
-	if (FAILED(render->InitWindow(rc, windowTitle)))
-	{
-		Utilities::Write("FAILED: Created Window", Utilities::LEVEL::EXTREME_LEVEL);
-		delete render;
-		Utilities::CloseConsole();
-		return -1;
-	}
-	else
-		Utilities::Write("SUCCESS: Created Window", Utilities::LEVEL::NORMAL_LEVEL);
 
-	if (FAILED(render->InitRenderer()))
-	{
-		Utilities::Write("FAILED: Render Init", Utilities::LEVEL::EXTREME_LEVEL);
-		delete render;
-		Utilities::CloseConsole();
-		return -1;
-	}
-	else
-		Utilities::Write("SUCCESS: Render Init", Utilities::LEVEL::NORMAL_LEVEL);
+	Application* app = new Application(config, render);
+	delete app;
 
 #ifdef MODEL_TESTING
 	Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
