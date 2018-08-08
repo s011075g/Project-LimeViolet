@@ -30,7 +30,8 @@ int main()
 	Config config = ConfigFileReader::ReadFile("resources/Config.json");
 
 	Application* app = new Application(config, render);
-	delete app;
+	
+	app->Start();
 
 #ifdef MODEL_TESTING
 	Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
@@ -96,50 +97,12 @@ int main()
 	//Test Camera
 	render->SetActiveCamera(ecs.GetComponent<CameraComponent>(camera));
 
+
+	app->SetMainSystems(mainSystems);
+	app->SetRenderPipeline(renderPipeline);
 	//Gameloop
-	uint32_t fps = 0;
-	double fpsTimeCounter = 0.0;
-	double updateTimer = 1.0;
-	double lastTime = GetTickCount() / 1000.0; //Converts the given milliseconds to seconds
-	const float frameTime = 1.0f / 60.0f;
-	while (render->ShouldExit())
-	{
-		double currentTime = GetTickCount() / 1000.0;
-		double passedTime = currentTime - lastTime;
-		lastTime = currentTime;
-
-		fpsTimeCounter += passedTime;
-		updateTimer += passedTime;
-
-		if (fpsTimeCounter >= 1.0)
-		{
-			double msPerFrame = 1000.0 / static_cast<double>(fps);
-			if (!std::isfinite(msPerFrame))
-				msPerFrame = -1;
-			//std::cout << msPerFrame << "ms (" << fps << " fps)" << std::endl;
-			Utilities::Write(std::string(std::to_string(msPerFrame) + " ms (" +std::to_string(fps) +" fps)").c_str());
-			fpsTimeCounter = 0;
-			fps = 0;
-		}
-
-		bool shouldRender = false;
-		while (updateTimer >= frameTime)
-		{
-			render->Update();
-			ecs.UpdateSystems(mainSystems, frameTime);
-			updateTimer -= frameTime;
-			shouldRender = true;
-		}
-		if (shouldRender) 
-		{
-			render->DrawStart();
-			ecs.UpdateSystems(renderPipeline, frameTime);
-			render->DrawEnd();
-			fps++;
-		}
-		else
-			Sleep(1);
-	}
+	app->GameLoop();
+	delete app;
 #ifdef MODEL_TESTING
 	render->FreeGeometry(geometry);
 	delete materials[0];
