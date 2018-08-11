@@ -182,6 +182,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scr\Render2\IRenderDevice.cpp" />
     <ClCompile Include="scr\Application.cpp" />
     <ClCompile Include="scr\Common\Transform.cpp" />
     <ClCompile Include="scr\Systems\RenderMeshSystem.cpp" />
@@ -216,11 +217,15 @@
     <ClCompile Include="scr\ECS\System.cpp" />
     <ClCompile Include="scr\Render\Vulkan\VulkanShaderManager.cpp" />
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
+    <ClCompile Include="scr\SDL\sdlApplication.cpp" />
+    <ClCompile Include="scr\SDL\sdlWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scr\Render2\IRenderDevice.h" />
     <ClInclude Include="scr\Application.h" />
     <ClInclude Include="scr\Common\Transform.h" />
     <ClInclude Include="scr\Render\DX11\DX11ConstantBuffers.h" />
+    <ClInclude Include="scr\SDL\IApplicationEventHandler.h" />
     <ClInclude Include="scr\Systems\RenderMeshSystem.h" />
     <ClInclude Include="scr\IO\EntityReader.h" />
     <ClInclude Include="scr\Render\DX11\DX11Shader.h" />
@@ -260,6 +265,8 @@
     <ClInclude Include="scr\ECS\System.h" />
     <ClInclude Include="scr\Render\Vulkan\VulkanShaderManager.h" />
     <ClInclude Include="scr\Render\Vulkan\VulkanVBOManager.h" />
+    <ClInclude Include="scr\SDL\sdlApplication.h" />
+    <ClInclude Include="scr\SDL\sdlWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Config.json" />
@@ -284,12 +291,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\directxtk_desktop_2015.2018.6.1.2\build\native\directxtk_desktop_2015.targets" Condition="Exists('..\packages\directxtk_desktop_2015.2018.6.1.2\build\native\directxtk_desktop_2015.targets')" />
+    <Import Project="..\packages\directxtk_desktop_2015.2018.7.3.1\build\native\directxtk_desktop_2015.targets" Condition="Exists('..\packages\directxtk_desktop_2015.2018.7.3.1\build\native\directxtk_desktop_2015.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\directxtk_desktop_2015.2018.6.1.2\build\native\directxtk_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk_desktop_2015.2018.6.1.2\build\native\directxtk_desktop_2015.targets'))" />
+    <Error Condition="!Exists('..\packages\directxtk_desktop_2015.2018.7.3.1\build\native\directxtk_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk_desktop_2015.2018.7.3.1\build\native\directxtk_desktop_2015.targets'))" />
   </Target>
 </Project>

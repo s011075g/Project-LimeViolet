@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
-#include "RawGeometry.h"
 
-class Geometry //todo remove materials from geomtry
+class Geometry
 {
 private:
 	void* _vertexBuffer;
