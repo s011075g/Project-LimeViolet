@@ -1,5 +1,5 @@
-#include "SDLApplication.h"
-#include <SDL/SDL.h>
+#include "sdlApplication.h"
+#include <sdl/SDL.h>
 #include "../IO/EntityReader.h"
 
 SDLApplication* SDLApplication::Create()

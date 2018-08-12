@@ -182,7 +182,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="scr\Render2\IRenderDevice.cpp" />
+    <ClCompile Include="scr\Render2\DDSTexture.cpp" />
+    <ClCompile Include="scr\Render2\ArrayBitmap.cpp" />
+    <ClCompile Include="include\stb\stb_image.c" />
+    <ClCompile Include="scr\Render2\RenderDevice.cpp" />
     <ClCompile Include="scr\Application.cpp" />
     <ClCompile Include="scr\Common\Transform.cpp" />
     <ClCompile Include="scr\Systems\RenderMeshSystem.cpp" />
@@ -219,11 +222,19 @@
     <ClCompile Include="scr\Render\Vulkan\VulkanVBOManager.cpp" />
     <ClCompile Include="scr\SDL\sdlApplication.cpp" />
     <ClCompile Include="scr\SDL\sdlWindow.cpp" />
+    <ClCompile Include="scr\Common\StringFuncs.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="scr\Render2\IRenderDevice.h" />
+    <ClInclude Include="scr\Render2\DDSTexture.h" />
+    <ClInclude Include="scr\Render2\ArrayBitmap.h" />
+    <ClInclude Include="include\stb\stb_image.h" />
+    <ClInclude Include="scr\Render2\RenderDevice.h" />
     <ClInclude Include="scr\Application.h" />
     <ClInclude Include="scr\Common\Transform.h" />
+    <ClInclude Include="scr\Render2\Sampler.hpp" />
+    <ClInclude Include="scr\Render2\Shader.hpp" />
+    <ClInclude Include="scr\Render2\Texture.hpp" />
+    <ClInclude Include="scr\Render2\UniformBuffer.hpp" />
     <ClInclude Include="scr\Render\DX11\DX11ConstantBuffers.h" />
     <ClInclude Include="scr\SDL\IApplicationEventHandler.h" />
     <ClInclude Include="scr\Systems\RenderMeshSystem.h" />
@@ -267,6 +278,7 @@
     <ClInclude Include="scr\Render\Vulkan\VulkanVBOManager.h" />
     <ClInclude Include="scr\SDL\sdlApplication.h" />
     <ClInclude Include="scr\SDL\sdlWindow.h" />
+    <ClInclude Include="scr\Common\StringFuncs.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\Config.json" />
@@ -275,6 +287,8 @@
     <None Include="resources\Model.json" />
     <None Include="resources\Panel_0.json" />
     <None Include="resources\Scene.json" />
+    <None Include="resources\shaders\basicShader.glsl" />
+    <None Include="resources\shaders\common.glh" />
     <None Include="resources\World.json" />
   </ItemGroup>
   <ItemGroup>

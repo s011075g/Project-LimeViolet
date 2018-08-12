@@ -30,4 +30,6 @@ namespace Utilities
 	void ShowConsole();
 	//Querry if the console window is showing.
 	bool IsConsoleVisible();
+	//Check if game is in debug mode
+	bool IsDebug();
 };

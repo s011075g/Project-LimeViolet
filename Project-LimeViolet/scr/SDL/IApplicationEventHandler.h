@@ -12,6 +12,6 @@ public:
 	virtual void OnMouseUp(uint32_t mouseButton, uint8_t numClicks) {};
 	virtual void OnMouseMove(int32_t mousePosX, int32_t mousePosY, int32_t deltaX, int32_t deltaY){};
 private:
-	IApplicationEventHandler(const IApplicationEventHandler& other) { (void)other; }
-	void operator=(const IApplicationEventHandler& other) const { (void)other; }
+	IApplicationEventHandler(const IApplicationEventHandler& other) = delete;
+	void operator=(const IApplicationEventHandler& other) = delete;
 };

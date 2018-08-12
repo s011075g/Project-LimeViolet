@@ -60,3 +60,12 @@ bool Utilities::IsConsoleVisible()
 {
 	return IsWindowVisible(GetConsoleWindow()) != FALSE;
 }
+
+bool Utilities::IsDebug()
+{
+#if defined(DEBUG) || defined(_DEBUG)
+	return true;
+#else
+	return false;
+#endif
+}

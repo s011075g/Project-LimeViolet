@@ -123,7 +123,19 @@
     <ClCompile Include="scr\SDL\sdlWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Render2\IRenderDevice.cpp">
+    <ClCompile Include="scr\Render2\RenderDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Common\StringFuncs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\stb\stb_image.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Render2\ArrayBitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\Render2\DDSTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -263,7 +275,31 @@
     <ClInclude Include="scr\SDL\sdlWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scr\Render2\IRenderDevice.h">
+    <ClInclude Include="scr\Render2\RenderDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render2\Sampler.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render2\Shader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render2\Texture.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Common\StringFuncs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stb\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render2\ArrayBitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render2\DDSTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\Render2\UniformBuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -275,6 +311,8 @@
     <None Include="resources\Model.json" />
     <None Include="resources\earth.mat" />
     <None Include="resources\Scene.json" />
+    <None Include="resources\shaders\common.glh" />
+    <None Include="resources\shaders\basicShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="resources\shaders\DX11\Basic.fx" />
