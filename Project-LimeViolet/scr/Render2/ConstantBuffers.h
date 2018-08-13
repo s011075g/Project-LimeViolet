@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Maths/MathStructs.h"
+#include "../Maths/MathStructs.h"
 
 struct PerDrawBuffer
 {

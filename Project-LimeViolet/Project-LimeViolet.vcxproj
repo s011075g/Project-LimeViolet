@@ -235,7 +235,7 @@
     <ClInclude Include="scr\Render2\Shader.hpp" />
     <ClInclude Include="scr\Render2\Texture.hpp" />
     <ClInclude Include="scr\Render2\UniformBuffer.hpp" />
-    <ClInclude Include="scr\Render\DX11\DX11ConstantBuffers.h" />
+    <ClInclude Include="scr\Render2\ConstantBuffers.h" />
     <ClInclude Include="scr\SDL\IApplicationEventHandler.h" />
     <ClInclude Include="scr\Systems\RenderMeshSystem.h" />
     <ClInclude Include="scr\IO\EntityReader.h" />
