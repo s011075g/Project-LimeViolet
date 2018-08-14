@@ -228,6 +228,7 @@
     <ClInclude Include="scr\Render2\DDSTexture.h" />
     <ClInclude Include="scr\Render2\ArrayBitmap.h" />
     <ClInclude Include="include\stb\stb_image.h" />
+    <ClInclude Include="scr\Render2\RenderContext.hpp" />
     <ClInclude Include="scr\Render2\RenderDevice.h" />
     <ClInclude Include="scr\Application.h" />
     <ClInclude Include="scr\Common\Transform.h" />

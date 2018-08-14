@@ -302,6 +302,9 @@
     <ClInclude Include="scr\Render2\ConstantBuffers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="scr\Render2\RenderContext.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
