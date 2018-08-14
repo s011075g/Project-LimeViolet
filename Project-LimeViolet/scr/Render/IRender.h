@@ -1,5 +1,4 @@
 #pragma once
-#include <windows.h>
 #include "IVBOManager.h"
 #include "ITextureManager.h"
 #include "../Components/CameraComponent.h"
@@ -7,6 +6,7 @@
 #include "../Components/RenderableMeshComponent.h"
 #include "../Components/MaterialComponent.h"
 #include "IShaderManager.h"
+#include <datetimeapi.h>
 
 class IRender
 {

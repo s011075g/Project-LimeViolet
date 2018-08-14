@@ -3,10 +3,8 @@
 #include <sdl/SDL_vulkan.h>
 #include <vulkan/vulkan_core.h>
 #include <vector>
-
 class RenderDevice
 {
-private:
 	//Vulkan varibles
 	VkInstance _instance;
 	VkSurfaceKHR _surface;
@@ -15,10 +13,25 @@ private:
 	VkQueue _graphicsQueue;
 	VkQueue _presentQueue;
 	VkCommandPool _commandPool;
+
+	std::vector<VkCommandBuffer> _commandBuffers;
+
+	VkSwapchainKHR _swapChain;
+	std::vector<VkImage> _swapChainImages;
+	std::vector<VkFramebuffer> _swapChainFramebuffers;
+	std::vector<VkImageView> _swapChainImageViews;
+	VkFormat _swapChainImageFormat;
+	VkExtent2D _swapChainExtent;
+
+	VkRenderPass _renderPass;
+	//
+	SDLWindow & _window;
 	//Bool used to keep check to see if the object has been destroyed
 	std::vector<std::pair<VkSampler, bool>> _samplers;
-	std::vector<std::pair<VkShaderModule, bool>> _shaders;
+	std::vector<std::tuple<VkPipeline, VkPipelineLayout, bool>> _shaders;
 	std::vector<std::tuple<VkImage, VkDeviceMemory, bool>> _images;
+
+	
 public:
 	enum SamplerFilter
 	{
@@ -45,17 +58,8 @@ public:
 	};
 	enum BufferUsage
 	{
-		USAGE_STATIC_DRAW,
-		USAGE_STREAM_DRAW,
-		USAGE_DYNAMIC_DRAW,
-
-		USAGE_STATIC_COPYY,
-		USAGE_STREAM_COPYY,
-		USAGE_DYNAMIC_COPY,
-
-		USAGE_STATIC_READ,
-		USAGE_STREAM_READ ,
-		USAGE_DYNAMIC_READ,
+		USAGE_STAGE_VERTEX = VK_SHADER_STAGE_VERTEX_BIT,
+		USAGE_STAGE_PIXEL = VK_SHADER_STAGE_FRAGMENT_BIT
 	};
 private:
 	struct SwapChainSupportDetails
@@ -99,18 +103,27 @@ private:
 	void CreateVKSurface(SDLWindow& window);
 	void CreateVKPhysicalDevice();
 		bool IsDeviceSuitable(const VkPhysicalDevice device) const;
-		QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice device) const;
 		static bool CheckDeviceExtensionSupport(const VkPhysicalDevice device);
-		SwapChainSupportDetails QuerySwapChainSupport(const VkPhysicalDevice device) const;
 	void CreateVKDevice();
+	void RecreateVkSwapChain();
+		void CreateVkSwapChain();
+		void CreateVkImageViews();
+		void CreateVkRenderPass();
+		void CreateVkFrameBuffers();
+	void CreateVkCommandPool();
 
-	void CreateCommandPool();
+	void CleanUpSwapChain();
 
-
+	VkPipelineShaderStageCreateInfo CreateVkPipelineShaderStageInfo(std::string shader, VkShaderStageFlagBits flags) const;
 	void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
 	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 	void TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
 	void CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
+	static VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<struct VkSurfaceFormatKHR>& availableFormats);
+	static VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
+	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
+	SwapChainSupportDetails QuerySwapChainSupport(const VkPhysicalDevice device) const;
+	QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice device) const;
 
 	VkCommandBuffer BeginSingleTimeCommands();
 	void EndSingleTimeCommands(VkCommandBuffer commandBuffer);

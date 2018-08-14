@@ -1,14 +1,14 @@
+#version 330
+#define GLSL_VERSION 330
 #include "common.glh"
 
-varying vec2 texCoord0;
-
 #if defined(VS_BUILD)
-Layout(binding = 0) uniform PerDraw
+layout(binding = 0) uniform PerDraw
 {
 	mat4 viewProjection;
 } pd;
 
-Layout(binding = 1) uniform PerObject
+layout(binding = 1) uniform PerObject
 {
 	mat4 world;
 	vec4 diffuseColor;
@@ -16,16 +16,16 @@ Layout(binding = 1) uniform PerObject
 	float specularPower;
 } po;
 
-Layout(location = 0) in vec3 positionL;
-Layout(location = 1) in vec2 texCoord;
-Layout(location = 2) in vec3 normalL;
-Layout(location = 3) in vec4 tangentL;
+Layout(0) in vec3 positionL;
+Layout(1) in vec2 texCoord;
+Layout(2) in vec3 normalL;
+Layout(3) in vec4 tangentL;
 
-Layout(location = 0) out vec4 PosH;
-Layout(location = 1) out vec4 PosW;
-Layout(location = 2) out vec3 NormalW;
-Layout(location = 3) out vec2 TexCoord;
-Layout(location = 4) out vec4 TanW;
+Layout(0) out vec4 PosH;
+Layout(1) out vec4 PosW;
+Layout(2) out vec3 NormalW;
+Layout(3) out vec2 TexCoord;
+Layout(4) out vec4 TanW;
 
 void main()
 {
