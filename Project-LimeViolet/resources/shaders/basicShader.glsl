@@ -2,12 +2,6 @@
 #define GLSL_VERSION 330
 #include "common.glh"
 
-#if defined(VS_BUILD)
-layout(binding = 0) uniform PerDraw
-{
-	mat4 viewProjection;
-} pd;
-
 layout(binding = 1) uniform PerObject
 {
 	mat4 world;
@@ -15,6 +9,13 @@ layout(binding = 1) uniform PerObject
 	vec3 specularColor;
 	float specularPower;
 } po;
+
+#if defined(VS_BUILD)
+
+layout(binding = 0) uniform PerDraw
+{
+	mat4 viewProjection;
+} pd;
 
 Layout(0) in vec3 positionL;
 Layout(1) in vec2 texCoord;

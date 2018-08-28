@@ -18,7 +18,7 @@ struct QueueFamilyIndices
 };
 
 RenderDevice::RenderDevice(SDLWindow& window)
-	: _window(window)
+	: _descriptorSetLayout({0}), _window(window)
 {
 	CreateVKInstance(window);
 	CreateVKSurface(window);
@@ -45,6 +45,9 @@ RenderDevice::~RenderDevice()
 			vkFreeMemory(_device, std::get<2>(_images[i]), nullptr);
 		}
 	}
+
+	vkDestroyDescriptorPool(_device, _descriptorSetLayout, nullptr);
+
 	vkDestroyCommandPool(_device, _commandPool, nullptr);
 
 	vkDestroyDevice(_device, nullptr);
@@ -223,6 +226,7 @@ uint32_t RenderDevice::CreateShaderProgram(const std::string& shaderText)
 
 	if (vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline) != VK_SUCCESS)
 	{
+		Utilities::Write("Failed to create graphics pipeline!", Utilities::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create graphics pipeline!");
 	}
 
@@ -234,7 +238,7 @@ uint32_t RenderDevice::CreateShaderProgram(const std::string& shaderText)
 
 uint32_t RenderDevice::ReleaseShaderProgram(uint32_t shader)
 {
-	uint32_t id = shader - 1;
+	const uint32_t id = shader - 1;
 	if (shader != 0 && std::get<2>(_shaders[id]))
 	{
 		vkDestroyPipeline(_device, std::get<0>(_shaders[id]), nullptr);
@@ -793,6 +797,34 @@ void RenderDevice::CreateVkFrameBuffers()
 			Utilities::Write("Failed to create framebuffer!", Utilities::LEVEL_ERROR);
 			throw std::runtime_error("Failed to create framebuffer!");
 		}
+	}
+}
+
+void RenderDevice::CreateVkDescriptorSetLayout()
+{
+	VkDescriptorSetLayoutBinding* array = new VkDescriptorSetLayoutBinding[2]{};
+	//PerDraw
+	array[0].binding = 0;
+	array[0].descriptorCount = 1;
+	array[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	array[0].pImmutableSamplers = nullptr;
+	array[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+	//PerObject
+	array[1].binding = 1;
+	array[1].descriptorCount = 1;
+	array[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	array[1].pImmutableSamplers = nullptr;
+	array[1].stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+
+	VkDescriptorSetLayoutCreateInfo layoutInfo = {};
+	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	layoutInfo.bindingCount = 2;
+	layoutInfo.pBindings = array;
+
+	if (vkCreateDescriptorSetLayout(_device, &layoutInfo, nullptr, &_descriptorSetLayout) != VK_SUCCESS) 
+	{
+		Utilities::Write("Failed to create descriptor set layout!", Utilities::LEVEL_ERROR);
+		throw std::runtime_error("Failed to create descriptor set layout!");
 	}
 }
 

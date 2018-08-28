@@ -12,6 +12,7 @@ class RenderDevice
 	VkDevice _device;
 	VkQueue _graphicsQueue;
 	VkQueue _presentQueue;
+	VkDescriptorSetLayout _descriptorSetLayout;
 	VkCommandPool _commandPool;
 
 	std::vector<VkCommandBuffer> _commandBuffers;
@@ -109,6 +110,7 @@ private:
 		void CreateVkImageViews();
 		void CreateVkRenderPass();
 		void CreateVkFrameBuffers();
+	void CreateVkDescriptorSetLayout();
 	void CreateVkCommandPool();
 
 	void CleanUpSwapChain();
