@@ -22,7 +22,7 @@ EntityHandle ECS::MakeEntity(BaseComponent** entityComponents, const uint32_t* c
 	{
 		if(!BaseComponent::IsTypeValid(componentIds[i]))
 		{
-			Utilities::Write("ECS Component Type not valid: " + componentIds[i], Utilities::LEVEL::ERROR_LEVEL);
+			Utilities::Write("ECS Component Type not valid: " + componentIds[i], Utilities::LEVEL::LEVEL_ERROR);
 			delete newEntity;
 			return nullptr;
 		}

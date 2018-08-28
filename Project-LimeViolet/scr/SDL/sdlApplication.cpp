@@ -8,7 +8,7 @@ SDLApplication* SDLApplication::Create()
 	uint32_t initalized = SDL_WasInit(flags);
 	if(initalized != flags && SDL_Init(flags) != 0)
 	{ 
-		Utilities::Write(SDL_GetError(), Utilities::EXTREME_LEVEL);
+		Utilities::Write(SDL_GetError(), Utilities::LEVEL_EXTREME);
 		return nullptr;
 	}
 	return new SDLApplication();

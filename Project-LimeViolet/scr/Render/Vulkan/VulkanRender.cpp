@@ -224,7 +224,7 @@ HRESULT VulkanRender::InitInstance()
 
 	if (result != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to create Vulkan instance!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create Vulkan instance!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create Vulkan instance!");
 	}
 
@@ -235,7 +235,7 @@ HRESULT VulkanRender::CreateSurface()
 {
 	if(glfwCreateWindowSurface(_instance, _window, nullptr, &_surface) != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to create window surface!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create window surface!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create window surface!");
 	}
 	return S_OK;
@@ -247,7 +247,7 @@ HRESULT VulkanRender::PickPhysicalDevice()
 	vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
 	if (deviceCount == 0) 
 	{
-		Utilities::Write("Failed to find Vulkan support!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to find Vulkan support!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to find Vulkan support!");
 	}
 
@@ -263,7 +263,7 @@ HRESULT VulkanRender::PickPhysicalDevice()
 
 	if (!_physicalDevice) 
 	{
-		Utilities::Write("Failed to find a suitable GPU!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to find a suitable GPU!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to find a suitable GPU!");
 	}
 
@@ -303,7 +303,7 @@ HRESULT VulkanRender::CreateLogicDevice()
 
 	if (vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device) != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to create logic device!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create logic device!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create logical device!");
 	}
 
@@ -379,7 +379,7 @@ HRESULT VulkanRender::CreateSwapChain()
 
 	if (vkCreateSwapchainKHR(_device, &createInfo, nullptr, &_swapChain) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to create swap chain!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create swap chain!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create swap chain!");
 	}
 
@@ -415,7 +415,7 @@ HRESULT VulkanRender::CreateImageViews()
 
 		if (vkCreateImageView(_device, &createInfo, nullptr, &_swapChainImageViews[i]) != VK_SUCCESS)
 		{
-			Utilities::Write("Failed to create image views!", Utilities::LEVEL::ERROR_LEVEL);
+			Utilities::Write("Failed to create image views!", Utilities::LEVEL::LEVEL_ERROR);
 			throw std::runtime_error("Failed to create image views!");
 		}
 	}
@@ -462,7 +462,7 @@ HRESULT VulkanRender::CreateRenderPass()
 
 	if (vkCreateRenderPass(_device, &renderPassInfo, nullptr, &_renderPass) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to create render pass!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create render pass!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create render pass!");
 	}
 
@@ -594,7 +594,7 @@ HRESULT VulkanRender::CreateGraphicsPipeLine()
 
 	if (vkCreatePipelineLayout(_device, &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to create pipeline layout!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create pipeline layout!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create pipeline layout!");
 	}
 
@@ -616,7 +616,7 @@ HRESULT VulkanRender::CreateGraphicsPipeLine()
 
 	if (vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &_graphicsPipeline) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to create graphics pipeline!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create graphics pipeline!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create graphics pipeline!");
 	}
 
@@ -645,7 +645,7 @@ HRESULT VulkanRender::CreateFrameBuffers()
 
 		if (vkCreateFramebuffer(_device, &framebufferInfo, nullptr, &_swapChainFramebuffers[i]) != VK_SUCCESS)
 		{
-			Utilities::Write("Failed to create framebuffer!", Utilities::LEVEL::ERROR_LEVEL);
+			Utilities::Write("Failed to create framebuffer!", Utilities::LEVEL::LEVEL_ERROR);
 			throw std::runtime_error("Failed to create framebuffer!");
 		}
 	}
@@ -664,7 +664,7 @@ HRESULT VulkanRender::CreateCommandPool()
 
 	if (vkCreateCommandPool(_device, &poolInfo, nullptr, &_commandPool) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to create command pool!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create command pool!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create command pool!");
 	}
 
@@ -683,7 +683,7 @@ HRESULT VulkanRender::CreateCommandBuffers()
 
 	if (vkAllocateCommandBuffers(_device, &allocInfo, _commandBuffers.data()) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to allocate command buffers!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to allocate command buffers!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to allocate command buffers!");
 	}
 
@@ -709,7 +709,7 @@ HRESULT VulkanRender::CreateCommandBuffers()
 
 		if (vkBeginCommandBuffer(_commandBuffers[i], &beginInfo) != VK_SUCCESS) 
 		{
-			Utilities::Write("Failed to begin recording command buffer!", Utilities::LEVEL::ERROR_LEVEL);
+			Utilities::Write("Failed to begin recording command buffer!", Utilities::LEVEL::LEVEL_ERROR);
 			throw std::runtime_error("Failed to begin recording command buffer!");
 		}
 
@@ -740,7 +740,7 @@ HRESULT VulkanRender::CreateCommandBuffers()
 
 		if (vkEndCommandBuffer(_commandBuffers[i]) != VK_SUCCESS) 
 		{
-			Utilities::Write("Failed to record command buffer!", Utilities::LEVEL::ERROR_LEVEL);
+			Utilities::Write("Failed to record command buffer!", Utilities::LEVEL::LEVEL_ERROR);
 			throw std::runtime_error("Failed to record command buffer!");
 		}
 	}
@@ -766,7 +766,7 @@ HRESULT VulkanRender::CreateSyncObjects()
 			vkCreateSemaphore(_device, &semaphoreInfo, nullptr, &_renderFinishedSemaphores[i]) != VK_SUCCESS ||
 			vkCreateFence(_device, &fenceInfo, nullptr, &_inFlightFences[i]) != VK_SUCCESS)
 		{
-			Utilities::Write("Failed to create synchronization objects for a frame!", Utilities::LEVEL::ERROR_LEVEL);
+			Utilities::Write("Failed to create synchronization objects for a frame!", Utilities::LEVEL::LEVEL_ERROR);
 			throw std::runtime_error("Failed to create synchronization objects for a frame!");
 		}
 

@@ -34,7 +34,7 @@ int main()
 	app->Start();
 
 #ifdef MODEL_TESTING
-	Utilities::Write("Running tests...", Utilities::LEVEL::NORMAL_LEVEL);
+	Utilities::Write("Running tests...", Utilities::LEVEL::LEVEL_NORMAL);
 
 	const auto tStart = std::chrono::system_clock::now();
 

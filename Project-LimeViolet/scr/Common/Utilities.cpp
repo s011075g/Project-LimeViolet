@@ -6,7 +6,7 @@ void Utilities::Write(const char* ptr, const LEVEL level)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), level);
 	std::cout << ptr << std::endl;
-	if (level == LEVEL::EXTREME_LEVEL)
+	if (level == LEVEL::LEVEL_EXTREME)
 	{
 		ShowConsole();
 		MessageBox(nullptr, L"Error - Check console", L"Error", MB_OK);

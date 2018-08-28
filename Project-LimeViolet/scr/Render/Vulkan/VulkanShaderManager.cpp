@@ -24,7 +24,7 @@ std::vector<char> VulkanShaderManager::ReadFile(const char* fileLocation)
 	std::ifstream file(fileLocation, std::ios::ate | std::ios::binary);
 	if (!file.good())
 	{
-		Utilities::Write((std::string("Unable to open file: ") + std::string(fileLocation)).c_str(), Utilities::LEVEL::WARNING_LEVEL);
+		Utilities::Write((std::string("Unable to open file: ") + std::string(fileLocation)).c_str(), Utilities::LEVEL::LEVEL_WARNING);
 		return {};
 	}
 
@@ -48,7 +48,7 @@ VkShaderModule VulkanShaderManager::CreateShaderModule(const VkDevice device, co
 	VkShaderModule shaderModule;
 	if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to create shader module!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create shader module!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create shader module!");
 	}
 

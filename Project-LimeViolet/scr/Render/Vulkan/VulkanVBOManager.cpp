@@ -23,7 +23,7 @@ Geometry* VulkanVBOManager::VBOGeometry(RawGeometry* geometry)
 	VkBuffer vertexBuffer;
 	if (vkCreateBuffer(_device, &bufferInfo, nullptr, &vertexBuffer) != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to create vertex buffer!", Utilities::LEVEL::WARNING_LEVEL);
+		Utilities::Write("Failed to create vertex buffer!", Utilities::LEVEL::LEVEL_WARNING);
 		return nullptr;
 	}
 
@@ -40,7 +40,7 @@ Geometry* VulkanVBOManager::VBOGeometry(RawGeometry* geometry)
 	if (vkAllocateMemory(_device, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS)
 	{
 		vkDestroyBuffer(_device, vertexBuffer, nullptr);
-		Utilities::Write("Failed to allocate vertex buffer memory!", Utilities::LEVEL::WARNING_LEVEL);
+		Utilities::Write("Failed to allocate vertex buffer memory!", Utilities::LEVEL::LEVEL_WARNING);
 		return nullptr;
 	}
 

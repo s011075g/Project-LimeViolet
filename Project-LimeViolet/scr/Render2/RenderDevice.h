@@ -29,9 +29,8 @@ class RenderDevice
 	//Bool used to keep check to see if the object has been destroyed
 	std::vector<std::pair<VkSampler, bool>> _samplers;
 	std::vector<std::tuple<VkPipeline, VkPipelineLayout, bool>> _shaders;
-	std::vector<std::tuple<VkImage, VkDeviceMemory, bool>> _images;
+	std::vector<std::tuple<VkImageView, VkImage, VkDeviceMemory, bool>> _images;
 
-	
 public:
 	enum SamplerFilter
 	{
@@ -115,18 +114,19 @@ private:
 	void CleanUpSwapChain();
 
 	VkPipelineShaderStageCreateInfo CreateVkPipelineShaderStageInfo(std::string shader, VkShaderStageFlagBits flags) const;
-	void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
-	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-	void TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
-	void CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
+	void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) const;
+	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) const;
+	void TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) const;
+	void CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) const;
+	VkImageView CreateImageView(VkImage image, VkFormat format) const;
 	static VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<struct VkSurfaceFormatKHR>& availableFormats);
 	static VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
 	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
 	SwapChainSupportDetails QuerySwapChainSupport(const VkPhysicalDevice device) const;
 	QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice device) const;
 
-	VkCommandBuffer BeginSingleTimeCommands();
-	void EndSingleTimeCommands(VkCommandBuffer commandBuffer);
+	VkCommandBuffer BeginSingleTimeCommands() const;
+	void EndSingleTimeCommands(VkCommandBuffer commandBuffer) const;
 
 	RenderDevice(const RenderDevice& other) = delete;
 	void operator=(const RenderDevice& other) = delete;

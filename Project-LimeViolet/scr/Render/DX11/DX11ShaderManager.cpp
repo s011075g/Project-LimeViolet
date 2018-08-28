@@ -154,7 +154,7 @@ HRESULT DX11ShaderManager::CreateShader(const wchar_t* fileLocation, const SHADE
 	HRESULT hr = CompileShaderFromFile(fileLocation, entryPoint, shaderModel, outBlob);
 	if(FAILED(hr))
 	{
-		Utilities::Write("Failed to compile shader", Utilities::EXTREME_LEVEL);
+		Utilities::Write("Failed to compile shader", Utilities::LEVEL_EXTREME);
 		return hr;
 	}
 

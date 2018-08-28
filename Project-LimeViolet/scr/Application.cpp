@@ -16,21 +16,21 @@ int Application::Start() const
 	const char* windowTitle = _config.windowTitle.c_str();
 	if (FAILED(_render->InitWindow(rc, windowTitle)))
 	{
-		Utilities::Write("FAILED: Created Window", Utilities::LEVEL::EXTREME_LEVEL);
+		Utilities::Write("FAILED: Created Window", Utilities::LEVEL::LEVEL_EXTREME);
 		Utilities::CloseConsole();
 		return -1;
 	}
 	else
-		Utilities::Write("SUCCESS: Created Window", Utilities::LEVEL::NORMAL_LEVEL);
+		Utilities::Write("SUCCESS: Created Window", Utilities::LEVEL::LEVEL_NORMAL);
 
 	if (FAILED(_render->InitRenderer()))
 	{
-		Utilities::Write("FAILED: Render Init", Utilities::LEVEL::EXTREME_LEVEL);
+		Utilities::Write("FAILED: Render Init", Utilities::LEVEL::LEVEL_EXTREME);
 		Utilities::CloseConsole();
 		return -1;
 	}
 	else
-		Utilities::Write("SUCCESS: Render Init", Utilities::LEVEL::NORMAL_LEVEL);
+		Utilities::Write("SUCCESS: Render Init", Utilities::LEVEL::LEVEL_NORMAL);
 	return 0;
 }
 

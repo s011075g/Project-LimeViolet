@@ -33,6 +33,18 @@ RenderDevice::RenderDevice(SDLWindow& window)
 RenderDevice::~RenderDevice()
 {
 	CleanUpSwapChain();
+	for(size_t i = 0; i < _samplers.size(); i++)
+		if (_samplers[i].second)
+			vkDestroySampler(_device, _samplers[i].first, nullptr);
+	for(size_t i = 0; i < _images.size(); i++)
+	{
+		if (std::get<3>(_images[i]))
+		{
+			vkDestroyImageView(_device, std::get<0>(_images[i]), nullptr);
+			vkDestroyImage(_device, std::get<1>(_images[i]), nullptr);
+			vkFreeMemory(_device, std::get<2>(_images[i]), nullptr);
+		}
+	}
 	vkDestroyCommandPool(_device, _commandPool, nullptr);
 
 	vkDestroyDevice(_device, nullptr);
@@ -63,7 +75,7 @@ uint32_t RenderDevice::CreateSampler(SamplerFilter minFilter, SamplerFilter magF
 
 	if(vkCreateSampler(_device, &samplerInfo, nullptr, &sampler) != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to create texture sampler!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create texture sampler!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create texture sampler!");
 	}
 	_samplers.emplace_back(sampler, true);
@@ -72,10 +84,11 @@ uint32_t RenderDevice::CreateSampler(SamplerFilter minFilter, SamplerFilter magF
 
 uint32_t RenderDevice::ReleaseSampler(uint32_t sampler)
 {
-	if (sampler != 0 && _samplers[sampler-1].second)
+	const uint32_t id = sampler - 1;
+	if (sampler != 0 && _samplers[id].second)
 	{
-		vkDestroySampler(_device, _samplers[sampler-1].first, nullptr);
-		_samplers[sampler-1].second = false;
+		vkDestroySampler(_device, _samplers[id].first, nullptr);
+		_samplers[id].second = false;
 	}
 	return 0;
 }
@@ -130,15 +143,15 @@ uint32_t RenderDevice::CreateShaderProgram(const std::string& shaderText)
 	inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 	inputAssembly.primitiveRestartEnable = VK_FALSE;
 
-	VkViewport viewport = {};
+	VkViewport viewport;
 	viewport.x = 0.0f;
 	viewport.y = 0.0f;
-	viewport.width = (float)_swapChainExtent.width;
-	viewport.height = (float)_swapChainExtent.height;
+	viewport.width = static_cast<float>(_swapChainExtent.width);
+	viewport.height = static_cast<float>(_swapChainExtent.height);
 	viewport.minDepth = 0.0f;
 	viewport.maxDepth = 1.0f;
 
-	VkRect2D scissor = {};
+	VkRect2D scissor;
 	scissor.offset = { 0, 0 };
 	scissor.extent = _swapChainExtent;
 
@@ -221,11 +234,12 @@ uint32_t RenderDevice::CreateShaderProgram(const std::string& shaderText)
 
 uint32_t RenderDevice::ReleaseShaderProgram(uint32_t shader)
 {
-	if (shader != 0 && std::get<2>(_shaders[shader - 1]))
+	uint32_t id = shader - 1;
+	if (shader != 0 && std::get<2>(_shaders[id]))
 	{
-		vkDestroyPipeline(_device, std::get<0>(_shaders[shader - 1]), nullptr);
-		vkDestroyPipelineLayout(_device, std::get<1>(_shaders[shader - 1]), nullptr);
-		std::get<2>(_shaders[shader - 1]) = false;
+		vkDestroyPipeline(_device, std::get<0>(_shaders[id]), nullptr);
+		vkDestroyPipelineLayout(_device, std::get<1>(_shaders[id]), nullptr);
+		std::get<2>(_shaders[id]) = false;
 	}
 	return 0;
 }
@@ -261,7 +275,7 @@ uint32_t RenderDevice::CreateTexture2D(uint32_t width, uint32_t height, void* da
 
 	if (vkCreateImage(_device, &imageInfo, nullptr, &image) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to create image!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create image!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create image!");
 	}
 
@@ -275,7 +289,7 @@ uint32_t RenderDevice::CreateTexture2D(uint32_t width, uint32_t height, void* da
 
 	if (vkAllocateMemory(_device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to allocate image memory!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to allocate image memory!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to allocate image memory!");
 	}
 
@@ -288,7 +302,7 @@ uint32_t RenderDevice::CreateTexture2D(uint32_t width, uint32_t height, void* da
 	vkDestroyBuffer(_device, stagingBuffer, nullptr);
 	vkFreeMemory(_device, stagingBufferMemory, nullptr);
 	
-	_images.emplace_back(image, imageMemory, true);
+	_images.emplace_back(CreateImageView(image, imageInfo.format), image, imageMemory, true);
 	return _images.size();
 }
 
@@ -320,7 +334,7 @@ uint32_t RenderDevice::CreateDDSTexture2D(uint32_t width, uint32_t height, const
 	//	format = VK_FORMAT_BC5_UNORM_BLOCK; //Unsure
 	//	break;
 	default:
-		Utilities::Write("Invalid DDS compression format", Utilities::WARNING_LEVEL);
+		Utilities::Write("Invalid DDS compression format", Utilities::LEVEL_WARNING);
 		return 0;
 	}
 	VkBuffer stagingBuffer;
@@ -352,7 +366,7 @@ uint32_t RenderDevice::CreateDDSTexture2D(uint32_t width, uint32_t height, const
 
 	if (vkCreateImage(_device, &imageInfo, nullptr, &image) != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to create image!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create image!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create image!");
 	}
 
@@ -366,7 +380,7 @@ uint32_t RenderDevice::CreateDDSTexture2D(uint32_t width, uint32_t height, const
 
 	if (vkAllocateMemory(_device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to allocate image memory!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to allocate image memory!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to allocate image memory!");
 	}
 
@@ -379,17 +393,19 @@ uint32_t RenderDevice::CreateDDSTexture2D(uint32_t width, uint32_t height, const
 	vkDestroyBuffer(_device, stagingBuffer, nullptr);
 	vkFreeMemory(_device, stagingBufferMemory, nullptr);
 
-	_images.emplace_back(image, imageMemory, true);
+	_images.emplace_back(CreateImageView(image, format), image, imageMemory, true);
 	return _images.size();
 }
 
 uint32_t RenderDevice::ReleaseTexture2D(uint32_t texture2D)
 {
-	if (texture2D != 0 && std::get<2>(_images[texture2D - 1]))
+	const uint32_t id = texture2D - 1;
+	if (texture2D != 0 && std::get<3>(_images[id]))
 	{
-		vkDestroyImage(_device, std::get<0>(_images[texture2D - 1]), nullptr);
-		vkFreeMemory(_device, std::get<1>(_images[texture2D - 1]), nullptr);
-		std::get<2>(_images[texture2D - 1]) = true;
+		vkDestroyImageView(_device, std::get<0>(_images[id]), nullptr);
+		vkDestroyImage(_device, std::get<1>(_images[id]), nullptr);
+		vkFreeMemory(_device, std::get<2>(_images[id]), nullptr);
+		std::get<3>(_images[id]) = false;
 	}
 	return 0;
 }
@@ -434,7 +450,7 @@ void RenderDevice::CreateVKInstance(SDLWindow& window)
 
 	if (vkResult != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to create Vulkan instance!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create Vulkan instance!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create Vulkan instance!");
 	}
 }
@@ -443,7 +459,7 @@ void RenderDevice::CreateVKSurface(SDLWindow& window)
 {
 	if(SDL_Vulkan_CreateSurface(window.GetWindowHandle(), _instance, &_surface) != SDL_TRUE)
 	{
-		Utilities::Write("Failed to create window surface!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create window surface!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create window surface!");
 	}
 }
@@ -454,7 +470,7 @@ void RenderDevice::CreateVKPhysicalDevice()
 	vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
 	if (deviceCount == 0)
 	{
-		Utilities::Write("Failed to find Vulkan support!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to find Vulkan support!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to find Vulkan support!");
 	}
 
@@ -470,7 +486,7 @@ void RenderDevice::CreateVKPhysicalDevice()
 
 	if (!_physicalDevice)
 	{
-		Utilities::Write("Failed to find a suitable GPU!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to find a suitable GPU!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to find a suitable GPU!");
 	}
 }
@@ -605,7 +621,7 @@ void RenderDevice::CreateVKDevice()
 
 	if (vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device) != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to create logic device!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create logic device!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create logical device!");
 	}
 
@@ -669,7 +685,7 @@ void RenderDevice::CreateVkSwapChain()
 
 	if (vkCreateSwapchainKHR(_device, &createInfo, nullptr, &_swapChain) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to create swap chain!", Utilities::ERROR_LEVEL);
+		Utilities::Write("Failed to create swap chain!", Utilities::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create swap chain!");
 	}
 
@@ -704,7 +720,7 @@ void RenderDevice::CreateVkImageViews()
 
 		if (vkCreateImageView(_device, &createInfo, nullptr, &_swapChainImageViews[i]) != VK_SUCCESS) 
 		{
-			Utilities::Write("Failed to create image views!", Utilities::ERROR_LEVEL);
+			Utilities::Write("Failed to create image views!", Utilities::LEVEL_ERROR);
 			throw std::runtime_error("Failed to create image views!");
 		}
 	}
@@ -722,7 +738,7 @@ void RenderDevice::CreateVkRenderPass()
 	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
-	VkAttachmentReference colorAttachmentRef = {};
+	VkAttachmentReference colorAttachmentRef;
 	colorAttachmentRef.attachment = 0;
 	colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
@@ -750,7 +766,7 @@ void RenderDevice::CreateVkRenderPass()
 
 	if (vkCreateRenderPass(_device, &renderPassInfo, nullptr, &_renderPass) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to create render pass!", Utilities::ERROR_LEVEL);
+		Utilities::Write("Failed to create render pass!", Utilities::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create render pass!");
 	}
 }
@@ -774,7 +790,7 @@ void RenderDevice::CreateVkFrameBuffers()
 
 		if (vkCreateFramebuffer(_device, &framebufferInfo, nullptr, &_swapChainFramebuffers[i]) != VK_SUCCESS)
 		{
-			Utilities::Write("Failed to create framebuffer!", Utilities::ERROR_LEVEL);
+			Utilities::Write("Failed to create framebuffer!", Utilities::LEVEL_ERROR);
 			throw std::runtime_error("Failed to create framebuffer!");
 		}
 	}
@@ -790,7 +806,7 @@ void RenderDevice::CreateVkCommandPool()
 
 	if (vkCreateCommandPool(_device, &poolInfo, nullptr, &_commandPool) != VK_SUCCESS) 
 	{
-		Utilities::Write("Failed to create graphics command pool!", Utilities::ERROR_LEVEL);
+		Utilities::Write("Failed to create graphics command pool!", Utilities::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create graphics command pool!");
 	}
 }
@@ -802,8 +818,17 @@ void RenderDevice::CleanUpSwapChain()
 	
 	vkFreeCommandBuffers(_device, _commandPool, static_cast<uint32_t>(_commandBuffers.size()), _commandBuffers.data());
 	
-	/*vkDestroyPipeline(_device, _graphicsPipeline, nullptr);
-	vkDestroyPipelineLayout(_device, _pipelineLayout, nullptr);*/
+	for(size_t i = 0; i < _shaders.size(); i++)
+	{
+		if(std::get<2>(_shaders[i]))
+		{
+			vkDestroyPipeline(_device, std::get<0>(_shaders[i]), nullptr);
+			vkDestroyPipelineLayout(_device, std::get<1>(_shaders[i]), nullptr);
+		}
+	}
+
+	_shaders.clear();
+
 	vkDestroyRenderPass(_device, _renderPass, nullptr);
 
 	for (size_t i = 0; i < _swapChainImageViews.size(); i++)
@@ -822,7 +847,7 @@ VkPipelineShaderStageCreateInfo RenderDevice::CreateVkPipelineShaderStageInfo(st
 	VkShaderModule module;
 	if (vkCreateShaderModule(_device, &createInfo, nullptr, &module) != VK_SUCCESS)
 	{
-		Utilities::Write("Failed to create shader module!", Utilities::LEVEL::ERROR_LEVEL);
+		Utilities::Write("Failed to create shader module!", Utilities::LEVEL::LEVEL_ERROR);
 		throw std::runtime_error("Failed to create shader module!");
 	}
 
@@ -834,7 +859,7 @@ VkPipelineShaderStageCreateInfo RenderDevice::CreateVkPipelineShaderStageInfo(st
 	return stageInfo;
 }
 
-void RenderDevice::CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+void RenderDevice::CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) const
 {
 	VkBufferCreateInfo bufferInfo = {};
 	bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -861,7 +886,7 @@ void RenderDevice::CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkM
 	vkBindBufferMemory(_device, buffer, bufferMemory, 0);
 }
 
-uint32_t RenderDevice::FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
+uint32_t RenderDevice::FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) const
 {
 	VkPhysicalDeviceMemoryProperties memProperties;
 	vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &memProperties);
@@ -869,11 +894,11 @@ uint32_t RenderDevice::FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags
 	for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) 
 		if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
 			return i;
-	Utilities::Write("Failed to find suitable memory type!", Utilities::LEVEL::ERROR_LEVEL);
+	Utilities::Write("Failed to find suitable memory type!", Utilities::LEVEL::LEVEL_ERROR);
 	throw std::runtime_error("Failed to find suitable memory type!");
 }
 
-void RenderDevice::TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
+void RenderDevice::TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) const
 {
 	VkCommandBuffer commandBuffer = BeginSingleTimeCommands();
 
@@ -917,11 +942,11 @@ void RenderDevice::TransitionImageLayout(VkImage image, VkFormat format, VkImage
 	EndSingleTimeCommands(commandBuffer);
 }
 
-void RenderDevice::CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height)
+void RenderDevice::CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) const
 {
 	VkCommandBuffer commandBuffer = BeginSingleTimeCommands();
 
-	VkBufferImageCopy region = {};
+	VkBufferImageCopy region;
 	region.bufferOffset = 0;
 	region.bufferRowLength = 0;
 	region.bufferImageHeight = 0;
@@ -934,6 +959,29 @@ void RenderDevice::CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t wi
 
 	vkCmdCopyBufferToImage(commandBuffer, buffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 	EndSingleTimeCommands(commandBuffer);
+}
+
+VkImageView RenderDevice::CreateImageView(VkImage image, VkFormat format) const
+{
+	VkImageViewCreateInfo viewInfo = {};
+	viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+	viewInfo.image = image;
+	viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	viewInfo.format = format;
+	viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	viewInfo.subresourceRange.baseMipLevel = 0;
+	viewInfo.subresourceRange.levelCount = 1;
+	viewInfo.subresourceRange.baseArrayLayer = 0;
+	viewInfo.subresourceRange.layerCount = 1;
+
+	VkImageView imageView;
+	if (vkCreateImageView(_device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) 
+	{
+		Utilities::Write("Failed to create texture image view!", Utilities::LEVEL_ERROR);
+		throw std::runtime_error("Failed to create texture image view!");
+	}
+
+	return imageView;
 }
 
 VkSurfaceFormatKHR RenderDevice::ChooseSwapSurfaceFormat(const std::vector<struct VkSurfaceFormatKHR>& availableFormats)
@@ -977,7 +1025,7 @@ VkExtent2D RenderDevice::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabi
 	return actualExtent;
 }
 
-VkCommandBuffer RenderDevice::BeginSingleTimeCommands()
+VkCommandBuffer RenderDevice::BeginSingleTimeCommands() const
 {
 	VkCommandBufferAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -997,7 +1045,7 @@ VkCommandBuffer RenderDevice::BeginSingleTimeCommands()
 	return commandBuffer;
 }
 
-void RenderDevice::EndSingleTimeCommands(VkCommandBuffer commandBuffer)
+void RenderDevice::EndSingleTimeCommands(VkCommandBuffer commandBuffer) const
 {
 	vkEndCommandBuffer(commandBuffer);
 
